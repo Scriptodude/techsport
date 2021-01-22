@@ -16,7 +16,7 @@ mv ./dist/* ../backend/src/main/resources/static/
 
 # Backend then
 echo 'Building the backend'
-cd ./backend
+cd ../backend
 
 echo 'Gradle'
 ./gradlew clean assemble
