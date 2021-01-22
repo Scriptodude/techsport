@@ -1,1 +1,1 @@
-web: java -jar backend/build/libs/techsport-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT -Dhttps.protocols=TLSv1.2 -jar backend/build/libs/techsport-0.0.1-SNAPSHOT.jar

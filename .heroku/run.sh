@@ -12,11 +12,13 @@ echo 'npm build'
 npm run build
 
 echo 'Moving resources to backend'
-mv ./dist/* ../backend/src/main/resources/static/
+mv ./dist/techsport/* ../backend/src/main/resources/static/
 
 # Backend then
 echo 'Building the backend'
 cd ../backend
-
 echo 'Gradle'
-./gradlew clean assemble
+./gradlew -Dhttps.protocols=TLSv1.2 clean assemble
+
+cd ../
+rm -rf ./frontend

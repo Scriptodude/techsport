@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClients
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
+import java.util.concurrent.TimeUnit
 
 @Configuration
 class DatabaseConfig constructor(
@@ -26,6 +27,11 @@ class DatabaseConfig constructor(
             ConnectionString("mongodb+srv://$databaseUser:$databasePwd@$databaseHost/techsports?retryWrites=true&w=majority")
 
         val mongoClientSettings = MongoClientSettings.builder()
+            .applyToConnectionPoolSettings {
+                it.maxConnectionIdleTime(3, TimeUnit.MINUTES)
+                it.maxSize(3)
+                it.minSize(1)
+            }
             .applyConnectionString(connString)
             .build()
 
