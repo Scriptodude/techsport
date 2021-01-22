@@ -1,0 +1,88 @@
+<div class="container">
+
+    <div class="d-flex justify-content-center">
+        <h2 *ngIf="error.trim().length > 0" class="border border-danger bg-danger text-light">{{ error }}</h2>
+        <h2 *ngIf="success.trim().length > 0" class="border border-success bg-success">{{ success }}</h2>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <input id="token-input" type="password" [(ngModel)]="tokenInput" placeholder="Token d'administration" />
+        <button mdbBtn class="btn btn-primary" (click)="submitToken()">Soumettre</button>
+    </div>
+
+    <div *ngIf="isAdmin">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+            <li [ngbNavItem]="1">
+                <a ngbNavLink>Équipes</a>
+                <ng-template ngbNavContent class="d-flex justify-content-center">
+                    <div class="text-center border border-light p-5">
+                        <p class="h4 mb-4">Créer une nouvelle équipe</p>
+                        <input id="team-name" type="text" [(ngModel)]="newTeam.name" class="form-control mb-4"
+                            placeholder="Nom de l'équipe" />
+
+                        <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
+                        <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
+
+                        <button mdbBtn class="btn btn-primary form-control mb-4" (click)="createTeam()">Créer</button>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+                <a ngbNavLink>Temps</a>
+                <ng-template ngbNavContent class="d-flex justify-content-center">
+                    <div class="text-center border border-light p-5">
+                        <p class="h4 mb-4">Ajouter du temps à une équipe</p>
+
+                        <div id="team-name" class="col">
+                            <div ngbDropdown class="d-inline-block">
+                                <button class="btn btn-primary btn-lg dropdown-toggle" id="dropdownBasic1"
+                                    ngbDropdownToggle>{{
+                                    selectedTeam.name ||
+                                    'Choisir l\'équipe'}}</button>
+                                <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="mb-4">
+                                    <button ngbDropdownItem *ngFor="let team of teams"
+                                        (click)="selectTeam(team.name, {hours: team.hours, minutes: team.minutes, seconds: team.seconds})">{{
+                                        team.name }}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-control mb-4" *ngIf="selectedTeam.name.trim().length > 0">
+                            <p class="h6 mb-4">L'équipe possède actuellement :
+                                {{ selectedTeam.currentTime.hours }} heures
+                                {{ selectedTeam.currentTime.minutes }} minutes
+                                {{ selectedTeam.currentTime.seconds }} secondes</p>
+                        </div>
+                        <br />
+                        <div class="container border border-primary">
+                            <p class="h5 mb-4"> Temps à ajouter. Au moins 1 champs est requis. </p>
+                            <div class="col mb-4">
+                                <table class="container mb-4">
+                                    <thead>
+                                        <th>Heures</th>
+                                        <th>Minutes</th>
+                                        <th>Secondes</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="number" [(ngModel)]="moreTime.hours"
+                                                    class="form-control" /></td>
+                                            <td><input type="number" [(ngModel)]="moreTime.minutes"
+                                                    class="form-control" /></td>
+                                            <td><input type="number" [(ngModel)]="moreTime.seconds"
+                                                    class="form-control" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <button mdbBtn class="btn btn-primary form-control mb-4" (click)="addTime()">Ajouter du
+                                    temps</button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+        </ul>
+
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
+</div>

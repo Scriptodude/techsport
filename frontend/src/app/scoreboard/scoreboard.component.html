@@ -1,0 +1,22 @@
+<div id="chartContainer" style="height:400px; width:100%"></div>
+<br>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Position</th>
+                <th scope="col">Nom de l'équipe</th>
+                <th scope="col">Temps total</th>
+                <th scope="col">Temps aujourd'hui</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let team of teams; let i = index">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ team.name }}</td>
+                <td>{{ team.hours | number }}h {{ team.minutes | number }}m {{ team.seconds | number }}s</td>
+                <td>{{ getTeamLastAdd(i) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

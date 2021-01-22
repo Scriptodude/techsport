@@ -1,0 +1,11 @@
+<ul ngbNav [activeId]="route.fragment | async" [ngClass]="'nav-tabs d-flex mb-4'">
+    <li [ngbNavItem]="1">
+        <a ngbNavLink routerLink="/pointage" routerLinkActive="active">Pointage</a>
+    </li>
+    <li [ngbNavItem]="2">
+        <a ngbNavLink routerLink="/equipes" routerLinkActive="active">Équipes</a>
+    </li>
+    <li [ngbNavItem]="3" [ngClass]="'ml-auto p-2'">
+        <a ngbNavLink routerLink="/admin">Administrer</a>
+    </li>
+</ul>
