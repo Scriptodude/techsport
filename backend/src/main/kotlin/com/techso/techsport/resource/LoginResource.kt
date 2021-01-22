@@ -9,7 +9,11 @@ import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@CrossOrigin(value = ["http://localhost:4200"], allowCredentials = "true")
+@CrossOrigin(value = [
+    "http://localhost:4200",
+    "http://techsport.herokuapp.com",
+    "https://techsport.herokuapp.com"],
+    allowCredentials = "true")
 class LoginResource
 @Autowired constructor(private val loginService: LoginService) {
 

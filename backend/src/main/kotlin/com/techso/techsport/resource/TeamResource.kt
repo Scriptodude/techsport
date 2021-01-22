@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/teams")
-@CrossOrigin(value = ["http://localhost:4200"], allowCredentials = "true")
+@CrossOrigin(value = [
+    "http://localhost:4200",
+    "http://techsport.herokuapp.com",
+    "https://techsport.herokuapp.com"],
+    allowCredentials = "true")
 class TeamResource
 @Autowired constructor(
     private val loginService: LoginService,
