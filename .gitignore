@@ -81,3 +81,4 @@ testem.log
 Thumbs.db
 # Ignore Gradle build output directory
 build
+backend/src/main/resources/static/
