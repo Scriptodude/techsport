@@ -16,15 +16,17 @@ class DatabaseConfig constructor(
     @Value("#{environment.DATABASE_USER}")
     private val databaseUser: String,
     @Value("#{environment.DATABASE_PASSWORD}")
-    private val databasePwd: String
+    private val databasePwd: String,
+    @Value("\${techsport.database.name}")
+    val name: String
 ) : AbstractMongoClientConfiguration() {
     override fun getDatabaseName(): String {
-        return "techsport"
+        return this.name
     }
 
     override fun mongoClient(): MongoClient {
         val connString =
-            ConnectionString("mongodb+srv://$databaseUser:$databasePwd@$databaseHost/techsports?retryWrites=true&w=majority")
+            ConnectionString("mongodb+srv://$databaseUser:$databasePwd@$databaseHost/?retryWrites=true&w=majority")
 
         val mongoClientSettings = MongoClientSettings.builder()
             .applyToConnectionPoolSettings {

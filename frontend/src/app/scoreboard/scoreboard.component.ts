@@ -24,7 +24,7 @@ export class ScoreboardComponent implements OnInit {
         let dataPoints: any = [];
 
         for (let entry of new Map(Object.entries(team.timeChanges))) {
-          y += entry[1];
+          y += Math.round(entry[1] / 36) / 100
           const dateData = entry[0].split('-').map(v => parseInt(v, 10))
           dataPoints.push({ x: new Date(dateData[0], dateData[1] - 1, dateData[2]), y: y });
         }
