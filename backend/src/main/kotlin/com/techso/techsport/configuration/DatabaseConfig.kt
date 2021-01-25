@@ -30,7 +30,7 @@ class DatabaseConfig constructor(
 
         val mongoClientSettings = MongoClientSettings.builder()
             .applyToConnectionPoolSettings {
-                it.maxConnectionIdleTime(3, TimeUnit.MINUTES)
+                it.maxConnectionIdleTime(10, TimeUnit.MINUTES)
                 it.maxSize(3)
                 it.minSize(1)
             }
