@@ -20,7 +20,7 @@ class ClientConfig(
     @Value("\${techsport.strava.client.id}") val stravaClientId: Int,
     @Value("\${techsport.strava.client.secret}") val stravaClientSecret: String,
     @Value("\${techsport.strava.oauth.url}") val stravaOauthUrl: String,
-    @Value("\${techsport.api.url}") val redirectUrl: String,
+    @Value("\${techsport.strava.redirect.url}") val redirectUrl: String,
 ) {
 
     @Bean

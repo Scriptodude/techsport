@@ -30,7 +30,7 @@ constructor(
     }
 
     @GetMapping("/callback")
-    fun oauthStrava(stravaAuthRequest: StravaAuthRequest) {
-        this.stravaService.handleStravaAuth(stravaAuthRequest)
+    fun oauthStrava(stravaAuthRequest: StravaAuthRequest, response: HttpServletResponse) {
+        this.stravaService.handleStravaAuth(stravaAuthRequest, response)
     }
 }
