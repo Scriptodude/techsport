@@ -8,6 +8,8 @@ import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.ActivityToValidateRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
@@ -21,12 +23,13 @@ constructor(
 ) {
 
     @Transactional
-    fun getAllUnvalidatedActivities() = this.activityToValidateRepository.findAllByApproved(null);
+    fun getNumberOfPages() = this.activityToValidateRepository.count()
 
     @Transactional
-    fun getAllActivities() = this.activityToValidateRepository.findAll()
-        .filter { it.approved != null }
-        .sortedBy { it.activityDate }
+    fun getAllActivities(page: Int): List<ActivityToValidate> =
+        this.activityToValidateRepository
+            .findAll(PageRequest.of(page, 10, Sort.by("activityDate")))
+            .toList()
 
     @Transactional
     fun changeActivityApprobation(teamName: String, activityId: String, approved: Boolean) {

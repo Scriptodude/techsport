@@ -2,6 +2,7 @@ package com.techso.techsport.resource
 
 import com.techso.techsport.model.ActivityToValidate
 import com.techso.techsport.model.request.ChangeActivityApprobation
+import com.techso.techsport.model.response.PagesResponse
 import com.techso.techsport.service.LoginService
 import com.techso.techsport.service.ValidationService
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,20 +25,22 @@ constructor(
 ) {
     @GetMapping("/to-validate")
     fun getActivitiesToValidate(
-        @CookieValue("token") token: String
+        @CookieValue("token") token: String,
+        @RequestParam("page") page: Int
     ): List<ActivityToValidate> {
         this.loginService.validateToken(token)
 
-        return this.validationService.getAllUnvalidatedActivities()
+        return this.validationService.getAllActivities(page).filter { it.approved == null }
     }
 
     @GetMapping
     fun getAllActivities(
-        @CookieValue("token") token: String
+        @CookieValue("token") token: String,
+        @RequestParam("page") page: Int
     ): List<ActivityToValidate> {
         this.loginService.validateToken(token)
 
-        return this.validationService.getAllActivities()
+        return this.validationService.getAllActivities(page)
     }
 
     @PostMapping
@@ -47,5 +50,12 @@ constructor(
     ) {
         this.loginService.validateToken(token)
         this.validationService.changeActivityApprobation(req.teamName ?: "", req.activityId, req.approved)
+    }
+
+    @GetMapping("/pages")
+    fun getPages(@CookieValue("token") token: String): PagesResponse {
+        this.loginService.validateToken(token)
+
+        return PagesResponse(this.validationService.getNumberOfPages())
     }
 }

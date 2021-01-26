@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import Activity from '../models/activity';
 import { ActivityService } from '../activity.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -28,16 +29,20 @@ export class AdminComponent implements OnInit {
   public error: string = '';
   public success: string = '';
   public filter: string = 'todo';
+  public page: number = 1;
+  public pageCount: number = 1;
 
   constructor(
     private loginService: LoginService,
     private teamService: TeamsService,
-    private activityService: ActivityService) { }
+    private activityService: ActivityService,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.checkAdmin();
 
     this.teamService.getAllTeams().subscribe(t => this.teams = t);
+    this.activatedRoute.queryParams.subscribe(params => this.page = params['page'] || 1)
     this.getActivities();
   }
 
@@ -150,22 +155,24 @@ export class AdminComponent implements OnInit {
   }
 
   getActivities(filter: string = 'todo') {
+    this.activityService.getPageCount().subscribe(p => this.pageCount = p.pages)
+
     switch(filter) {
       case "all":
-        this.activityService.getAllActivities().subscribe(a => this.activities = a);
+        this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a);
         this.filter = 'Toutes';
         break;
       case 'declined':
-        this.activityService.getAllActivities().subscribe(a => this.activities = a.filter(i => i.approved == false));
+        this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == false));
         this.filter = 'Refusées';
         break;    
       case 'approved':
-        this.activityService.getAllActivities().subscribe(a => this.activities = a.filter(i => i.approved == true));
+        this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == true));
         this.filter = 'Approuvées';
         break;
       default:
       case 'todo':
-        this.activityService.getActivitiesToValidate().subscribe(a => this.activities = a);
+        this.activityService.getActivitiesToValidate(this.page).subscribe(a => this.activities = a);
         this.filter = 'À Valider';
         break;
     }
@@ -176,6 +183,10 @@ export class AdminComponent implements OnInit {
     if (activity.approved === true) return 'Status: Approuvée pour l\'équipe ' + activity.teamName || 'Inconnue';
     else if (activity.approved === false) return 'Status: Refusée'
     return 'Status: À Valider'
+  }
+
+  pages() {
+    return Array(this.pageCount)
   }
 
   private checkAdmin() {
