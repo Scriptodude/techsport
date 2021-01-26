@@ -14,7 +14,7 @@
             <tr *ngFor="let team of teams; let i = index">
                 <th scope="row">{{ i+1 }}</th>
                 <td>{{ team.name }}</td>
-                <td>{{ team.hours | number }}h {{ team.minutes | number }}m {{ team.seconds | number }}s</td>
+                <td>{{ team.timeTotal.hours | number }}h {{ team.timeTotal.minutes | number }}m {{ team.timeTotal.seconds | number }}s</td>
                 <td>{{ getTeamLastAdd(i) }}</td>
             </tr>
         </tbody>

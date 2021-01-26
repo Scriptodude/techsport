@@ -77,10 +77,9 @@ export class ScoreboardComponent implements OnInit {
 
     if (Object.entries(team.timeChanges).length == 0) return "Aucun";
 
-    const totalSeconds = Object.entries(team.timeChanges).sort((a, b) => a[0].localeCompare(b[0]))[0][1]
-    const hours = Math.floor(totalSeconds / 3600)
-    const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
-    const seconds = Math.floor((totalSeconds - hours * 3600 - minutes * 60));
+    const hours = team.timeToday.hours
+    const minutes = team.timeToday.minutes
+    const seconds = team.timeToday.seconds
 
     return hours + "h " + minutes + "m " + seconds + "s ";
   }

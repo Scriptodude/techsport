@@ -1,6 +1,7 @@
 package com.techso.techsport.model.response
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.techso.techsport.model.Time
 import java.time.LocalDate
 
 data class TeamResponse(
@@ -9,7 +10,6 @@ data class TeamResponse(
     val members: List<String>,
     val timeChanges: Map<LocalDate, Long>
 ) {
-    val hours = timeInSeconds / 3600;
-    val minutes = (timeInSeconds - hours * 3600) / 60;
-    val seconds = timeInSeconds - hours * 3600 - minutes * 60
+    val timeTotal = Time(this.timeInSeconds)
+    val timeToday = Time(timeChanges.getOrDefault(LocalDate.now(), 0))
 }
