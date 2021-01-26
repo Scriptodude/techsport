@@ -10,5 +10,6 @@ data class ActivityToValidate(
     var activityTime: Time,
     @get:JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     var activityDate: Instant,
-    var approved: Boolean? = null
+    var approved: Boolean? = null,
+    var teamName: String? = null
 )

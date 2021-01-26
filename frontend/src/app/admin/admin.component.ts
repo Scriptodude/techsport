@@ -7,6 +7,8 @@ import { TeamsService } from '../teams.service';
 import { catchError } from 'rxjs/operators'
 import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
+import Activity from '../models/activity';
+import { ActivityService } from '../activity.service';
 
 @Component({
   selector: 'app-admin',
@@ -16,32 +18,36 @@ import { of, throwError } from 'rxjs';
 export class AdminComponent implements OnInit {
 
   public active = 1;
+  public activities: Activity[] = [];
   public tokenInput: string = '';
   public isAdmin: Boolean = false;
   public teams: Team[] = [];
-  public newTeam: {name: string; members: string;} = { name: '', members: '' };
-  public moreTime: addTimeBody = {hours: 0, minutes:0, seconds: 0}
+  public newTeam: { name: string; members: string; } = { name: '', members: '' };
+  public moreTime: addTimeBody = { hours: 0, minutes: 0, seconds: 0 }
   public selectedTeam: Team = createDefaultTeam();
   public error: string = '';
   public success: string = '';
+  public filter: string = 'todo';
 
   constructor(
     private loginService: LoginService,
-    private teamService: TeamsService) { }
+    private teamService: TeamsService,
+    private activityService: ActivityService) { }
 
   ngOnInit(): void {
     this.checkAdmin();
 
     this.teamService.getAllTeams().subscribe(t => this.teams = t);
+    this.getActivities();
   }
 
   async submitToken() {
     this.error = '';
     this.success = '';
     this.isAdmin = false;
-    const d:Date = new Date();
+    const d: Date = new Date();
     d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
-    const expires:string = `expires=${d.toUTCString()}`;
+    const expires: string = `expires=${d.toUTCString()}`;
     document.cookie = `token=${this.tokenInput}; ${expires}`;
 
     this.checkAdmin();
@@ -52,7 +58,7 @@ export class AdminComponent implements OnInit {
     this.success = '';
     this.selectedTeam = team
 
-    if(team.members.length > 0) {
+    if (team.members.length > 0) {
       this.newTeam.members = team.members.join('\n')
     }
   }
@@ -64,14 +70,14 @@ export class AdminComponent implements OnInit {
     const members = this.newTeam.members.trim().split('\n');
 
     if (name.length != 0) {
-      this.teamService.createTeam({name, members})
-      .pipe(catchError(this.handleErrorCreateTeam.bind(this)))
-      .subscribe(r => {
-        if (r == null) return;
-        this.teams.push(r);
-        this.newTeam = {name: '', members: ''}
-        this.success = 'Nouvelle équipe ajoutée.';
-      });
+      this.teamService.createTeam({ name, members })
+        .pipe(catchError(this.handleErrorCreateTeam.bind(this)))
+        .subscribe(r => {
+          if (r == null) return;
+          this.teams.push(r);
+          this.newTeam = { name: '', members: '' }
+          this.success = 'Nouvelle équipe ajoutée.';
+        });
     }
   }
 
@@ -116,12 +122,64 @@ export class AdminComponent implements OnInit {
         this.success = 'Équipe mise à jour avec succès.';
         this.error = '';
         this.selectedTeam = createDefaultTeam();
-        this.newTeam = {name:'', members: ''}
+        this.newTeam = { name: '', members: '' }
       })
   }
 
+  changeApproval(activity: Activity, team: string, approved: boolean) {
+    this.error = '';
+    this.success = '';
+
+    if (activity == null || activity.id.trim().length == 0) {
+      this.error = 'Aucune activité associée';
+      return
+    }
+
+    this.activityService.changeActivityApproval({
+      teamName: team,
+      activityId: activity.id,
+      approved
+    })
+      .pipe(catchError(this.handleAppovalError.bind(this)))
+      .subscribe(r => {
+        if (r == false) return;
+
+        this.success = 'La demande fut ' + (approved == true ? 'approuvée' : 'refusée') + ' avec succès!';
+        this.getActivities()
+      })
+  }
+
+  getActivities(filter: string = 'todo') {
+    switch(filter) {
+      case "all":
+        this.activityService.getAllActivities().subscribe(a => this.activities = a);
+        this.filter = 'Toutes';
+        break;
+      case 'declined':
+        this.activityService.getAllActivities().subscribe(a => this.activities = a.filter(i => i.approved == false));
+        this.filter = 'Refusées';
+        break;    
+      case 'approved':
+        this.activityService.getAllActivities().subscribe(a => this.activities = a.filter(i => i.approved == true));
+        this.filter = 'Approuvées';
+        break;
+      default:
+      case 'todo':
+        this.activityService.getActivitiesToValidate().subscribe(a => this.activities = a);
+        this.filter = 'À Valider';
+        break;
+    }
+  }
+
+  getStatus(activity: Activity) {
+    if (activity == null) return ''
+    if (activity.approved === true) return 'Status: Approuvée pour l\'équipe ' + activity.teamName || 'Inconnue';
+    else if (activity.approved === false) return 'Status: Refusée'
+    return 'Status: À Valider'
+  }
+
   private checkAdmin() {
-      this.loginService.isAdmin().subscribe(r => this.isAdmin = r.status == 200)
+    this.loginService.isAdmin().subscribe(r => this.isAdmin = r.status == 200)
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -132,7 +190,7 @@ export class AdminComponent implements OnInit {
   }
 
   private handleErrorCreateTeam(error: HttpErrorResponse) {
-    switch(error.status) {
+    switch (error.status) {
       case 409:
         this.error = 'Une équipe avec ce nom existe déjà'
         break;
@@ -141,9 +199,24 @@ export class AdminComponent implements OnInit {
         break;
       default: this.error = 'Erreur lors de la création/édition de l\'équipe'
     }
-    this.error = error.status == 409 ? 'Une équipe avec ce nom existe déjà' : 'Erreur lors de la création de l\'équipe'
 
     throwError("Could not finish the call");
     return of(null);
+  }
+
+  private handleAppovalError(error: HttpErrorResponse) {
+    switch (error.status) {
+      case 409:
+        this.error = 'Cette demande est déjà approuvée'
+        this.getActivities();
+        break;
+      case 404:
+        this.error = 'Cette demande n\'existe plus'
+        break;
+      default: this.error = 'Erreur lors de l\'approbation de la demande'
+    }
+
+    throwError("Could not finish the call")
+    return of(false)
   }
 }

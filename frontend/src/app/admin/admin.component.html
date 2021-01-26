@@ -25,8 +25,7 @@
                                     selectedTeam.name ||
                                     'Choisir l\'équipe'}}</button>
                                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="mb-4">
-                                    <button ngbDropdownItem *ngFor="let team of teams"
-                                        (click)="selectTeam(team)">{{
+                                    <button ngbDropdownItem *ngFor="let team of teams" (click)="selectTeam(team)">{{
                                         team.name }}</button>
                                 </div>
                             </div>
@@ -66,20 +65,55 @@
                     </div>
                 </ng-template>
             </li>
-            <li [ngbNavItem]="2">
-                <a ngbNavLink>Créer une équipe</a>
+            <li [ngbNavItem]="2" (click)="getActivities()">
+                <a ngbNavLink>Approbations</a>
                 <ng-template ngbNavContent class="d-flex justify-content-center">
-                    <div class="text-center border border-light p-5">
-                        <p class="h4 mb-4">Créer une nouvelle équipe</p>
-                        <input type="text" [(ngModel)]="newTeam.name" class="form-control mb-4"
-                            placeholder="Nom de l'équipe" />
-
-                        <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
-                        <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
-
-                        <button mdbBtn class="btn btn-primary form-control mb-4" (click)="createTeam()">Créer</button>
+                    <span>Filtrer par:</span>
+                    <div ngbDropdown class="d-inline-block">
+                        <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ filter
+                            }}</button>
+                        <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
+                            <button ngbDropdownItem (click)="getActivities('all')">Toutes</button>
+                            <button ngbDropdownItem (click)="getActivities('todo')">À Valider</button>
+                            <button ngbDropdownItem (click)="getActivities('declined')">Refusées</button>
+                            <button ngbDropdownItem (click)="getActivities('approved')">Approuvées</button>
+                        </div>
                     </div>
+                    <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
+                        <ng-container *ngFor="let activity of activities">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <a class="" href="https://www.strava.com/activities/{{activity.id}}">Lien vers
+                                        l'activité (Strava)</a>
+                                    <div class="row">
+                                        <span class="col-sm-6">Athlète: {{ activity.athleteFullName }}</span>
+                                        <span class="col-sm-6">Date: {{activity.activityDate}}</span>
+                                        <span class="col-sm-6">Temps: {{activity.activityTime.hours}}h
+                                            {{activity.activityTime.minutes}}m {{activity.activityTime.seconds}}s</span>
+                                        <span class="col-sm-6">{{ getStatus(activity) }}</span>
+                                    </div>
+                                    <ng-container *ngIf="activity.approved == false || activity.approved == null">
+                                        <div ngbDropdown class="d-inline-block">
+                                            <button class="btn btn-primary dropdown-toggle" id="selectTeamApproval"
+                                                ngbDropdownToggle>Approuver pour l'équipe</button>
+                                            <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
+                                                <button ngbDropdownItem *ngFor="let team of teams"
+                                                    (click)="changeApproval(activity, team.name, true)">{{team.name}}</button>
+                                            </div>
+                                        </div>
+                                        <button mdbBtn class="btn btn-primary"
+                                            (click)="changeApproval(activity, 'test-2', false)">Refuser</button>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <ng-template #noActivities>
+                        <h1 class="text-center border border-light p-5">Aucune demande d'approbation n'est disponible
+                        </h1>
+                    </ng-template>
                 </ng-template>
+
             </li>
             <li [ngbNavItem]="3">
                 <a ngbNavLink>Éditer une équipe</a>
@@ -93,8 +127,7 @@
                                     selectedTeam.name ||
                                     'Choisir l\'équipe'}}</button>
                                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="mb-4">
-                                    <button ngbDropdownItem *ngFor="let team of teams"
-                                        (click)="selectTeam(team)">{{
+                                    <button ngbDropdownItem *ngFor="let team of teams" (click)="selectTeam(team)">{{
                                         team.name }}</button>
                                 </div>
                             </div>
@@ -102,10 +135,27 @@
 
                         <div *ngIf="selectedTeam.name">
                             <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
-                            <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
-    
-                            <button mdbBtn class="btn btn-primary form-control mb-4" (click)="editTeam()">Éditer</button>
+                            <textarea id="team-member" [(ngModel)]="newTeam.members"
+                                class="form-control mb-4"></textarea>
+
+                            <button mdbBtn class="btn btn-primary form-control mb-4"
+                                (click)="editTeam()">Éditer</button>
                         </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="4">
+                <a ngbNavLink>Créer une équipe</a>
+                <ng-template ngbNavContent class="d-flex justify-content-center">
+                    <div class="text-center border border-light p-5">
+                        <p class="h4 mb-4">Créer une nouvelle équipe</p>
+                        <input type="text" [(ngModel)]="newTeam.name" class="form-control mb-4"
+                            placeholder="Nom de l'équipe" />
+
+                        <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
+                        <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
+
+                        <button mdbBtn class="btn btn-primary form-control mb-4" (click)="createTeam()">Créer</button>
                     </div>
                 </ng-template>
             </li>

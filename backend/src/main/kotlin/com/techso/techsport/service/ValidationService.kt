@@ -45,6 +45,7 @@ constructor(
 
                 if (approved) {
                     this.teamService.addTimeToTeam(teamName, activity.activityTime.timeInSeconds)
+                    activity.teamName = teamName
                 }
 
                 this.activityToValidateRepository.save(activity)
