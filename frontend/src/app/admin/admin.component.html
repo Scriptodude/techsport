@@ -26,16 +26,16 @@
                                     'Choisir l\'équipe'}}</button>
                                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="mb-4">
                                     <button ngbDropdownItem *ngFor="let team of teams"
-                                        (click)="selectTeam(team.name, {hours: team.hours, minutes: team.minutes, seconds: team.seconds})">{{
+                                        (click)="selectTeam(team)">{{
                                         team.name }}</button>
                                 </div>
                             </div>
                         </div>
                         <div class="form-control mb-4" *ngIf="selectedTeam.name.trim().length > 0">
                             <p class="h6 mb-4">L'équipe possède actuellement :
-                                {{ selectedTeam.currentTime.hours }} heures
-                                {{ selectedTeam.currentTime.minutes }} minutes
-                                {{ selectedTeam.currentTime.seconds }} secondes</p>
+                                {{ selectedTeam.timeTotal.hours }} heures
+                                {{ selectedTeam.timeTotal.minutes }} minutes
+                                {{ selectedTeam.timeTotal.seconds }} secondes</p>
                         </div>
                         <br />
                         <div class="container border border-primary">
@@ -94,7 +94,7 @@
                                     'Choisir l\'équipe'}}</button>
                                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="mb-4">
                                     <button ngbDropdownItem *ngFor="let team of teams"
-                                        (click)="selectTeam(team.name, {hours: team.hours, minutes: team.minutes, seconds: team.seconds}, team.members)">{{
+                                        (click)="selectTeam(team)">{{
                                         team.name }}</button>
                                 </div>
                             </div>

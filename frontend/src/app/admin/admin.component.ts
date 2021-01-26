@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
 import AddTimeBody from '../models/addTimeBody';
 import addTimeBody from '../models/addTimeBody';
-import Team from '../models/team';
+import Team, { createDefaultTeam } from '../models/team';
 import { TeamsService } from '../teams.service';
 import { catchError } from 'rxjs/operators'
 import { HttpErrorResponse } from '@angular/common/http';
@@ -21,7 +21,7 @@ export class AdminComponent implements OnInit {
   public teams: Team[] = [];
   public newTeam: {name: string; members: string;} = { name: '', members: '' };
   public moreTime: addTimeBody = {hours: 0, minutes:0, seconds: 0}
-  public selectedTeam: {name: string, members: string[], currentTime: AddTimeBody} = {name: '', members: [], currentTime: this.moreTime};
+  public selectedTeam: Team = createDefaultTeam();
   public error: string = '';
   public success: string = '';
 
@@ -47,13 +47,13 @@ export class AdminComponent implements OnInit {
     this.checkAdmin();
   }
 
-  selectTeam(name: string, currentTime: AddTimeBody,  members: string[] = []) {
+  selectTeam(team: Team) {
     this.error = '';
     this.success = '';
-    this.selectedTeam = {name, members, currentTime};
+    this.selectedTeam = team
 
-    if(members.length > 0) {
-      this.newTeam.members = members.join('\n')
+    if(team.members.length > 0) {
+      this.newTeam.members = team.members.join('\n')
     }
   }
 
@@ -92,9 +92,9 @@ export class AdminComponent implements OnInit {
       .pipe(catchError(this.handleError.bind(this)))
       .subscribe(r => {
         if (r == false) return;
-        this.selectedTeam.currentTime.hours += this.moreTime.hours;
-        this.selectedTeam.currentTime.minutes += this.moreTime.minutes;
-        this.selectedTeam.currentTime.seconds += this.moreTime.seconds;
+        this.selectedTeam.timeTotal.hours += this.moreTime.hours;
+        this.selectedTeam.timeTotal.minutes += this.moreTime.minutes;
+        this.selectedTeam.timeTotal.seconds += this.moreTime.seconds;
         this.success = 'Temps mis à jour avec succès.';
       });
   }
@@ -115,7 +115,7 @@ export class AdminComponent implements OnInit {
         if (r == null) return
         this.success = 'Équipe mise à jour avec succès.';
         this.error = '';
-        this.selectedTeam = {name:'', members:[], currentTime: {hours: 0, minutes: 0, seconds: 0}}
+        this.selectedTeam = createDefaultTeam();
         this.newTeam = {name:'', members: ''}
       })
   }
