@@ -10,6 +10,7 @@ import { AdminComponent } from './admin/admin.component';
 import { FormsModule } from '@angular/forms';
 import { TeamsComponent } from './teams/teams.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
+import { StravaComponent } from './strava/strava.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ScoreboardComponent } from './scoreboard/scoreboard.component';
     NavigationComponent,
     AdminComponent,
     TeamsComponent,
-    ScoreboardComponent
+    ScoreboardComponent,
+    StravaComponent
   ],
   imports: [
     BrowserModule,

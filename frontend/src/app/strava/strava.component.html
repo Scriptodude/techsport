@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <h2 *ngIf="failure" class="border border-danger bg-danger text-light">Impossible d'importer les données.</h2>
+        <h2 *ngIf="success" class="border border-success bg-success">Données importées avec succès</h2>
+    </div>
+    <h4>Demande d'approbation via strava</h4>
+    <p>En cliquant sur le bouton ci-dessous,
+        vous allez pouvoir importer toutes vos activités publiques d'aujourd'hui.</p>
+    <p>Ceci créera alors des demandes d'approbation à être approuvés par les admins.</p>
+    <p>Il n'y a aucun système de feedback pour savoir si votre activité est acceptée ou refusée pour l'instant. </p>
+
+    <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava">Importer de strava</a>
+</div>

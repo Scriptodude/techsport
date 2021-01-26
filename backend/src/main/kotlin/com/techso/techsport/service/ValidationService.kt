@@ -56,7 +56,7 @@ constructor(
     fun addActivity(activity: Activity, athlete: Athlete) {
         val activityOpt = this.activityToValidateRepository.findById(activity.id.toString());
 
-        if (activityOpt.isPresent) return;
+        if (activityOpt.isPresent) return
         else {
             val newActivity = ActivityToValidate(
                 id = activity.id.toString(),
