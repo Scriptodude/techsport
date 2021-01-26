@@ -1,3 +1,8 @@
 package com.techso.techsport.model.request
 
-data class AddTimeToTeamRequest(val hours: Int, val minutes: Int, val seconds: Int?)
+import com.fasterxml.jackson.annotation.JsonCreator
+
+
+data class AddTimeToTeamRequest
+@JsonCreator
+constructor(val hours: Int, val minutes: Int, val seconds: Int?)

@@ -26,6 +26,8 @@ class TeamService
         if (team != null) {
             team.addTime(timeInSeconds)
             teamRepository.save(team)
+        } else {
+            throw TeamNotFoundException()
         }
     }
 

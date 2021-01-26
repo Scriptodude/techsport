@@ -30,10 +30,7 @@ constructor(
     }
 
     @GetMapping("/callback")
-    fun oauthStrava(
-        @CookieValue("token") token: String,
-        stravaAuthRequest: StravaAuthRequest): List<Activity> {
-        this.loginService.validateToken(token)
-        return this.stravaService.handleStravaAuth(stravaAuthRequest)
+    fun oauthStrava(stravaAuthRequest: StravaAuthRequest) {
+        this.stravaService.handleStravaAuth(stravaAuthRequest)
     }
 }

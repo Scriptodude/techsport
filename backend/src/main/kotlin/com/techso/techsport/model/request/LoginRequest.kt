@@ -1,3 +1,7 @@
 package com.techso.techsport.model.request
 
-data class LoginRequest(val token: String)
+import com.fasterxml.jackson.annotation.JsonCreator
+
+data class LoginRequest
+@JsonCreator
+constructor(val token: String)

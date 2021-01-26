@@ -1,3 +1,7 @@
 package com.techso.techsport.model.request
 
-data class UpdateTeamMembers(val members: List<String>)
+import com.fasterxml.jackson.annotation.JsonCreator
+
+data class UpdateTeamMembers
+@JsonCreator
+constructor(val members: List<String>)

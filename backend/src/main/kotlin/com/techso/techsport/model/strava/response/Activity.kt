@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 
 data class Activity(
-    @JsonProperty("athlete") val athlete: Athlete,
+    @JsonProperty("id") val id: Long,
     @JsonProperty("moving_time") val movingTime: Long,
-    @JsonProperty("start_date") val startDate: Instant?
+    @JsonProperty("start_date_local") val startDate: Instant?
 )

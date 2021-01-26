@@ -1,3 +1,7 @@
 package com.techso.techsport.model.request
 
-class CreateNewTeamRequest(val name: String, val members: List<String>)
+import com.fasterxml.jackson.annotation.JsonCreator
+
+class CreateNewTeamRequest
+@JsonCreator
+constructor(val name: String, val members: List<String>)

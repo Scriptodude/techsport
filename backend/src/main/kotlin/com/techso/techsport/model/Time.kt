@@ -1,7 +1,7 @@
 package com.techso.techsport.model
 
-data class Time(val timeInSeconds: Long) {
-    val hours = timeInSeconds / 3600;
-    val minutes = (timeInSeconds - hours * 3600) / 60;
-    val seconds = timeInSeconds - hours * 3600 - minutes * 60
+data class Time(var timeInSeconds: Long) {
+    var hours = timeInSeconds / 3600;
+    var minutes = (timeInSeconds - hours * 3600) / 60;
+    var seconds = timeInSeconds - hours * 3600 - minutes * 60
 }
