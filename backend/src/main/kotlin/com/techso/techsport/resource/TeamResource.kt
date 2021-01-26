@@ -2,6 +2,7 @@ package com.techso.techsport.resource
 
 import com.techso.techsport.model.request.AddTimeToTeamRequest
 import com.techso.techsport.model.request.CreateNewTeamRequest
+import com.techso.techsport.model.request.UpdateTeamMembers
 import com.techso.techsport.model.response.TeamResponse
 import com.techso.techsport.service.LoginService
 import com.techso.techsport.service.TeamService
@@ -54,5 +55,16 @@ class TeamResource
         this.loginService.validateToken(token)
         val timeInSeconds = timeService.toSeconds(timeToTeamRequest)
         this.teamService.addTimeToTeam(name, timeInSeconds)
+    }
+
+    @PutMapping("/{name}")
+    fun editMembers(
+        @PathVariable name: String,
+        @CookieValue("token") token: String,
+        @RequestBody updateTeamMembers: UpdateTeamMembers): TeamResponse {
+        this.loginService.validateToken(token)
+
+        val team = this.teamService.updateTeam(name, updateTeamMembers.members)
+        return TeamResponse(team.name, team.timeInSeconds, team.members, team.timeChanges)
     }
 }

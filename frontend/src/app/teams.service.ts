@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import AddTimeBody from './models/addTimeBody';
 import CreateTeamBody from './models/createTeamBody';
 import Team from './models/team';
+import UpdateTeamMembers from './models/updateTeamMembers';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,9 @@ export class TeamsService {
 
   addTime(name: string, body: AddTimeBody) {
     return this.client.post(environment.apiUrl + '/teams/' + name, body, {withCredentials: true});
+  }
+
+  updateTeam(name: string, body: UpdateTeamMembers) {
+    return this.client.put(environment.apiUrl + '/teams/' + name, body, {withCredentials: true});
   }
 }

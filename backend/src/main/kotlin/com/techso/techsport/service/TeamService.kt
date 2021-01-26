@@ -2,6 +2,7 @@ package com.techso.techsport.service
 
 import com.techso.techsport.model.Team
 import com.techso.techsport.model.exception.AlreadyExistsException
+import com.techso.techsport.model.exception.TeamNotFoundException
 import com.techso.techsport.repository.TeamRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
@@ -35,6 +36,16 @@ class TeamService
         }
 
         val team = Team(name)
+        team.members.addAll(members)
+
+        return teamRepository.save(team)
+    }
+
+    @Transactional
+    fun updateTeam(name: String, members: List<String>): Team {
+        val team = teamRepository.findByName(name) ?: throw TeamNotFoundException()
+
+        team.members.clear()
         team.members.addAll(members)
 
         return teamRepository.save(team)

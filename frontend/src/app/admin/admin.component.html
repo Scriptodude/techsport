@@ -66,21 +66,49 @@
                     </div>
                 </ng-template>
             </li>
-          <li [ngbNavItem]="2">
-            <a ngbNavLink>Équipes</a>
-            <ng-template ngbNavContent class="d-flex justify-content-center">
-              <div class="text-center border border-light p-5">
-                <p class="h4 mb-4">Créer une nouvelle équipe</p>
-                <input type="text" [(ngModel)]="newTeam.name" class="form-control mb-4"
-                       placeholder="Nom de l'équipe" />
+            <li [ngbNavItem]="2">
+                <a ngbNavLink>Créer une équipe</a>
+                <ng-template ngbNavContent class="d-flex justify-content-center">
+                    <div class="text-center border border-light p-5">
+                        <p class="h4 mb-4">Créer une nouvelle équipe</p>
+                        <input type="text" [(ngModel)]="newTeam.name" class="form-control mb-4"
+                            placeholder="Nom de l'équipe" />
 
-                <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
-                <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
+                        <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
+                        <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
 
-                <button mdbBtn class="btn btn-primary form-control mb-4" (click)="createTeam()">Créer</button>
-              </div>
-            </ng-template>
-          </li>
+                        <button mdbBtn class="btn btn-primary form-control mb-4" (click)="createTeam()">Créer</button>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+                <a ngbNavLink>Éditer une équipe</a>
+                <ng-template ngbNavContent class="d-flex justify-content-center">
+                    <div class="text-center border border-light p-5">
+                        <p class="h4 mb-4">Éditer une équipe</p>
+                        <div id="team-name" class="col">
+                            <div ngbDropdown class="d-inline-block">
+                                <button class="btn btn-primary btn-lg dropdown-toggle" id="dropdownBasic1"
+                                    ngbDropdownToggle>{{
+                                    selectedTeam.name ||
+                                    'Choisir l\'équipe'}}</button>
+                                <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="mb-4">
+                                    <button ngbDropdownItem *ngFor="let team of teams"
+                                        (click)="selectTeam(team.name, {hours: team.hours, minutes: team.minutes, seconds: team.seconds}, team.members)">{{
+                                        team.name }}</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="selectedTeam.name">
+                            <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
+                            <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
+    
+                            <button mdbBtn class="btn btn-primary form-control mb-4" (click)="editTeam()">Éditer</button>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
         </ul>
 
         <div [ngbNavOutlet]="nav" class="mt-2"></div>

@@ -21,7 +21,7 @@ export class AdminComponent implements OnInit {
   public teams: Team[] = [];
   public newTeam: {name: string; members: string;} = { name: '', members: '' };
   public moreTime: addTimeBody = {hours: 0, minutes:0, seconds: 0}
-  public selectedTeam: {name: string, currentTime: AddTimeBody} = {name: '', currentTime: this.moreTime};
+  public selectedTeam: {name: string, members: string[], currentTime: AddTimeBody} = {name: '', members: [], currentTime: this.moreTime};
   public error: string = '';
   public success: string = '';
 
@@ -47,10 +47,14 @@ export class AdminComponent implements OnInit {
     this.checkAdmin();
   }
 
-  selectTeam(name: string, currentTime: AddTimeBody) {
+  selectTeam(name: string, currentTime: AddTimeBody,  members: string[] = []) {
     this.error = '';
     this.success = '';
-    this.selectedTeam = {name, currentTime};
+    this.selectedTeam = {name, members, currentTime};
+
+    if(members.length > 0) {
+      this.newTeam.members = members.join('\n')
+    }
   }
 
   createTeam() {
@@ -95,6 +99,27 @@ export class AdminComponent implements OnInit {
       });
   }
 
+  editTeam() {
+    this.error = '';
+    this.success = '';
+
+    if (this.selectedTeam.name.trim() == '') {
+      this.error = 'Vous devez choisir une équipe';
+      return;
+    }
+
+    this.teamService
+      .updateTeam(this.selectedTeam.name, { members: this.newTeam.members.length == 0 ? [] : this.newTeam.members.split('\n') })
+      .pipe(catchError(this.handleErrorCreateTeam.bind(this)))
+      .subscribe(r => {
+        if (r == null) return
+        this.success = 'Équipe mise à jour avec succès.';
+        this.error = '';
+        this.selectedTeam = {name:'', members:[], currentTime: {hours: 0, minutes: 0, seconds: 0}}
+        this.newTeam = {name:'', members: ''}
+      })
+  }
+
   private checkAdmin() {
       this.loginService.isAdmin().subscribe(r => this.isAdmin = r.status == 200)
   }
@@ -107,6 +132,15 @@ export class AdminComponent implements OnInit {
   }
 
   private handleErrorCreateTeam(error: HttpErrorResponse) {
+    switch(error.status) {
+      case 409:
+        this.error = 'Une équipe avec ce nom existe déjà'
+        break;
+      case 404:
+        this.error = 'Cette équipe n\'existe pas'
+        break;
+      default: this.error = 'Erreur lors de la création/édition de l\'équipe'
+    }
     this.error = error.status == 409 ? 'Une équipe avec ce nom existe déjà' : 'Erreur lors de la création de l\'équipe'
 
     throwError("Could not finish the call");
