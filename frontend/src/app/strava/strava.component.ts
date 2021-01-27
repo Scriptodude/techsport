@@ -10,18 +10,10 @@ import { environment } from 'src/environments/environment';
 export class StravaComponent implements OnInit {
 
   apiUrl = environment.apiUrl;
-  success = null;
-  failure = null;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      console.log(params)
-      this.success = params["success"];
-      this.failure = params["failure"];
-      console.log(this.success)
-  });
   }
 
 }

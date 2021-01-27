@@ -28,21 +28,19 @@ export class AdminComponent implements OnInit {
   public selectedTeam: Team = createDefaultTeam();
   public error: string = '';
   public success: string = '';
-  public filter: string = 'todo';
+  public filter: string = 'À Valider';
   public page: number = 1;
   public pageCount: number = 1;
 
   constructor(
     private loginService: LoginService,
     private teamService: TeamsService,
-    private activityService: ActivityService,
-    private activatedRoute: ActivatedRoute) { }
+    private activityService: ActivityService) { }
 
   ngOnInit(): void {
     this.checkAdmin();
 
     this.teamService.getAllTeams().subscribe(t => this.teams = t);
-    this.activatedRoute.queryParams.subscribe(params => this.page = params['page'] || 1)
     this.getActivities();
   }
 
@@ -154,26 +152,23 @@ export class AdminComponent implements OnInit {
       })
   }
 
-  getActivities(filter: string = 'todo') {
+  getActivities(filter: string = 'À Valider') {
     this.activityService.getPageCount().subscribe(p => this.pageCount = p.pages)
+    this.filter = filter;
 
-    switch(filter) {
-      case "all":
+    switch(this.filter) {
+      case "Toutes":
         this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a);
-        this.filter = 'Toutes';
         break;
-      case 'declined':
+      case 'Refusées':
         this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == false));
-        this.filter = 'Refusées';
         break;    
-      case 'approved':
+      case 'Approuvées':
         this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == true));
-        this.filter = 'Approuvées';
         break;
       default:
-      case 'todo':
+      case 'À Valider':
         this.activityService.getActivitiesToValidate(this.page).subscribe(a => this.activities = a);
-        this.filter = 'À Valider';
         break;
     }
   }
@@ -187,6 +182,11 @@ export class AdminComponent implements OnInit {
 
   pages() {
     return Array(this.pageCount)
+  }
+
+  changePage(page: number) {
+    this.page = page
+    this.getActivities(this.filter)
   }
 
   private checkAdmin() {

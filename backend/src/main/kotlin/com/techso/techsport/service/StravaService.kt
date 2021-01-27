@@ -62,9 +62,9 @@ constructor(
                 }
             }
         } catch (e: Exception) {
-            httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true")
+            httpResponse.sendRedirect("${this.frontUrl}?failure=true")
         }
 
-        httpResponse.sendRedirect("${this.frontUrl}/strava?success=true")
+        httpResponse.sendRedirect("${this.frontUrl}?success=true")
     }
 }

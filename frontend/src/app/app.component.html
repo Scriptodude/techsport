@@ -1,2 +1,6 @@
 <app-navigation></app-navigation>
+<div class="d-flex justify-content-center">
+    <h2 *ngIf="failure" class="border border-danger bg-danger text-light">Impossible d'importer les données.</h2>
+    <h2 *ngIf="success" class="border border-success bg-success">Données importées avec succès</h2>
+</div>
 <router-outlet></router-outlet>
