@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse
 class LoginResource
 @Autowired constructor(private val loginService: LoginService) {
 
-    @PostMapping("/api/isAdmin")
+    @PostMapping("/isAdmin")
     fun isAdmin(@CookieValue("token") token: String) {
         this.loginService.validateToken(token)
     }

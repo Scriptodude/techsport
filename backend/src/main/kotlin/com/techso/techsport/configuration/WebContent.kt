@@ -1,18 +1,30 @@
 package com.techso.techsport.configuration
 
+import org.springframework.boot.web.server.ErrorPage
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.util.AntPathMatcher
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.method.HandlerTypePredicate
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.servlet.config.annotation.*
 import org.springframework.web.util.UrlPathHelper
+import org.springframework.http.HttpStatus
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory
+
+import org.springframework.boot.web.server.WebServerFactoryCustomizer
+
+
+
+
+
+
 
 @Configuration
-@EnableWebMvc
 class WebContent : WebMvcConfigurer {
+
+    override fun addViewControllers(registry: ViewControllerRegistry) {
+        registry.addViewController("/notFound").setViewName("forward:/")
+    }
 
     override fun configurePathMatch(configurer: PathMatchConfigurer) {
         configurer
@@ -25,11 +37,23 @@ class WebContent : WebMvcConfigurer {
     }
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("/strava")
-                .addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/admin")
-                .addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/*")
-                .addResourceLocations("classpath:/static/");
+            .addResourceLocations("classpath:/static/*");
+        registry.addResourceHandler("/strava")
+            .addResourceLocations("classpath:/static/*");
+        registry.addResourceHandler("/admin")
+            .addResourceLocations("classpath:/static/*");
+    }
+
+    @Bean
+    fun containerCustomizer(): WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>? {
+        return WebServerFactoryCustomizer { container: ConfigurableServletWebServerFactory ->
+            container.addErrorPages(
+                ErrorPage(
+                    HttpStatus.NOT_FOUND,
+                    "/notFound"
+                )
+            )
+        }
     }
 }

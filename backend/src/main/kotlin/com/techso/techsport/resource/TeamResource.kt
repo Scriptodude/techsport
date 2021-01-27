@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/teams")
+@RequestMapping("/teams")
 @CrossOrigin(value = [
     "http://localhost:4200",
     "http://techsport.herokuapp.com",

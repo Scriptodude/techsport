@@ -11,9 +11,16 @@ export class StravaComponent implements OnInit {
 
   apiUrl = environment.apiUrl;
 
+  success = null;
+  failure = null;
+
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.success = params["success"];
+      this.failure = params["failure"];
+  });
   }
 
 }

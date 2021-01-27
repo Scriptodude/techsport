@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/api/strava")
+@RequestMapping("/strava")
 @CrossOrigin(value = [
     "http://localhost:4200",
     "http://techsport.herokuapp.com",
