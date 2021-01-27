@@ -1,14 +1,17 @@
 <ul ngbNav [activeId]="route.fragment | async" [ngClass]="'nav-tabs d-flex mb-4'">
     <li [ngbNavItem]="1">
-        <a ngbNavLink routerLink="/pointage" routerLinkActive="active">Pointage</a>
+        <a ngbNavLink routerLink="/accueil" routerLinkActive="active">Accueil</a>
     </li>
     <li [ngbNavItem]="2">
-        <a ngbNavLink routerLink="/equipes" routerLinkActive="active">Équipes</a>
+        <a ngbNavLink routerLink="/pointage" routerLinkActive="active">Pointage</a>
     </li>
     <li [ngbNavItem]="3">
-        <a ngbNavLink routerLink="/strava">Importer de strava</a>
+        <a ngbNavLink routerLink="/equipes" routerLinkActive="active">Équipes</a>
     </li>
-    <li [ngbNavItem]="4" [ngClass]="'ml-auto'">
+    <li [ngbNavItem]="4">
+        <a ngbNavLink routerLink="/strava" routerLinkActive="active">Importer de strava</a>
+    </li>
+    <li [ngbNavItem]="5" [ngClass]="'ml-auto'" routerLinkActive="active">
         <a ngbNavLink routerLink="/admin">Administrer</a>
     </li>
 </ul>

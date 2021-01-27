@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { TeamsComponent } from './teams/teams.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 import { StravaComponent } from './strava/strava.component';
+import { RulesComponent } from './rules/rules.component';
+import { AngularEmojisModule } from 'angular-emojis';
 
 @NgModule({
   declarations: [
@@ -19,14 +21,16 @@ import { StravaComponent } from './strava/strava.component';
     AdminComponent,
     TeamsComponent,
     ScoreboardComponent,
-    StravaComponent
+    StravaComponent,
+    RulesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularEmojisModule
   ],
   providers: [],
   bootstrap: [AppComponent]
