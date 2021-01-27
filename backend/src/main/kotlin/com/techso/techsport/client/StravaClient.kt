@@ -1,6 +1,5 @@
 package com.techso.techsport.client
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
 import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete
@@ -10,7 +9,10 @@ import feign.Headers
 import feign.Param
 import feign.QueryMap
 import feign.RequestLine
-import java.time.*
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 interface StravaClient {
     @RequestLine("POST /v3/oauth/token")
@@ -26,7 +28,7 @@ interface StravaClient {
         @Param("token") token: String,
         @Param("after") after: Long = (
                 ZonedDateTime
-                    .of(LocalDate.of(2021, 1, 26), LocalTime.MIN, ZoneId.of("UTC"))
+                    .of(LocalDate.now(), LocalTime.MIN, ZoneId.of("UTC"))
                     .toInstant()
                     .toEpochMilli() / 1000)
     ): List<Activity>

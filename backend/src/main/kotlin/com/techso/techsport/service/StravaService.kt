@@ -56,9 +56,9 @@ constructor(
                     val activities = this.stravaClient.getAthleteActivities(response.accessToken);
                     val athlete = this.stravaClient.getCurrentAthlete(response.accessToken);
 
-                    activities.forEach {
-                        this.validationService.addActivity(it, athlete)
-                    }
+                    activities
+                        .filter { it.movingTime > 15 * 60 }
+                        .forEach { this.validationService.addActivity(it, athlete) }
                 }
             }
         } catch (e: Exception) {
