@@ -63,7 +63,7 @@ constructor(
                             .findById(athlete.id)
                             .map { it.lastImport }
                             .orElse(ZonedDateTime
-                                .of(LocalDate.of(2021, 1, 26), LocalTime.MIN, ZoneId.of("UTC"))
+                                .of(LocalDate.of(2021, 2, 1), LocalTime.MIN, ZoneId.of("UTC"))
                                 .toInstant())
                     val activities = this.stravaClient.getAthleteActivities(response.accessToken, lastImport.toEpochMilli() / 1000);
                     this.dataImportRepository.save(DataImport(athleteId = athlete.id, Instant.now()))
