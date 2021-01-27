@@ -1,15 +1,18 @@
 package com.techso.techsport.service
 
 import com.techso.techsport.client.StravaClient
+import com.techso.techsport.model.DataImport
 import com.techso.techsport.model.StravaConfig
 import com.techso.techsport.model.exception.UnauthorizedException
 import com.techso.techsport.model.request.StravaAuthRequest
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
+import com.techso.techsport.repository.DataImportRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.lang.Exception
 import java.net.URI
+import java.time.*
 import javax.servlet.http.HttpServletResponse
 
 @Service
@@ -20,6 +23,7 @@ constructor(
     private val stravaConfig: StravaConfig,
     private val validationService: ValidationService,
     @Value("\${techsport.front.url}") val frontUrl: String,
+    private val dataImportRepository: DataImportRepository
 ) {
 
     fun redirect(response: HttpServletResponse) =
@@ -53,8 +57,16 @@ constructor(
                 if (techso == null) {
                     System.err.println("Not in techso")
                 } else {
-                    val activities = this.stravaClient.getAthleteActivities(response.accessToken);
                     val athlete = this.stravaClient.getCurrentAthlete(response.accessToken);
+                    val lastImport =
+                        this.dataImportRepository
+                            .findById(athlete.id)
+                            .map { it.lastImport }
+                            .orElse(ZonedDateTime
+                                .of(LocalDate.of(2021, 1, 26), LocalTime.MIN, ZoneId.of("UTC"))
+                                .toInstant())
+                    val activities = this.stravaClient.getAthleteActivities(response.accessToken, lastImport.toEpochMilli() / 1000);
+                    this.dataImportRepository.save(DataImport(athleteId = athlete.id, Instant.now()))
 
                     activities
                         .filter { it.movingTime > 15 * 60 }

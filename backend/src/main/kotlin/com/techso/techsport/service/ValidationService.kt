@@ -1,12 +1,14 @@
 package com.techso.techsport.service
 
 import com.techso.techsport.model.ActivityToValidate
+import com.techso.techsport.model.DataImport
 import com.techso.techsport.model.Time
 import com.techso.techsport.model.exception.ActivityNotFoundException
 import com.techso.techsport.model.exception.AlreadyApprovedException
 import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.ActivityToValidateRepository
+import com.techso.techsport.repository.DataImportRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
