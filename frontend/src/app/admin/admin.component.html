@@ -94,14 +94,14 @@
                                     </div>
                                     <ng-container *ngIf="activity.approved == false || activity.approved == null">
                                         <div ngbDropdown class="d-inline-block">
-                                            <button class="btn btn-primary dropdown-toggle" id="selectTeamApproval"
+                                            <button class="btn btn-success dropdown-toggle" id="selectTeamApproval"
                                                 ngbDropdownToggle>Approuver pour l'équipe</button>
                                             <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
                                                 <button ngbDropdownItem *ngFor="let team of teams"
                                                     (click)="changeApproval(activity, team.name, true)">{{team.name}}</button>
                                             </div>
                                         </div>
-                                        <button mdbBtn class="btn btn-primary"
+                                        <button mdbBtn class="btn btn-danger"
                                             (click)="changeApproval(activity, 'test-2', false)">Refuser</button>
                                     </ng-container>
                                 </div>
