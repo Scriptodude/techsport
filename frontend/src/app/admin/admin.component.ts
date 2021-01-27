@@ -153,24 +153,26 @@ export class AdminComponent implements OnInit {
   }
 
   getActivities(filter: string = 'À Valider') {
-    this.activityService.getPageCount().subscribe(p => this.pageCount = p.pages)
-    this.filter = filter;
+    this.activityService.getPageCount().subscribe(p => {
+      this.pageCount = p.pages; this.page = 1
+      this.filter = filter;
 
-    switch(this.filter) {
-      case "Toutes":
-        this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a);
-        break;
-      case 'Refusées':
-        this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == false));
-        break;    
-      case 'Approuvées':
-        this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == true));
-        break;
-      default:
-      case 'À Valider':
-        this.activityService.getActivitiesToValidate(this.page).subscribe(a => this.activities = a);
-        break;
-    }
+      switch (this.filter) {
+        case "Toutes":
+          this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a);
+          break;
+        case 'Refusées':
+          this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == false));
+          break;
+        case 'Approuvées':
+          this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == true));
+          break;
+        default:
+        case 'À Valider':
+          this.activityService.getActivitiesToValidate(this.page).subscribe(a => this.activities = a);
+          break;
+      }
+    })
   }
 
   getStatus(activity: Activity) {
