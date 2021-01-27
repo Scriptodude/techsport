@@ -25,7 +25,10 @@ interface StravaClient {
     fun getAthleteActivities(
         @Param("token") token: String,
         @Param("after") after: Long = (
-                LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000)
+                ZonedDateTime
+                    .of(LocalDate.of(2021, 1, 26), LocalTime.MIN, ZoneId.of("UTC"))
+                    .toInstant()
+                    .toEpochMilli() / 1000)
     ): List<Activity>
 
     @Headers("Authorization: Bearer {token}")
