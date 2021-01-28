@@ -22,10 +22,7 @@ constructor(
     private val loginService: LoginService
 ) {
     @GetMapping
-    fun oauthStrava(
-        @CookieValue("token") token: String,
-        response: HttpServletResponse) {
-        this.loginService.validateToken(token)
+    fun oauthStrava(response: HttpServletResponse) {
         this.stravaService.redirect(response)
     }
 

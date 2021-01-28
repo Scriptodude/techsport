@@ -13,6 +13,7 @@ export class StravaComponent implements OnInit {
 
   success = null;
   failure = null;
+  reason: String = 'Impossible d\'importer les données'
 
   constructor(private route: ActivatedRoute) { }
 
@@ -20,6 +21,20 @@ export class StravaComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.success = params["success"];
       this.failure = params["failure"];
+      const reason = params["reason"];
+
+      switch (reason) {
+        case "1":
+          this.reason = 'Vous ne faites pas parti du club techso.'
+          break;
+        case "2":
+          this.reason = 'Vous pouvez importer vos données qu\'aux 15 minutes.'
+          break;
+        case "3":
+        default:
+          this.reason = 'Erreur lors de l\'import des données.'
+          break;
+      }
   });
   }
 

@@ -1,5 +1,6 @@
 package com.techso.techsport.client
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
 import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete

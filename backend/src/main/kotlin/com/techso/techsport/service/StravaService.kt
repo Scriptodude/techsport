@@ -6,6 +6,7 @@ import com.techso.techsport.model.StravaConfig
 import com.techso.techsport.model.exception.UnauthorizedException
 import com.techso.techsport.model.request.StravaAuthRequest
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
+import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.DataImportRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -34,7 +35,7 @@ constructor(
                         "redirect_uri=${this.stravaConfig.redirectUrl}&" +
                         "approval_prompt=auto&" +
                         "response_type=code&" +
-                        "scope=read,activity:read"
+                        "scope=read,activity:read,profile:read_all"
             )
                 .normalize()
                 .toString()
@@ -51,13 +52,13 @@ constructor(
                     )
                 )
 
-                val clubs = this.stravaClient.getClubs(response.accessToken)
-                val techso = clubs.firstOrNull { it.name.toLowerCase() == "techso" }
+                val athlete = this.stravaClient.getCurrentAthlete(response.accessToken);
+                val techso = athlete.clubs?.firstOrNull { it.name.toLowerCase() == "techso" };
 
                 if (techso == null) {
-                    System.err.println("Not in techso")
+                    httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=1")
+                    return
                 } else {
-                    val athlete = this.stravaClient.getCurrentAthlete(response.accessToken);
                     val lastImport =
                         this.dataImportRepository
                             .findById(athlete.id)
@@ -65,6 +66,12 @@ constructor(
                             .orElse(ZonedDateTime
                                 .of(LocalDate.of(2021, 2, 1), LocalTime.MIN, ZoneId.of("UTC"))
                                 .toInstant())
+
+                    if (lastImport.minusMillis(Instant.now().toEpochMilli()).toEpochMilli() < 15 * 60 * 1000) {
+                        httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=2")
+                        return
+                    }
+
                     val activities = this.stravaClient.getAthleteActivities(response.accessToken, lastImport.toEpochMilli() / 1000);
                     this.dataImportRepository.save(DataImport(athleteId = athlete.id, Instant.now()))
 
@@ -74,7 +81,7 @@ constructor(
                 }
             }
         } catch (e: Exception) {
-            httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true")
+            httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=3")
         }
 
         httpResponse.sendRedirect("${this.frontUrl}/strava?success=true")

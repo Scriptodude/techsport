@@ -5,5 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class Athlete(
     @JsonProperty("id") val id: Long,
     @JsonProperty("firstname") val firstname: String,
-    @JsonProperty("lastname") val lastname: String
+    @JsonProperty("lastname") val lastname: String,
+    @JsonProperty("clubs") val clubs: List<Club>?
 )
