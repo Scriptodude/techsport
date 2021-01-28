@@ -67,7 +67,7 @@ constructor(
                                 .of(LocalDate.of(2021, 2, 1), LocalTime.MIN, ZoneId.of("UTC"))
                                 .toInstant())
 
-                    if (lastImport.minusMillis(Instant.now().toEpochMilli()).toEpochMilli() < 15 * 60 * 1000) {
+                    if (Instant.now().minusMillis(lastImport.toEpochMilli()).toEpochMilli() < 15 * 60 * 1000) {
                         httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=2")
                         return
                     }
@@ -82,6 +82,7 @@ constructor(
             }
         } catch (e: Exception) {
             httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=3")
+            return
         }
 
         httpResponse.sendRedirect("${this.frontUrl}/strava?success=true")
