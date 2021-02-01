@@ -25,7 +25,7 @@ constructor(
 ) {
 
     @Transactional
-    fun getNumberOfPages() = this.activityToValidateRepository.findAll(PageRequest.of(1, 20)).totalPages
+    fun getNumberOfPages() = this.activityToValidateRepository.findAll(PageRequest.of(0, 10)).totalPages
 
     @Transactional
     fun getAllActivities(page: Int): List<ActivityToValidate> =
