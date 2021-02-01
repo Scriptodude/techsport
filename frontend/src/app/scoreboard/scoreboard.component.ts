@@ -55,7 +55,7 @@ export class ScoreboardComponent implements OnInit {
           scaleBreaks: {
             autoCalculate: true
           },
-          includeZero: true,
+          includeZero: false,
         },
         legend: {
           cursor: "pointer",
