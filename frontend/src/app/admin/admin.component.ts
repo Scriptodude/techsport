@@ -7,7 +7,7 @@ import { TeamsService } from '../teams.service';
 import { catchError } from 'rxjs/operators'
 import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
-import Activity from '../models/activity';
+import { Activity } from '../models/activity';
 import { ActivityService } from '../activity.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -153,26 +153,23 @@ export class AdminComponent implements OnInit {
   }
 
   getActivities(filter: string = 'À Valider') {
-    this.activityService.getPageCount().subscribe(p => {
-      this.pageCount = p.pages; this.page = 1
-      this.filter = filter;
+    this.filter = filter;
 
-      switch (this.filter) {
-        case "Toutes":
-          this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a);
-          break;
-        case 'Refusées':
-          this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == false));
-          break;
-        case 'Approuvées':
-          this.activityService.getAllActivities(this.page).subscribe(a => this.activities = a.filter(i => i.approved == true));
-          break;
-        default:
-        case 'À Valider':
-          this.activityService.getActivitiesToValidate(this.page).subscribe(a => this.activities = a);
-          break;
-      }
-    })
+    switch (this.filter) {
+      case "Toutes":
+        this.activityService.getAllActivities(this.page, null, true).subscribe(a => {this.activities = a. activities; this.pageCount = a.pages});
+        break;
+      case 'Refusées':
+        this.activityService.getAllActivities(this.page, false).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        break;
+      case 'Approuvées':
+        this.activityService.getAllActivities(this.page, true).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        break;
+      default:
+      case 'À Valider':
+        this.activityService.getAllActivities(this.page, null).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        break;
+    }
   }
 
   getStatus(activity: Activity) {

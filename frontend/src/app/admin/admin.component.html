@@ -73,10 +73,10 @@
                         <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ filter
                             }}</button>
                         <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
-                            <button ngbDropdownItem (click)="getActivities('Toutes')">Toutes</button>
-                            <button ngbDropdownItem (click)="getActivities('À Valider')">À Valider</button>
-                            <button ngbDropdownItem (click)="getActivities('Refusées')">Refusées</button>
-                            <button ngbDropdownItem (click)="getActivities('Approuvées')">Approuvées</button>
+                            <button ngbDropdownItem (click)="page = 1; getActivities('Toutes')">Toutes</button>
+                            <button ngbDropdownItem (click)="page = 1; getActivities('À Valider')">À Valider</button>
+                            <button ngbDropdownItem (click)="page = 1; getActivities('Refusées')">Refusées</button>
+                            <button ngbDropdownItem (click)="page = 1; getActivities('Approuvées')">Approuvées</button>
                         </div>
                     </div>
                     <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">

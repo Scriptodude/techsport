@@ -1,13 +1,18 @@
 import { stringify } from "@angular/compiler/src/util";
 import Time from "./time";
 
-export default interface Activity {
+export interface Activity {
     id: string;
     athleteFullName: string;
     activityTime: Time;
     activityDate: string;
     approved: Boolean | null;
     teamName: string | null;
+}
+
+export default interface ActivityResponse {
+    activities: Activity[];
+    pages: number;
 }
 
 export function createDefaultActivity() {

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import ActivityResponse from './models/activity';
 import Activity from './models/activity';
 import ChangeActivityApproval from './models/changeActivityApproval';
 import PageCountResponse from './models/pageCountResponse';
@@ -12,19 +13,15 @@ export class ActivityService {
 
   constructor(private client: HttpClient) { }
 
-  getActivitiesToValidate(page: number) {
-    return this.client.get<Activity[]>(environment.apiUrl + "/activities/to-validate?page=" + (page - 1), { withCredentials: true})
-  }
+  getAllActivities(page: number, approved: boolean | null = null, all = false) {
+    let queryParam = "?page=" + (page - 1);
+    queryParam += approved == null ? '' : '&approved=' + approved;
+    queryParam += '&all=' + all;
 
-  getAllActivities(page: number) {
-    return this.client.get<Activity[]>(environment.apiUrl + "/activities?page=" + (page - 1), { withCredentials: true })
+    return this.client.get<ActivityResponse>(environment.apiUrl + "/activities" + queryParam, { withCredentials: true })
   }
 
   changeActivityApproval(changeActivityApproval: ChangeActivityApproval) {
     return this.client.post(environment.apiUrl + "/activities", changeActivityApproval, { withCredentials: true, observe: 'response' })
-  }
-
-  getPageCount() {
-    return this.client.get<PageCountResponse>(environment.apiUrl + "/activities/pages", { withCredentials: true })
   }
 }

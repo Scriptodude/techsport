@@ -10,6 +10,7 @@ import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.ActivityToValidateRepository
 import com.techso.techsport.repository.DataImportRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -25,13 +26,14 @@ constructor(
 ) {
 
     @Transactional
-    fun getNumberOfPages() = this.activityToValidateRepository.findAll(PageRequest.of(0, 10)).totalPages
+    fun getAllActivities(page: Int, approved: Boolean?): Page<ActivityToValidate> =
+        this.activityToValidateRepository
+            .findAllByApproved(approved, PageRequest.of(page, 10, Sort.by("activityDate")))
 
     @Transactional
-    fun getAllActivities(page: Int): List<ActivityToValidate> =
+    fun getAllActivities(page: Int): Page<ActivityToValidate> =
         this.activityToValidateRepository
             .findAll(PageRequest.of(page, 10, Sort.by("activityDate")))
-            .toList()
 
     @Transactional
     fun changeActivityApprobation(teamName: String, activityId: String, approved: Boolean) {
