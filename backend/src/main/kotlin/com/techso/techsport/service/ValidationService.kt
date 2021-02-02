@@ -33,7 +33,7 @@ constructor(
     @Transactional
     fun getAllActivities(page: Int): Page<ActivityToValidate> =
         this.activityToValidateRepository
-            .findAll(PageRequest.of(page, 10, Sort.by("activityDate")))
+            .findAll(PageRequest.of(page, 10))
 
     @Transactional
     fun changeActivityApprobation(teamName: String, activityId: String, approved: Boolean) {
