@@ -9,3 +9,23 @@ textarea {
 .btn {
     margin-left: 5px;
 }
+
+::ng-deep input { 
+    text-align: center; 
+}
+
+::ng-deep::-webkit-input-placeholder {
+    text-align: center;
+ }
+ 
+ ::ng-deep:-moz-placeholder { /* Firefox 18- */
+    text-align: center;  
+ }
+ 
+ ::ng-deep::-moz-placeholder {  /* Firefox 19+ */
+    text-align: center;  
+ }
+ 
+ ::ng-deep:-ms-input-placeholder {  
+    text-align: center; 
+ }
