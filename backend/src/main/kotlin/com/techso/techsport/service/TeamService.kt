@@ -30,7 +30,8 @@ class TeamService
             timeToTeamRequest.who,
             timeToTeamRequest.why,
             timeToTeamRequest.athlete,
-            name)
+            name,
+            timeInSeconds)
     }
 
     @Transactional

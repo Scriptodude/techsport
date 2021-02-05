@@ -1,6 +1,7 @@
 package com.techso.techsport.service
 
 import com.techso.techsport.model.ManualTimeLog
+import com.techso.techsport.model.Time
 import com.techso.techsport.repository.ManualTimeLogRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -15,14 +16,15 @@ class TimeLogService
 @Autowired
 constructor(private val manualTimeLogRepository: ManualTimeLogRepository) {
     @Transactional
-    fun log(whoEntered: String, why: String, athlete: String, team: String) {
+    fun log(whoEntered: String, why: String, athlete: String, team: String, timeInSeconds: Long) {
         val log = ManualTimeLog(
             id = UUID.randomUUID().toString(),
             whoEntered = whoEntered,
             teamName = team,
             why = why,
             athleteName = athlete,
-            dateTime = Instant.now()
+            dateTime = Instant.now(),
+            time = Time(timeInSeconds)
         )
 
         this.manualTimeLogRepository.save(log)

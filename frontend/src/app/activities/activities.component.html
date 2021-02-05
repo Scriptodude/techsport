@@ -1,4 +1,3 @@
-<span (load)="getActivities"></span>
 <span>Filtrer par:</span>
 <div ngbDropdown class="d-inline-block">
     <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ filter
@@ -38,25 +37,7 @@
             </div>
         </div>
     </ng-container>
-    <nav aria-label="Page">
-        <ul class="pagination justify-content-center">
-            <li [ngClass]="{'page-item': true, 'disabled': page == 1}">
-                <a class="page-link" [routerLink]="['.']" (click)="changePage(page-1)" aria-label="Précédente">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Précédente</span>
-                </a>
-            </li>
-            <li *ngFor="let a of pages(); let i = index" [ngClass]="{'page-item': true, 'active': page == i+1}">
-                <a class="page-link" [routerLink]="['.']" (click)="changePage(i+1)">{{ i+1 }}</a>
-            </li>
-            <li [ngClass]="{'page-item': true, 'disabled': page+1 > pageCount}">
-                <a class="page-link" [routerLink]="['.']" (click)="changePage(page+1)" aria-label="Suivante">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Suivante</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <app-pagination [pageCount]="pageCount" [page]="page" (pageChanged)="changePage($event)"></app-pagination>
 </div>
 <ng-template #noActivities>
     <h1 class="text-center border border-light p-5">Aucune demande d'approbation n'est disponible

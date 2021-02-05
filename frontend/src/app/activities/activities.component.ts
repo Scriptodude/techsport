@@ -16,14 +16,15 @@ export class ActivitiesComponent implements OnInit {
 
   public activities: Activity[] = [];
   public filter: string = 'À Valider';
-  public page: number = 1;
   public pageCount: number = 1;
   @Output() message = new EventEmitter<ComponentMessage>()
   @Input() teams: Team[] = []
+  public page: number = 1;
 
   constructor(private activityService: ActivityService) { }
 
   ngOnInit(): void {
+    this.getActivities();
   }
 
   pages() {

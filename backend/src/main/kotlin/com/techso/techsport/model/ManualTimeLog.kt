@@ -10,6 +10,7 @@ open class ManualTimeLog(
     val teamName: String,
     val why: String,
     val athleteName: String,
-    @get:JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "America/Montreal")
+    val time: Time,
+    @get:JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
     val dateTime: Instant
 )

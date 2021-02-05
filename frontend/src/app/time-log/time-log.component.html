@@ -1,1 +1,20 @@
-<p>Bientôt...</p>
+<div class="text-center border border-light p-5" *ngIf="logs.length > 0; else noActivities">
+    <ng-container *ngFor="let log of logs">
+        <div class="card text-center">
+            <div class="card-body">
+                <span> {{ log.why }}</span>
+                <div class="row">
+                    <span class="col-sm-6">Athlète: {{ log.athleteName }}</span>
+                    <span class="col-sm-6">Ajouté le: {{ log.dateTime }}</span>
+                    <span class="col-sm-6">Temps: {{ log.time.hours }}h
+                        {{ log.time.minutes }}m {{ log.time.seconds }}s</span>
+                    <span class="col-sm-6">Ajouté par: {{ log.whoEntered }}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <app-pagination (pageChanged)="changePage($event)" [pageCount]="pageCount"></app-pagination>
+</div>
+<ng-template #noActivities>
+    <h1 class="text-center border border-light p-5">Aucune demande n'a été approuvée manuellement</h1>
+</ng-template>

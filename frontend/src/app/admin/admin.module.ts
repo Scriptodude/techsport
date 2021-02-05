@@ -12,6 +12,7 @@ import { EditTeamComponent } from '../edit-team/edit-team.component';
 import { ActivitiesComponent } from '../activities/activities.component';
 import { AddTimeComponent } from '../add-time/add-time.component';
 import { TimeLogComponent } from '../time-log/time-log.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 
 
@@ -22,7 +23,8 @@ import { TimeLogComponent } from '../time-log/time-log.component';
     EditTeamComponent,
     ActivitiesComponent,
     AddTimeComponent,
-    TimeLogComponent
+    TimeLogComponent,
+    PaginationComponent
   ],
   imports: [
     CommonModule,
