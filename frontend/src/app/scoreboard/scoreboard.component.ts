@@ -51,7 +51,7 @@ export class ScoreboardComponent implements OnInit {
           interval: 1,
           intervalType: "day"
         },
-        axisY:{
+        axisY: {
           scaleBreaks: {
             autoCalculate: true
           },
@@ -82,6 +82,38 @@ export class ScoreboardComponent implements OnInit {
     const seconds = team.timeToday.seconds
 
     return hours + "h " + minutes + "m " + seconds + "s ";
+  }
+
+  getTeamStats(idx: number, name: string) {
+    if (idx < 0 || idx > this.teams.length) return "N/a";
+
+    const team = this.teams[idx];
+
+    const entries = new Map<string, number>(Object.entries(team.timeChanges))
+    if (entries.size == 0) return "N/a";
+
+    const sorted = Array.from(entries.values()).sort()
+    const minV = sorted[0]
+    const maxV = sorted[sorted.length - 1]
+    const avgV = sorted.reduce((acc, v) => acc + v) / sorted.length
+
+    switch (name) {
+      case "max": return this.secondsToHms(maxV)
+      case "min": return this.secondsToHms(minV)
+      default: return this.secondsToHms(avgV.toFixed(2))
+    }
+  }
+
+  private secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+
+    var hDisplay = h > 0 ? h + "h " : "";
+    var mDisplay = m > 0 ? m + "m " : "";
+    var sDisplay = s > 0 ? s + "s" : "";
+    return hDisplay + mDisplay + sDisplay;
   }
 
 }
