@@ -1,0 +1,10 @@
+
+    <div class="text-center border border-light p-5">
+        <p class="h4 mb-4">Créer une nouvelle équipe</p>
+        <input type="text" [(ngModel)]="newTeam.name" class="form-control mb-4" placeholder="Nom de l'équipe" />
+
+        <p class="h6 mb-4">Membres de l'équipe, 1 par ligne</p>
+        <textarea id="team-member" [(ngModel)]="newTeam.members" class="form-control mb-4"></textarea>
+
+        <button mdbBtn class="btn btn-primary form-control mb-4" (click)="createTeam()">Créer</button>
+    </div>

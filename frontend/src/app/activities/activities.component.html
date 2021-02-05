@@ -1,0 +1,64 @@
+<span (load)="getActivities"></span>
+<span>Filtrer par:</span>
+<div ngbDropdown class="d-inline-block">
+    <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ filter
+        }}</button>
+    <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
+        <button ngbDropdownItem (click)="page = 1; getActivities('Toutes')">Toutes</button>
+        <button ngbDropdownItem (click)="page = 1; getActivities('À Valider')">À Valider</button>
+        <button ngbDropdownItem (click)="page = 1; getActivities('Refusées')">Refusées</button>
+        <button ngbDropdownItem (click)="page = 1; getActivities('Approuvées')">Approuvées</button>
+    </div>
+</div>
+<div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
+    <ng-container *ngFor="let activity of activities">
+        <div class="card text-center">
+            <div class="card-body">
+                <a class="" href="https://www.strava.com/activities/{{activity.id}}">Lien vers
+                    l'activité (Strava)</a>
+                <div class="row">
+                    <span class="col-sm-6">Athlète: {{ activity.athleteFullName }}</span>
+                    <span class="col-sm-6">Date: {{activity.activityDate}}</span>
+                    <span class="col-sm-6">Temps: {{activity.activityTime.hours}}h
+                        {{activity.activityTime.minutes}}m {{activity.activityTime.seconds}}s</span>
+                    <span class="col-sm-6">{{ getStatus(activity) }}</span>
+                </div>
+                <ng-container *ngIf="activity.approved == false || activity.approved == null">
+                    <div ngbDropdown class="d-inline-block">
+                        <button class="btn btn-success dropdown-toggle" id="selectTeamApproval"
+                            ngbDropdownToggle>Approuver pour l'équipe</button>
+                        <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
+                            <button ngbDropdownItem *ngFor="let team of teams"
+                                (click)="changeApproval(activity, team.name, true)">{{team.name}}</button>
+                        </div>
+                    </div>
+                    <button mdbBtn class="btn btn-danger"
+                        (click)="changeApproval(activity, 'test-2', false)">Refuser</button>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <nav aria-label="Page">
+        <ul class="pagination justify-content-center">
+            <li [ngClass]="{'page-item': true, 'disabled': page == 1}">
+                <a class="page-link" [routerLink]="['.']" (click)="changePage(page-1)" aria-label="Précédente">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Précédente</span>
+                </a>
+            </li>
+            <li *ngFor="let a of pages(); let i = index" [ngClass]="{'page-item': true, 'active': page == i+1}">
+                <a class="page-link" [routerLink]="['.']" (click)="changePage(i+1)">{{ i+1 }}</a>
+            </li>
+            <li [ngClass]="{'page-item': true, 'disabled': page+1 > pageCount}">
+                <a class="page-link" [routerLink]="['.']" (click)="changePage(page+1)" aria-label="Suivante">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Suivante</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<ng-template #noActivities>
+    <h1 class="text-center border border-light p-5">Aucune demande d'approbation n'est disponible
+    </h1>
+</ng-template>

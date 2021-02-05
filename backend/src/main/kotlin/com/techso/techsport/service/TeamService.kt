@@ -3,6 +3,7 @@ package com.techso.techsport.service
 import com.techso.techsport.model.Team
 import com.techso.techsport.model.exception.AlreadyExistsException
 import com.techso.techsport.model.exception.TeamNotFoundException
+import com.techso.techsport.model.request.AddTimeToTeamRequest
 import com.techso.techsport.repository.TeamRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
@@ -11,13 +12,26 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TeamService
-@Autowired constructor(private val teamRepository: TeamRepository) {
+@Autowired constructor(
+    private val teamRepository: TeamRepository,
+    private val timeLogService: TimeLogService
+) {
     @Transactional
     fun getAllTeams(): List<Team> =
         teamRepository.findAll(Sort.by(Sort.Direction.DESC, "timeInSeconds"));
 
     @Transactional
     fun getTeam(name: String) = teamRepository.findByName(name)
+
+    @Transactional
+    fun addTimeToTeam(name: String, timeInSeconds: Long, timeToTeamRequest: AddTimeToTeamRequest) {
+        this.addTimeToTeam(name, timeInSeconds)
+        this.timeLogService.log(
+            timeToTeamRequest.who,
+            timeToTeamRequest.why,
+            timeToTeamRequest.athlete,
+            name)
+    }
 
     @Transactional
     fun addTimeToTeam(name: String, timeInSeconds: Long) {

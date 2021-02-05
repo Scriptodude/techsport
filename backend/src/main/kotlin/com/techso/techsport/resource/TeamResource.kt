@@ -54,7 +54,10 @@ class TeamResource
     ) {
         this.loginService.validateToken(token)
         val timeInSeconds = timeService.toSeconds(timeToTeamRequest)
-        this.teamService.addTimeToTeam(name, timeInSeconds)
+        this.teamService.addTimeToTeam(
+            name,
+            timeInSeconds,
+            timeToTeamRequest)
     }
 
     @PutMapping("/{name}")
