@@ -92,7 +92,7 @@ export class ScoreboardComponent implements OnInit {
     const entries = new Map<string, number>(Object.entries(team.timeChanges))
     if (entries.size == 0) return "N/a";
 
-    const sorted = Array.from(entries.values()).sort()
+    const sorted = Array.from(entries.values()).sort((a, b) => a - b)
     const minV = sorted[0]
     const maxV = sorted[sorted.length - 1]
     const avgV = sorted.reduce((acc, v) => acc + v) / sorted.length
