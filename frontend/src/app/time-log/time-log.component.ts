@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import moment from 'moment-timezone';
 import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import ComponentMessage from '../models/componentMessage';
@@ -31,6 +32,10 @@ export class TimeLogComponent implements OnInit {
         this.logs = r.logs;
         this.pageCount = r.pages;
       })
+  }
+
+  toMontrealTimezone(time: string) {
+    return moment.utc(time, "YYYY-MM-DD HH:mm").tz("America/Montreal").locale("fr").format("D MMMM à HH:mm")
   }
 
   private handleError(error: HttpErrorResponse) {

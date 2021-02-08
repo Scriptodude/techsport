@@ -5,7 +5,7 @@
                 <span> {{ log.why }}</span>
                 <div class="row">
                     <span class="col-sm-6">Athlète: {{ log.athleteName }}</span>
-                    <span class="col-sm-6">Ajouté le: {{ log.dateTime }}</span>
+                    <span class="col-sm-6">Ajouté le: {{ toMontrealTimezone(log.dateTime) }}</span>
                     <span class="col-sm-6">Temps: {{ log.time.hours }}h
                         {{ log.time.minutes }}m {{ log.time.seconds }}s</span>
                     <span class="col-sm-6">Ajouté par: {{ log.whoEntered }}</span>
