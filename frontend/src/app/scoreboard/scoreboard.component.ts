@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import moment from 'moment-timezone';
 import Team from '../models/team';
 import { TeamsService } from '../teams.service';
 import * as CanvasJS from './canvasjs.min';
@@ -19,14 +20,22 @@ export class ScoreboardComponent implements OnInit {
       this.teams = teams
 
       let data: any = [];
+      let startDate = moment.tz(moment("2021-02-01"), 'Etc/UTC')
+      let now = moment.tz(moment(), 'Etc/UTC')
+
       for (let team of this.teams) {
         let y = 0;
         let dataPoints: any = [];
 
-        for (let entry of new Map(Object.entries(team.timeChanges))) {
-          y += entry[1]
-          const dateData = entry[0].split('-').map(v => parseInt(v, 10))
-          dataPoints.push({ x: new Date(dateData[0], dateData[1] - 1, dateData[2]), y: parseFloat((y / 3600).toFixed(2)) });
+        for (var m = startDate.clone(); m.isBefore(now); m.add(1, 'days')) {
+          const timeChanges = new Map(Object.entries(team.timeChanges))
+          const dateFormatted = m.format("YYYY-MM-DD");
+
+          if (timeChanges.has(dateFormatted)) {
+            y += timeChanges.get(dateFormatted)
+          }
+
+          dataPoints.push({ x: m.toDate(), y: parseFloat((y / 3600).toFixed(2)) });
         }
 
         data.push({
@@ -39,6 +48,7 @@ export class ScoreboardComponent implements OnInit {
           dataPoints
         })
       }
+
       let chart = new CanvasJS.Chart("chartContainer", {
         zoomEnabled: true,
         animationEnabled: true,
