@@ -14,6 +14,7 @@ export class StravaComponent implements OnInit {
   success = null;
   failure = null;
   reason: String = 'Impossible d\'importer les données'
+  count = 0;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -22,6 +23,7 @@ export class StravaComponent implements OnInit {
       this.success = params["success"];
       this.failure = params["failure"];
       const reason = params["reason"];
+      this.count = params["count"] || 0;
 
       switch (reason) {
         case "1":

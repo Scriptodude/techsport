@@ -75,16 +75,18 @@ constructor(
                     val activities = this.stravaClient.getAthleteActivities(response.accessToken, lastImport.toEpochMilli() / 1000);
                     this.dataImportRepository.save(DataImport(athleteId = athlete.id, Instant.now()))
 
-                    activities
-                        .filter { it.movingTime > 15 * 60 }
+                    val goodActivities = activities
+                        .filter { it.movingTime >= 15 * 60 }
+
+                    goodActivities
                         .forEach { this.validationService.addActivity(it, athlete) }
+
+                    httpResponse.sendRedirect("${this.frontUrl}/strava?success=true&count=${goodActivities.size}")
                 }
             }
         } catch (e: Exception) {
             httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=3")
             return
         }
-
-        httpResponse.sendRedirect("${this.frontUrl}/strava?success=true")
     }
 }
