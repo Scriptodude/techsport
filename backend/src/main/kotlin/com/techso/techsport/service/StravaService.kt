@@ -27,6 +27,10 @@ constructor(
     private val dataImportRepository: DataImportRepository
 ) {
 
+    companion object {
+        const val DATE_LIMIT = 1614574800000L
+    }
+
     fun redirect(response: HttpServletResponse) =
         response.sendRedirect(
             URI.create(
@@ -43,6 +47,11 @@ constructor(
 
     fun handleStravaAuth(authRequest: StravaAuthRequest?, httpResponse: HttpServletResponse) {
         try {
+            if (Instant.now().isAfter(Instant.ofEpochMilli(DATE_LIMIT))) {
+                httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=4")
+                return
+            }
+
             if (authRequest != null && authRequest.error == null && authRequest.code != null) {
                 val response = this.stravaClient.exchangeToken(
                     TokenExchangeRequest(

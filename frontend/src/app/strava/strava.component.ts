@@ -32,6 +32,9 @@ export class StravaComponent implements OnInit {
         case "2":
           this.reason = 'Vous pouvez importer vos données qu\'aux 15 minutes.'
           break;
+        case "4":
+          this.reason = 'L\'import est fermé, l\'événement terminait le 1er mars à minuit heures de montréal.'
+          break;
         case "3":
         default:
           this.reason = 'Erreur lors de l\'import des données.'
