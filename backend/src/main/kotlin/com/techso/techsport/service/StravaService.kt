@@ -28,29 +28,29 @@ constructor(
 ) {
 
     companion object {
-        const val DATE_LIMIT = 1614574800000L
+        const val DATE_LIMIT = 1614618000000L
     }
 
     fun redirect(response: HttpServletResponse) =
-        response.sendRedirect(
-            URI.create(
-                "${this.stravaConfig.oauthUrl}?" +
-                        "client_id=${this.stravaConfig.clientId}&" +
-                        "redirect_uri=${this.stravaConfig.redirectUrl}&" +
-                        "approval_prompt=auto&" +
-                        "response_type=code&" +
-                        "scope=read,activity:read,profile:read_all"
-            )
-                .normalize()
-                .toString()
-        );
+            if (Instant.now().isAfter(Instant.ofEpochMilli(DATE_LIMIT))) {
+                httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=4")
+            } else {
+                response.sendRedirect(
+                        URI.create(
+                                "${this.stravaConfig.oauthUrl}?" +
+                                        "client_id=${this.stravaConfig.clientId}&" +
+                                        "redirect_uri=${this.stravaConfig.redirectUrl}&" +
+                                        "approval_prompt=auto&" +
+                                        "response_type=code&" +
+                                        "scope=read,activity:read,profile:read_all"
+                        )
+                                .normalize()
+                                .toString()
+                );
+            }
 
     fun handleStravaAuth(authRequest: StravaAuthRequest?, httpResponse: HttpServletResponse) {
         try {
-            if (Instant.now().isAfter(Instant.ofEpochMilli(DATE_LIMIT))) {
-                httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=4")
-                return
-            }
 
             if (authRequest != null && authRequest.error == null && authRequest.code != null) {
                 val response = this.stravaClient.exchangeToken(
