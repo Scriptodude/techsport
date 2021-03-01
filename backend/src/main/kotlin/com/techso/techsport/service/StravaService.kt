@@ -33,7 +33,7 @@ constructor(
 
     fun redirect(response: HttpServletResponse) =
             if (Instant.now().isAfter(Instant.ofEpochMilli(DATE_LIMIT))) {
-                httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=4")
+                response.sendRedirect("${this.frontUrl}/strava?failure=true&reason=4")
             } else {
                 response.sendRedirect(
                         URI.create(
