@@ -1,6 +1,6 @@
 package com.techso.techsport.service
 
-import com.techso.techsport.client.StravaClient
+import com.techso.techsport.configuration.client.StravaClient
 import com.techso.techsport.configuration.properties.TechsportProperties
 import com.techso.techsport.model.DataImport
 import com.techso.techsport.model.request.StravaAuthRequest

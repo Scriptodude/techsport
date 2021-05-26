@@ -3,7 +3,7 @@ package com.techso.techsport.resource
 import com.techso.techsport.model.request.AddTimeToTeamRequest
 import com.techso.techsport.model.request.CreateNewTeamRequest
 import com.techso.techsport.model.request.UpdateTeamMembers
-import com.techso.techsport.model.response.TeamResponse
+import com.techso.techsport.model.response.TimeBasedTeamResponse
 import com.techso.techsport.service.LoginService
 import com.techso.techsport.service.TeamService
 import com.techso.techsport.service.TimeService
@@ -27,23 +27,23 @@ class TeamResource
     fun getAllTeams() =
         this.teamService
             .getAllTeams()
-            .map { TeamResponse(it.name, it.timeInSeconds, it.members, it.timeChanges) }
+            .map { TimeBasedTeamResponse(it.name, it.points, it.members, it.pointsChanges) }
 
     @PostMapping
     fun createNewTeam(
         @CookieValue("token") token: String,
         @RequestBody createNewTeamRequest: CreateNewTeamRequest
-    ): TeamResponse {
+    ): TimeBasedTeamResponse {
         this.loginService.validateToken(token)
         val team = this.teamService.createNewTeam(createNewTeamRequest.name, createNewTeamRequest.members)
 
-        return TeamResponse(team.name, team.timeInSeconds, team.members, team.timeChanges)
+        return TimeBasedTeamResponse(team.name, team.points, team.members, team.pointsChanges)
     }
 
     @GetMapping("/{name}")
-    fun getTeamByName(@PathVariable name: String): TeamResponse {
+    fun getTeamByName(@PathVariable name: String): TimeBasedTeamResponse {
         val team = this.teamService.getTeam(name)
-        return TeamResponse(team?.name!!, team?.timeInSeconds, team?.members, team?.timeChanges)
+        return TimeBasedTeamResponse(team?.name!!, team?.points, team?.members, team?.pointsChanges)
     }
 
     @PostMapping("/{name}")
@@ -54,7 +54,7 @@ class TeamResource
     ) {
         this.loginService.validateToken(token)
         val timeInSeconds = timeService.toSeconds(timeToTeamRequest)
-        this.teamService.addTimeToTeam(
+        this.teamService.addPointsToTeam(
             name,
             timeInSeconds,
             timeToTeamRequest)
@@ -64,10 +64,10 @@ class TeamResource
     fun editMembers(
         @PathVariable name: String,
         @CookieValue("token") token: String,
-        @RequestBody updateTeamMembers: UpdateTeamMembers): TeamResponse {
+        @RequestBody updateTeamMembers: UpdateTeamMembers): TimeBasedTeamResponse {
         this.loginService.validateToken(token)
 
         val team = this.teamService.updateTeam(name, updateTeamMembers.members)
-        return TeamResponse(team.name, team.timeInSeconds, team.members, team.timeChanges)
+        return TimeBasedTeamResponse(team.name, team.points, team.members, team.pointsChanges)
     }
 }

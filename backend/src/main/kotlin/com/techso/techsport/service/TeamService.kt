@@ -24,26 +24,15 @@ class TeamService
     fun getTeam(name: String) = teamRepository.findByName(name)
 
     @Transactional
-    fun addTimeToTeam(name: String, timeInSeconds: Long, timeToTeamRequest: AddTimeToTeamRequest) {
-        this.addTimeToTeam(name, timeInSeconds)
+    fun addPointsToTeam(name: String, timeInSeconds: Long, timeToTeamRequest: AddTimeToTeamRequest) {
+        this.addPointsToTeam(name, timeInSeconds)
         this.timeLogService.log(
             timeToTeamRequest.who,
             timeToTeamRequest.why,
             timeToTeamRequest.athlete,
             name,
-            timeInSeconds)
-    }
-
-    @Transactional
-    fun addTimeToTeam(name: String, timeInSeconds: Long) {
-        val team = teamRepository.findByName(name)
-
-        if (team != null) {
-            team.addTime(timeInSeconds)
-            teamRepository.save(team)
-        } else {
-            throw TeamNotFoundException()
-        }
+            timeInSeconds
+        )
     }
 
     @Transactional
@@ -66,5 +55,17 @@ class TeamService
         team.members.addAll(members)
 
         return teamRepository.save(team)
+    }
+
+    @Transactional
+    fun addPointsToTeam(teamName: String, points: Long) {
+        val team = teamRepository.findByName(teamName)
+
+        if (team != null) {
+            team.addTime(points)
+            teamRepository.save(team)
+        } else {
+            throw TeamNotFoundException()
+        }
     }
 }

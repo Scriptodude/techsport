@@ -1,6 +1,5 @@
-package com.techso.techsport.client
+package com.techso.techsport.configuration.client
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
 import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete
@@ -10,10 +9,6 @@ import feign.Headers
 import feign.Param
 import feign.QueryMap
 import feign.RequestLine
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
 
 interface StravaClient {
     @RequestLine("POST /v3/oauth/token")

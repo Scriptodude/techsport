@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.techso.techsport.client.StravaClient
+import com.techso.techsport.configuration.client.StravaClient
 import com.techso.techsport.configuration.properties.TechsportProperties
-import com.techso.techsport.model.StravaConfig
 import feign.Feign
 import feign.jackson.JacksonDecoder
 import feign.jackson.JacksonEncoder
