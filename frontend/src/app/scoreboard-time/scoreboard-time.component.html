@@ -1,0 +1,37 @@
+<div id="chartContainer" style="height:400px; width:100%"></div>
+<br>
+<div class="container text-center">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Position</th>
+                <th scope="col">Nom de l'équipe</th>
+                <th scope="col">Temps total</th>
+                <th scope="col">Temps aujourd'hui</th>
+                <th scope="col" class="text-center">Statistiques Quotidiennes
+                    <tr class="d-flex justify-content-center text-center">
+                        <th scope="col" class="stat">Max</th>
+                        <th scope="col" class="stat">Min</th>
+                        <th scope="col" class="stat">Moy</th>
+                    </tr>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let team of teams; let i = index">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ team.name }}</td>
+                <td>{{ team.timeTotal.hours | number }}h {{ team.timeTotal.minutes | number }}m {{
+                    team.timeTotal.seconds | number }}s</td>
+                <td>{{ getTeamLastAdd(i) }}</td>
+                <td>
+                    <div class="d-flex justify-content-center text-center">
+                        <td class="stat">{{ getTeamStats(i, "max") }}</td>
+                        <td class="stat">{{ getTeamStats(i, "min") }}</td>
+                        <td class="stat">{{ getTeamStats(i, "moy") }}</td>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

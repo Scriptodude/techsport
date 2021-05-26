@@ -1,7 +1,7 @@
 export interface ApplicationConfigurationResponse {
-  appMode: String
-  startDate: String
-  endDate: String
+  appMode: string
+  startDate: string
+  endDate: string
 }
 
 export function createDefaultConfigResponse(): ApplicationConfigurationResponse {
@@ -13,8 +13,8 @@ export function createDefaultConfigResponse(): ApplicationConfigurationResponse 
 }
 
 export interface ApplicationConfigurationRequest {
-  mode: String
-  modifers: Map<String, Number>
-  startDate: String
-  endDate: String
+  mode: string
+  modifers: Map<string, number>
+  startDate: string
+  endDate: string
 }
