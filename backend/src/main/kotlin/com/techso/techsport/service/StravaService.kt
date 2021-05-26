@@ -1,15 +1,12 @@
 package com.techso.techsport.service
 
 import com.techso.techsport.client.StravaClient
+import com.techso.techsport.configuration.properties.TechsportProperties
 import com.techso.techsport.model.DataImport
-import com.techso.techsport.model.StravaConfig
-import com.techso.techsport.model.exception.UnauthorizedException
 import com.techso.techsport.model.request.StravaAuthRequest
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
-import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.DataImportRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.lang.Exception
 import java.net.URI
@@ -21,25 +18,20 @@ class StravaService
 @Autowired
 constructor(
     private val stravaClient: StravaClient,
-    private val stravaConfig: StravaConfig,
+    private val techsport: TechsportProperties,
     private val validationService: ValidationService,
-    @Value("\${techsport.front.url}") val frontUrl: String,
     private val dataImportRepository: DataImportRepository
 ) {
 
-    companion object {
-        const val DATE_LIMIT = 1614618000000L
-    }
-
     fun redirect(response: HttpServletResponse) =
-            if (Instant.now().isAfter(Instant.ofEpochMilli(DATE_LIMIT))) {
-                response.sendRedirect("${this.frontUrl}/strava?failure=true&reason=4")
+            if (Instant.now().isAfter(techsport.endOfEvent)) {
+                response.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=4")
             } else {
                 response.sendRedirect(
                         URI.create(
-                                "${this.stravaConfig.oauthUrl}?" +
-                                        "client_id=${this.stravaConfig.clientId}&" +
-                                        "redirect_uri=${this.stravaConfig.redirectUrl}&" +
+                                "${this.techsport.strava.url.oauth}?" +
+                                        "client_id=${this.techsport.strava.client.id}&" +
+                                        "redirect_uri=${this.techsport.strava.url.redirect}&" +
                                         "approval_prompt=auto&" +
                                         "response_type=code&" +
                                         "scope=read,activity:read,profile:read_all"
@@ -55,8 +47,8 @@ constructor(
             if (authRequest != null && authRequest.error == null && authRequest.code != null) {
                 val response = this.stravaClient.exchangeToken(
                     TokenExchangeRequest(
-                        this.stravaConfig.clientId,
-                        this.stravaConfig.clientSecret,
+                        this.techsport.strava.client.id,
+                        this.techsport.strava.client.secret,
                         authRequest.code
                     )
                 )
@@ -65,7 +57,7 @@ constructor(
                 val techso = athlete.clubs?.firstOrNull { it.name.toLowerCase() == "techso" };
 
                 if (techso == null) {
-                    httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=1")
+                    httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=1")
                     return
                 } else {
                     val lastImport =
@@ -77,7 +69,7 @@ constructor(
                                 .toInstant())
 
                     if (Instant.now().minusMillis(lastImport.toEpochMilli()).toEpochMilli() <= 15 * 60 * 1000) {
-                        httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=2")
+                        httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=2")
                         return
                     }
 
@@ -90,11 +82,11 @@ constructor(
                     goodActivities
                         .forEach { this.validationService.addActivity(it, athlete) }
 
-                    httpResponse.sendRedirect("${this.frontUrl}/strava?success=true&count=${goodActivities.size}")
+                    httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?success=true&count=${goodActivities.size}")
                 }
             }
         } catch (e: Exception) {
-            httpResponse.sendRedirect("${this.frontUrl}/strava?failure=true&reason=3")
+            httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=3")
             return
         }
     }

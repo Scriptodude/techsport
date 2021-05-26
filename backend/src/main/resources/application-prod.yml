@@ -1,0 +1,10 @@
+techsport:
+  front-url: "https://techsport.herokuapp.com"
+  end-of-event: "2021-06-30T00:00:00Z"
+  database:
+    name: "techsport-dev"
+  strava:
+    url:
+      api: "https://www.strava.com/api/"
+      oauth: "https://www.strava.com/oauth/authorize"
+      redirect: "https://techsport.herokuapp.com/api/strava/callback"
