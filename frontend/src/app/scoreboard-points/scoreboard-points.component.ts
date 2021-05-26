@@ -13,7 +13,7 @@ export class ScoreboardPointsComponent implements OnInit {
 
   teams: Team[] = [];
   @Input() startDate = '2021-01-01';
-  @Input() endDate = '2021-01-02';
+  @Input() endDate = '2021-01-01';
 
   constructor(private teamService: TeamsService) { }
 
@@ -23,13 +23,21 @@ export class ScoreboardPointsComponent implements OnInit {
 
       let data: any = [];
       let startDate = moment.tz(moment(this.startDate), 'Etc/UTC')
-      let now = moment.tz(moment(this.endDate), 'Etc/UTC')
+      let now = moment.tz(moment(), 'Etc/UTC')
+      let endDate = moment.tz(moment(this.endDate), 'Etc/UTC')
+      let maxDate = now; 
+      let maxValue = 0;
+      let dataCount = 0;
+
+      if (now > endDate) {
+        maxDate = endDate;
+      }
 
       for (let team of this.teams) {
         let y = 0;
         let dataPoints: any = [];
 
-        for (var m = startDate.clone(); m.isBefore(now); m.add(1, 'days')) {
+        for (var m = startDate.clone(); m.isBefore(maxDate); m.add(1, 'days')) {
           const timeChanges = new Map(Object.entries(team.pointChanges))
           const dateFormatted = m.format("YYYY-MM-DD");
 
@@ -37,6 +45,8 @@ export class ScoreboardPointsComponent implements OnInit {
             y += timeChanges.get(dateFormatted)
           }
 
+          maxValue = Math.max(maxValue, y);
+          dataCount++;
           dataPoints.push({ x: m.toDate(), y });
         }
 
@@ -56,7 +66,7 @@ export class ScoreboardPointsComponent implements OnInit {
         animationEnabled: true,
         exportEnabled: false,
         title: {
-          text: name
+          text: "Pointage Actuel"
         },
         axisX: {
           valueFormatString: "DD/MM",
@@ -64,10 +74,10 @@ export class ScoreboardPointsComponent implements OnInit {
           intervalType: "day"
         },
         axisY: {
-          scaleBreaks: {
-            autoCalculate: true
-          },
           includeZero: false,
+          minimum: 0,
+          maximum: maxValue * 1.25,
+          interval: Math.ceil(maxValue * 1.25 / dataCount)
         },
         legend: {
           cursor: "pointer",

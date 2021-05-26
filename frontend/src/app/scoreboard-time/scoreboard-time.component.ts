@@ -13,7 +13,7 @@ export class ScoreboardTimeComponent implements OnInit {
 
   teams: Team[] = [];
   @Input() startDate = '2021-01-01';
-  @Input() endDate = '2021-01-02';
+  @Input() endDate = '2021-01-01';
 
   constructor(private teamService: TeamsService) { }
 
@@ -23,7 +23,13 @@ export class ScoreboardTimeComponent implements OnInit {
 
       let data: any = [];
       let startDate = moment.tz(moment(this.startDate), 'Etc/UTC')
-      let now = moment.tz(moment(this.endDate), 'Etc/UTC')
+      let now = moment.tz(moment(), 'Etc/UTC')
+      let endDate = moment.tz(moment(this.endDate), 'Etc/UTC')
+      let maxDate = now; 
+
+      if (now > endDate) {
+        maxDate = endDate;
+      }
 
       for (let team of this.teams) {
         let y = 0;
