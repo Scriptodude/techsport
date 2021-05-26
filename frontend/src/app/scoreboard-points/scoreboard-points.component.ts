@@ -83,7 +83,7 @@ export class ScoreboardPointsComponent implements OnInit {
           cursor: "pointer",
           verticalAlign: "top",
           horizontalAlign: "center",
-          dockInsidePlotArea: true,
+          dockInsidePlotArea: false,
         },
         data
       });
