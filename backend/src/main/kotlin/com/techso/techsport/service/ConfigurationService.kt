@@ -13,7 +13,14 @@ class ConfigurationService(private val configurationRepository: ConfigurationRep
         }
     }
 
-    fun updateConfig(updateConfigurationRequest: UpdateConfigurationRequest): ApplicationConfiguration {
-        return this.configurationRepository.save(ApplicationConfiguration(appMode = updateConfigurationRequest.mode, pointModifier = updateConfigurationRequest.modifiers))
+    fun updateConfig(request: UpdateConfigurationRequest): ApplicationConfiguration {
+        return this.configurationRepository.save(
+            ApplicationConfiguration(
+                appMode = request.mode,
+                pointModifier = request.modifiers,
+                startDate = request.startDate,
+                endDate = request.endDate
+            )
+        )
     }
 }

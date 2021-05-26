@@ -8,7 +8,6 @@ import com.techso.techsport.model.strava.request.TokenExchangeRequest
 import com.techso.techsport.repository.DataImportRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.lang.Exception
 import java.net.URI
 import java.time.*
 import javax.servlet.http.HttpServletResponse
@@ -20,26 +19,29 @@ constructor(
     private val stravaClient: StravaClient,
     private val techsport: TechsportProperties,
     private val validationService: ValidationService,
-    private val dataImportRepository: DataImportRepository
+    private val dataImportRepository: DataImportRepository,
+    private val configurationService: ConfigurationService
 ) {
 
     fun redirect(response: HttpServletResponse) =
-            if (Instant.now().isAfter(techsport.endOfEvent)) {
-                response.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=4")
-            } else {
-                response.sendRedirect(
-                        URI.create(
-                                "${this.techsport.strava.url.oauth}?" +
-                                        "client_id=${this.techsport.strava.client.id}&" +
-                                        "redirect_uri=${this.techsport.strava.url.redirect}&" +
-                                        "approval_prompt=auto&" +
-                                        "response_type=code&" +
-                                        "scope=read,activity:read,profile:read_all"
-                        )
-                                .normalize()
-                                .toString()
-                );
-            }
+        if (Instant.now().isAfter(this.configurationService.getConfig().endDate) || Instant.now()
+                .isBefore(this.configurationService.getConfig().startDate)
+        ) {
+            response.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=4")
+        } else {
+            response.sendRedirect(
+                URI.create(
+                    "${this.techsport.strava.url.oauth}?" +
+                            "client_id=${this.techsport.strava.client.id}&" +
+                            "redirect_uri=${this.techsport.strava.url.redirect}&" +
+                            "approval_prompt=auto&" +
+                            "response_type=code&" +
+                            "scope=read,activity:read,profile:read_all"
+                )
+                    .normalize()
+                    .toString()
+            );
+        }
 
     fun handleStravaAuth(authRequest: StravaAuthRequest?, httpResponse: HttpServletResponse) {
         try {
@@ -64,17 +66,29 @@ constructor(
                         this.dataImportRepository
                             .findById(athlete.id)
                             .map { it.lastImport }
-                            .orElse(ZonedDateTime
-                                .of(LocalDate.of(2021, 2, 1), LocalTime.MIN, ZoneId.of("UTC"))
-                                .toInstant())
+                            .orElse(
+                                ZonedDateTime
+                                    .of(LocalDate.of(2021, 2, 1), LocalTime.MIN, ZoneId.of("UTC"))
+                                    .toInstant()
+                            )
 
-                    if (Instant.now().minusMillis(lastImport.toEpochMilli()).toEpochMilli() <= 15 * 60 * 1000) {
+                    if (Instant.now().minusMillis(lastImport.toEpochMilli())
+                            .toEpochMilli() <= 15 * 60 * 1000
+                    ) {
                         httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=2")
                         return
                     }
 
-                    val activities = this.stravaClient.getAthleteActivities(response.accessToken, lastImport.toEpochMilli() / 1000);
-                    this.dataImportRepository.save(DataImport(athleteId = athlete.id, Instant.now()))
+                    val activities = this.stravaClient.getAthleteActivities(
+                        response.accessToken,
+                        lastImport.toEpochMilli() / 1000
+                    );
+                    this.dataImportRepository.save(
+                        DataImport(
+                            athleteId = athlete.id,
+                            Instant.now()
+                        )
+                    )
 
                     val goodActivities = activities
                         .filter { it.movingTime >= 15 * 60 }

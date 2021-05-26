@@ -1,6 +1,5 @@
 techsport:
   front-url: "http://localhost:4200"
-  end-of-event: "2021-06-30T00:00:00Z"
   database:
     name: "techsport-dev"
   strava:
