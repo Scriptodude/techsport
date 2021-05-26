@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
-import AddTimeBody from '../models/addTimeBody';
-import addTimeBody from '../models/addTimeBody';
 import Team, { createDefaultTeam } from '../models/team';
 import { TeamsService } from '../teams.service';
-import { catchError } from 'rxjs/operators'
-import { HttpErrorResponse } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
-import { Activity } from '../models/activity';
-import { ActivityService } from '../activity.service';
-import { ActivatedRoute } from '@angular/router';
 import ComponentMessage from '../models/componentMessage';
+import { ApplicationConfigurationResponse, createDefaultConfigResponse } from '../models/applicationConfiguration';
+import { ConfigurationService } from '../configuration.service';
 
 @Component({
   selector: 'app-admin',
@@ -25,16 +19,19 @@ export class AdminComponent implements OnInit {
   public teams: Team[] = [];
   public error: string = '';
   public success: string = '';
+  public config: ApplicationConfigurationResponse = createDefaultConfigResponse()
   private resetErrorTimeout: any;
 
   constructor(
     private loginService: LoginService,
-    private teamService: TeamsService) { }
+    private teamService: TeamsService,
+    private configService: ConfigurationService) { }
 
   ngOnInit(): void {
     this.checkAdmin();
 
     this.teamService.getAllTeams().subscribe(t => this.teams = t);
+    this.configService.getConfiguration().subscribe(c => this.config = c);
   }
 
   async submitToken() {
@@ -68,6 +65,10 @@ export class AdminComponent implements OnInit {
       this.error = '';
       this.success = '';
     }, 3000)
+  }
+
+  isTimeMode() {
+    return this.config.appMode === 'time';
   }
 
   private checkAdmin() {
