@@ -19,7 +19,8 @@
             <div class="form-check" *ngIf="configRequest.mode === 'time'">
                 <p>Le mode de pointage par temps prend en compte le temps de mouvement de chaque activité approuvée.
                     <br>Le temps minimum requis pour qu'une activité soit importable est de 15 minutes.<br>Il est
-                    possible d'ajouter manuellement du temps pour des équipes dans ce mode.</p>
+                    possible d'ajouter manuellement du temps pour des équipes dans ce mode.
+                </p>
                 <br>
             </div>
 
@@ -28,18 +29,21 @@
                     kilomètres pour certains types d'activités. <br>Le pointage est automatiquement calculé lors de
                     l'approbation d'une activité.<br>Il est impossible d'ajouter des points manuellement dans ce mode,
                     seul l'import via strava est disponible.</p>
-                <table class="container mb-4">
+                <br>
+                <table class="table">
                     <thead>
                         <th>Type d'activité</th>
                         <th>Points par kilomètres</th>
                     </thead>
-                    <tbody>
-                        <tr *ngFor="let sport of getAvailableSports()">
+                    <tbody [formGroup]="modifiers">
+                        <tr *ngFor="let sport of getAvailableSports(); let i = index; trackBy: trackByFn">
                             <td>{{ sport[1] }}</td>
-                            <td><input type="number" class="form-control" min="0.5" placeholder="1" step="0.5"/></td>
-<!-- 
-                                     [ngModel]="configRequest.modifiers.get(sport[0])"
-                                    (ngModelChange)="configRequest.modifiers.set(sport[0], $event)" -->
+                            <td><input type="number" name="{{ sport[0] }}" class="form-control"
+                                    formControlName="{{ sport[0] }}"
+                                    value="{{ configRequest.modifiers.get(sport[0]) || 1.0 }}"
+                                    placeholder="{{ configRequest.modifiers.get(sport[0]) || 1.0 }}" 
+                                    min="0.5"
+                                    step="0.5" required/></td>
                         </tr>
                     </tbody>
                 </table>
@@ -47,21 +51,22 @@
             </div>
 
             <br>
-            <mat-form-field appearance="fill">
-                <input matInput [ngxMatDatetimePicker]="picker" [formControl]="start" placeholder="Choisissez la date de début">
+            <mat-form-field appearance="fill" style="margin-right: 20px">
+                <input matInput [ngxMatDatetimePicker]="picker" [formControl]="start"
+                    placeholder="Choisissez la date de début">
                 <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
-                <ngx-mat-datetime-picker #picker [showSpinners]="true" [showSeconds]="true"
-                   [stepHour]="1" [stepMinute]="15" [defaultTime]="[0, 0, 0]">
+                <ngx-mat-datetime-picker #picker [showSpinners]="true" [showSeconds]="true" [stepHour]="1"
+                    [stepMinute]="15" [defaultTime]="[0, 0, 0]">
                 </ngx-mat-datetime-picker>
-             </mat-form-field>
-             <br>
-             <mat-form-field appearance="fill">
-                <input matInput [ngxMatDatetimePicker]="picker2" [formControl]="end" placeholder="Choisissez la date de fin">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <input matInput [ngxMatDatetimePicker]="picker2" [formControl]="end"
+                    placeholder="Choisissez la date de fin">
                 <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
-                <ngx-mat-datetime-picker #picker2 [showSpinners]="true" [showSeconds]="true"
-                   [stepHour]="1" [stepMinute]="15" [defaultTime]="[23, 59, 59]">
+                <ngx-mat-datetime-picker #picker2 [showSpinners]="true" [showSeconds]="true" [stepHour]="1"
+                    [stepMinute]="15" [defaultTime]="[23, 59, 59]">
                 </ngx-mat-datetime-picker>
-             </mat-form-field>
+            </mat-form-field>
 
             <button mdbBtn class="btn btn-primary form-control mb-4" (click)="updateConfig()">Mettre à jour</button>
         </div>

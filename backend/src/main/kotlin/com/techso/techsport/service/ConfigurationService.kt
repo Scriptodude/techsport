@@ -17,7 +17,7 @@ class ConfigurationService(private val configurationRepository: ConfigurationRep
         return this.configurationRepository.save(
             ApplicationConfiguration(
                 appMode = request.mode,
-                pointModifier = request.modifiers,
+                pointModifiers = request.modifiers,
                 startDate = request.startDate,
                 endDate = request.endDate
             )

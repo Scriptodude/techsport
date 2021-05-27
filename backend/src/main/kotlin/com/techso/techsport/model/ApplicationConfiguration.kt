@@ -10,7 +10,7 @@ data class ApplicationConfiguration(
     @Id
     val id: Int = 1,
     val appMode: ApplicationMode = ApplicationMode.time,
-    val pointModifier: PointModifierMap = mutableMapOf(),
+    val pointModifiers: PointModifierMap = mutableMapOf(),
     val startDate: Instant = Instant.parse("2021-01-01T00:00:00Z"),
     val endDate: Instant = Instant.parse("2021-01-01T00:00:00Z")
 )
