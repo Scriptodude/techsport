@@ -3,7 +3,6 @@ import Time from "./time";
 export default interface Team {
     name: string;
     members: string[];
-    timeChanges: Map<Date, number>;
     pointChanges: Map<Date, number>;
     timeToday: Time;
     timeTotal: Time;
@@ -14,7 +13,6 @@ export function createDefaultTeam(): Team {
         name: '',
         members: [],
         pointChanges: new Map(),
-        timeChanges: new Map(),
         timeToday: {
             hours: 0,
             minutes: 0,

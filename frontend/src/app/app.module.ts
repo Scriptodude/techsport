@@ -13,8 +13,6 @@ import { StravaComponent } from './strava/strava.component';
 import { RulesComponent } from './rules/rules.component';
 import { AngularEmojisModule } from 'angular-emojis';
 import { AdminModule } from './admin/admin.module';
-import { ScoreboardTimeComponent } from './scoreboard-time/scoreboard-time.component';
-import { ScoreboardPointsComponent } from './scoreboard-points/scoreboard-points.component';
 
 @NgModule({
   declarations: [
@@ -23,9 +21,7 @@ import { ScoreboardPointsComponent } from './scoreboard-points/scoreboard-points
     TeamsComponent,
     ScoreboardComponent,
     StravaComponent,
-    RulesComponent,
-    ScoreboardTimeComponent,
-    ScoreboardPointsComponent
+    RulesComponent
   ],
   imports: [
     BrowserModule,
