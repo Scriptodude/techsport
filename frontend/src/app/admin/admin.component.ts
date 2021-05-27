@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
     this.checkAdmin();
 
     this.teamService.getAllTeams().subscribe(t => this.teams = t);
-    this.configService.getConfiguration().subscribe(c => this.config = c);
+    this.configService.getConfiguration().subscribe(this.setConfig.bind(this));
   }
 
   async submitToken() {
@@ -69,6 +69,10 @@ export class AdminComponent implements OnInit {
 
   isTimeMode() {
     return this.config.appMode === 'time';
+  }
+
+  setConfig(config: ApplicationConfigurationResponse) {
+    this.config = config;
   }
 
   private checkAdmin() {

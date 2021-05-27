@@ -52,7 +52,7 @@ class TeamResource
     @GetMapping("/{name}")
     fun getTeamByName(@PathVariable name: String): TimeBasedTeamResponse {
         val team = this.teamService.getTeam(name)
-        return TimeBasedTeamResponse(team?.name!!, team?.points, team?.members, team?.pointsChanges)
+        return TimeBasedTeamResponse(team?.name!!, team?.points.toLong(), team?.members, team?.pointsChanges)
     }
 
     @PostMapping("/{name}")
@@ -65,7 +65,7 @@ class TeamResource
         val timeInSeconds = timeService.toSeconds(timeToTeamRequest)
         this.teamService.addPointsToTeam(
             name,
-            timeInSeconds,
+            timeInSeconds.toDouble(),
             timeToTeamRequest
         )
     }
@@ -85,7 +85,7 @@ class TeamResource
     private fun selectResponseAccordingToConfig(it: Team) = when (configurationService.getConfig().appMode) {
         ApplicationMode.time -> TimeBasedTeamResponse(
             it.name,
-            it.points,
+            it.points.toLong(),
             it.members,
             it.pointsChanges
         )

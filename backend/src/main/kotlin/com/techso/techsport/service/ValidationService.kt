@@ -51,7 +51,7 @@ constructor(
                 activity.approved = approved
 
                 if (approved) {
-                    this.teamService.addPointsToTeam(teamName, activity.activityTime.timeInSeconds)
+                    this.teamService.addPointsToTeam(teamName, activity.activityTime.timeInSeconds.toDouble())
                     activity.teamName = teamName
                 }
 

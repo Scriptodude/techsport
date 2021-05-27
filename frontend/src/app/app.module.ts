@@ -14,6 +14,7 @@ import { RulesComponent } from './rules/rules.component';
 import { AngularEmojisModule } from 'angular-emojis';
 import { AdminModule } from './admin/admin.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,

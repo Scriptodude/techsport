@@ -5,5 +5,5 @@ import java.time.LocalDate
 abstract class BaseTeamResponse(
     val name: String,
     val members: List<String>,
-    val pointChanges: Map<LocalDate, Long>
+    val pointChanges: Map<LocalDate, Double>
 )

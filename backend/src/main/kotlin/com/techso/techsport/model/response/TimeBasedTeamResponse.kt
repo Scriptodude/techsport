@@ -8,8 +8,8 @@ data class TimeBasedTeamResponse(
     @JsonIgnore val _name: String,
     @JsonIgnore val timeInSeconds: Long,
     @JsonIgnore val _members: List<String>,
-    @JsonIgnore val timeChanges: Map<LocalDate, Long>
+    @JsonIgnore val timeChanges: Map<LocalDate, Double>
 ): BaseTeamResponse(_name, _members, timeChanges) {
     val timeTotal = Time(this.timeInSeconds)
-    val timeToday = Time(timeChanges.getOrDefault(LocalDate.now(), 0))
+    val timeToday = Time(timeChanges.getOrDefault(LocalDate.now(), 0).toLong())
 }

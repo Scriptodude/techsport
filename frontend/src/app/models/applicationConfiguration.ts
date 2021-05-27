@@ -14,7 +14,17 @@ export function createDefaultConfigResponse(): ApplicationConfigurationResponse 
 
 export interface ApplicationConfigurationRequest {
   mode: string
-  modifers: Map<string, number>
+  modifiers: Map<string, number>
   startDate: string
   endDate: string
+}
+
+
+export function createDefaultConfigRequest(): ApplicationConfigurationRequest {
+  return {
+    mode: "",
+    modifiers: new Map(),
+    startDate: '2021-01-01T00:00:00Z',
+    endDate: '2021-01-01T00:00:00Z'
+  }
 }

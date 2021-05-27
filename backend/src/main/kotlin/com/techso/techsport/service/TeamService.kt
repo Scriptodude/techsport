@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 class TeamService
 @Autowired constructor(
     private val teamRepository: TeamRepository,
-    private val timeLogService: TimeLogService
+    private val timeLogService: PointsLogService
 ) {
     @Transactional
     fun getAllTeams(): List<Team> =
@@ -24,14 +24,14 @@ class TeamService
     fun getTeam(name: String) = teamRepository.findByName(name)
 
     @Transactional
-    fun addPointsToTeam(name: String, timeInSeconds: Long, timeToTeamRequest: AddTimeToTeamRequest) {
+    fun addPointsToTeam(name: String, timeInSeconds: Double, timeToTeamRequest: AddTimeToTeamRequest) {
         this.addPointsToTeam(name, timeInSeconds)
         this.timeLogService.log(
             timeToTeamRequest.who,
             timeToTeamRequest.why,
             timeToTeamRequest.athlete,
             name,
-            timeInSeconds
+            timeInSeconds.toLong()
         )
     }
 
@@ -58,7 +58,7 @@ class TeamService
     }
 
     @Transactional
-    fun addPointsToTeam(teamName: String, points: Long) {
+    fun addPointsToTeam(teamName: String, points: Double) {
         val team = teamRepository.findByName(teamName)
 
         if (team != null) {

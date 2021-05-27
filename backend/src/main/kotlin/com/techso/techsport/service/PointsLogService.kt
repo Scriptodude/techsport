@@ -12,7 +12,7 @@ import java.time.Instant
 import java.util.*
 
 @Service
-class TimeLogService
+class PointsLogService
 @Autowired
 constructor(private val manualTimeLogRepository: ManualTimeLogRepository) {
     @Transactional

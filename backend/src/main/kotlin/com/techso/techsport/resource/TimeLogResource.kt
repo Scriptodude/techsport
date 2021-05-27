@@ -2,7 +2,7 @@ package com.techso.techsport.resource
 
 import com.techso.techsport.model.response.LogsResponse
 import com.techso.techsport.service.LoginService
-import com.techso.techsport.service.TimeLogService
+import com.techso.techsport.service.PointsLogService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 )
 class TimeLogResource
 @Autowired constructor(
-    private val timeLogService: TimeLogService,
+    private val timeLogService: PointsLogService,
     private val loginService: LoginService
 ) {
     @GetMapping

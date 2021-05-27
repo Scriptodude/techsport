@@ -19,18 +19,16 @@
                     <h1 *ngIf="!isTimeMode()">Le mode distance est en construction</h1>
                 </ng-template>
             </li>
-            <li [ngbNavItem]="2">
+            <li [ngbNavItem]="2" *ngIf="isTimeMode()">
                 <a ngbNavLink>Entrer manuellement</a>
                 <ng-template ngbNavContent class="d-flex justify-content-center">
-                    <app-add-time [teams]="teams" (message)="handleMessage($event)" *ngIf="isTimeMode()"></app-add-time>
-                    <h1 *ngIf="!isTimeMode()">Le mode distance est en construction</h1>
+                    <app-add-time [teams]="teams" (message)="handleMessage($event)"></app-add-time>
                 </ng-template>
             </li>
-            <li [ngbNavItem]="3">
+            <li [ngbNavItem]="3" *ngIf="isTimeMode()">
                 <a ngbNavLink>Journal des points</a>
                 <ng-template ngbNavContent class="d-flex justify-content-center">
-                    <app-time-log (message)="handleMessage($event)" *ngIf="isTimeMode()"></app-time-log>
-                    <h1 *ngIf="!isTimeMode()">Le mode distance est en construction</h1>
+                    <app-time-log (message)="handleMessage($event)"></app-time-log>
                 </ng-template>
             </li>
             <li [ngbNavItem]="4">
@@ -44,6 +42,13 @@
                 <ng-template ngbNavContent class="d-flex justify-content-center">
                     <app-create-team (createdTeam)="teams.push($event)" (message)="handleMessage($event)">
                     </app-create-team>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="6">
+                <a ngbNavLink>Configuration</a>
+                <ng-template ngbNavContent class="d-flex justify-content-center">
+                    <app-admin-config [config]="this.config" (configUpdated)="setConfig($event)">
+                    </app-admin-config>
                 </ng-template>
             </li>
         </ul>
