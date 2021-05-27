@@ -52,19 +52,21 @@
 
             <br>
             <mat-form-field appearance="fill" style="margin-right: 20px">
+                <mat-label>Date de début (heures de montréal)</mat-label>
                 <input matInput [ngxMatDatetimePicker]="picker" [formControl]="start"
                     placeholder="Choisissez la date de début">
                 <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
                 <ngx-mat-datetime-picker #picker [showSpinners]="true" [showSeconds]="true" [stepHour]="1"
-                    [stepMinute]="15" [defaultTime]="[0, 0, 0]">
+                    [stepMinute]="1" [defaultTime]="[0, 0, 0]">
                 </ngx-mat-datetime-picker>
             </mat-form-field>
             <mat-form-field appearance="fill">
+                <mat-label>Date de fin (heures de montréal)</mat-label>
                 <input matInput [ngxMatDatetimePicker]="picker2" [formControl]="end"
                     placeholder="Choisissez la date de fin">
                 <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
                 <ngx-mat-datetime-picker #picker2 [showSpinners]="true" [showSeconds]="true" [stepHour]="1"
-                    [stepMinute]="15" [defaultTime]="[23, 59, 59]">
+                    [stepMinute]="1" [defaultTime]="[23, 59, 59]">
                 </ngx-mat-datetime-picker>
             </mat-form-field>
 

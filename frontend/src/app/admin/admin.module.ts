@@ -23,8 +23,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatDateAdapter } from '@angular-material-components/datetime-picker';
 
-
-
 @NgModule({
   declarations: [
     AdminComponent,
@@ -56,7 +54,7 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatDateAdapter }
     NgxMatMomentModule
   ],
   providers: [
-    { provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: false } },
+    { provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true, strict: true } },
     { provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter }]
 })
 export class AdminModule { }
