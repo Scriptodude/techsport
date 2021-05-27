@@ -1,2 +1,7 @@
 ## Techsport
 
+### Heroku build packs
+
+1. heroku/jvm
+2. https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku-community/apt.tgz
+3. https://github.com/niteoweb/heroku-buildpack-shell.git
