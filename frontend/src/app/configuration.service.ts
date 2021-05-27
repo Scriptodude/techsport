@@ -15,6 +15,12 @@ export class ConfigurationService {
   }
 
   updateConfiguration(request: ApplicationConfigurationRequest) {
-    return this.client.put<ApplicationConfigurationResponse>(environment.apiUrl + "/config", request, {withCredentials: true});
+    const actualRequest: ApplicationConfigurationRequest = {
+      startDate: request.startDate,
+      endDate: request.endDate,
+      modifiers: [...request.modifiers.entries()].reduce((obj, [key, value]) => (obj[key] = value, obj), {}),
+      mode: request.mode
+    }
+    return this.client.put<ApplicationConfigurationResponse>(environment.apiUrl + "/config", actualRequest, {withCredentials: true});
   }
 }

@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import moment from 'moment-timezone';
+import { of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ConfigurationService } from '../configuration.service';
 import { ApplicationConfigurationRequest, ApplicationConfigurationResponse, createDefaultConfigRequest, createDefaultConfigResponse } from '../models/applicationConfiguration';
 import ComponentMessage from '../models/componentMessage';
@@ -33,6 +36,16 @@ export class AdminConfigComponent implements OnInit {
   }
 
   updateConfig() {
+    if (this.start.value === null) {
+      this.message.emit(new ComponentMessage(false, "La date de début est requise."));
+      return;
+    }
+
+    if (this.end.value === null) {
+      this.message.emit(new ComponentMessage(false, "la date de fin est requise."));
+      return;
+    }
+
     this.configRequest.startDate = moment.utc(this.start.value).tz("America/Montreal", true).utc(true).format()
     this.configRequest.endDate = moment.utc(this.end.value).tz("America/Montreal").utc().format()
 
@@ -41,7 +54,13 @@ export class AdminConfigComponent implements OnInit {
     }
 
     console.log(this.configRequest);
-    this.configService.updateConfiguration(this.configRequest).subscribe(r => this.configUpdated.next(r));
+    this.configService.updateConfiguration(this.configRequest)
+    .pipe(catchError(this.handleError.bind(this)))
+    .subscribe(r => {
+      if (r == null) return;
+      this.configUpdated.emit(r)
+      this.message.emit(new ComponentMessage(true, "Configuration mise à jour avec succès"));
+    });
   }
 
   getSelectedMode() {
@@ -66,5 +85,12 @@ export class AdminConfigComponent implements OnInit {
 
   trackByFn(index, item) {
     return index;
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    this.message.emit(new ComponentMessage(false, 'Erreur lors de la mise à jour de la configuration.'));
+
+    throwError("Could not finish the call");
+    return of(null)
   }
 }

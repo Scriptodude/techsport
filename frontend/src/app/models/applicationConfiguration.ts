@@ -16,7 +16,7 @@ export function createDefaultConfigResponse(): ApplicationConfigurationResponse 
 
 export interface ApplicationConfigurationRequest {
   mode: string
-  modifiers: Map<string, number>
+  modifiers: any
   startDate: string
   endDate: string
 }

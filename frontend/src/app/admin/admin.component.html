@@ -47,7 +47,7 @@
             <li [ngbNavItem]="6">
                 <a ngbNavLink>Configuration</a>
                 <ng-template ngbNavContent class="d-flex justify-content-center">
-                    <app-admin-config [config]="this.config" (configUpdated)="setConfig($event)">
+                    <app-admin-config [config]="this.config" (configUpdated)="setConfig($event)" (message)="handleMessage($event)">
                     </app-admin-config>
                 </ng-template>
             </li>
