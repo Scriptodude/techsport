@@ -3,7 +3,8 @@
         <h2 *ngIf="failure" class="border border-danger bg-danger text-light">{{ reason }}</h2>
         <h2 *ngIf="success" class="border border-success bg-success">{{ count }} activité(s) importée(s) avec succès</h2>
     </div>
-    <h4>Demande d'approbation via strava</h4>
+    <h2>Demande d'approbation via strava</h2>
+    <h3>Ouvert du {{ startDate }} au {{ endDate }}, heures de Montréal</h3>
     <p>En cliquant sur le bouton ci-dessous,
         vous allez pouvoir importer toutes vos activités publiques depuis votre dernier import<br />
         (Date localisé, donc une activitée le 26 Janvier à 3:00 pour la France - qui est le 25 Janvier à 21:00 pour Montréal - compte comme le 26).</p>

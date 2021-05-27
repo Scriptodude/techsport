@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import moment, { locale } from 'moment-timezone';
 import { environment } from 'src/environments/environment';
+import { ConfigurationService } from '../configuration.service';
 
 @Component({
   selector: 'app-strava',
@@ -15,10 +17,17 @@ export class StravaComponent implements OnInit {
   failure = null;
   reason: String = 'Impossible d\'importer les données'
   count = 0;
+  startDate = '2021-01-01 à 00:00:00'
+  endDate = '2021-01-01 à 00:00:00'
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private configService: ConfigurationService) { }
 
   ngOnInit(): void {
+    this.configService.getConfiguration().subscribe(r => {
+      this.startDate = moment.utc(r.startDate).tz("America/Montreal").locale("fr").format("LLL")
+      this.endDate = moment.utc(r.endDate).tz("America/Montreal").locale("fr").format("LLL")
+    })
+
     this.route.queryParams.subscribe(params => {
       this.success = params["success"];
       this.failure = params["failure"];
@@ -33,7 +42,7 @@ export class StravaComponent implements OnInit {
           this.reason = 'Vous pouvez importer vos données qu\'aux 15 minutes.'
           break;
         case "4":
-          this.reason = 'L\'import est fermé, l\'événement terminait le 1er mars à minuit heures de montréal.'
+          this.reason = 'L\'import est fermé, l\'événement terminait le ' + this.endDate + ", heures de montréal"
           break;
         case "3":
         default:
