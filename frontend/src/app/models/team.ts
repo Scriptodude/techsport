@@ -6,6 +6,8 @@ export default interface Team {
     pointChanges: Map<Date, number>;
     timeToday: Time;
     timeTotal: Time;
+    pointsTotal: number;
+    pointsToday: number;
 }
 
 export function createDefaultTeam(): Team {
@@ -24,6 +26,8 @@ export function createDefaultTeam(): Team {
             minutes: 0,
             seconds: 0,
             timeInSeconds: 0
-        }
+        },
+        pointsTotal: 0,
+        pointsToday: 0
     }
 }

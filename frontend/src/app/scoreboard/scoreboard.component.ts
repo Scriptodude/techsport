@@ -109,8 +109,7 @@ export class ScoreboardComponent implements OnInit {
     if (this.isTimeMode()) {
       return `${team.timeTotal.hours}h ${team.timeTotal.minutes}m ${team.timeTotal.seconds}s`; 
     } else {
-      // TODO: Change this to use points
-      return team.timeTotal.timeInSeconds;
+      return team.pointsTotal;
     }
   }
 
@@ -122,7 +121,7 @@ export class ScoreboardComponent implements OnInit {
     if (Object.entries(team.pointChanges).length == 0) return "Aucun";
 
     if (!this.isTimeMode()) {
-      return team.timeToday.timeInSeconds.toString();
+      return team.pointsToday;
     }
 
     const hours = team.timeToday.hours
