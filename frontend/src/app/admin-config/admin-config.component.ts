@@ -76,7 +76,7 @@ export class AdminConfigComponent implements OnInit {
   }
 
   getAvailableSports() {
-    return [["Walk", "Marche à pied"], ["Run", "Course à pied extérieure"], ["VirtualRun", "Course à pied sur tapis roulant"], ["Ride", "Vélo"], ["VirtualRide", "Vélo Stationnaire"], ["InlineSkate", "Patin à roues alignées"]]
+    return [["Walk", "Marche à pied"], ["Hike", "Randonnée pédestre"], ["Run", "Course à pied extérieure"], ["VirtualRun", "Course à pied sur tapis roulant"], ["Ride", "Vélo"], ["VirtualRide", "Vélo Stationnaire"], ["InlineSkate", "Patin à roues alignées"]]
   }
 
   selectMode(mode: string) {

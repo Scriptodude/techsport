@@ -17,7 +17,16 @@ export class PaginationComponent implements OnInit {
   }
 
   pages() {
-    return Array(this.pageCount)
+    const min = Math.max(this.page - 2, 1)
+    const result: number[] = []
+    let i = min;
+
+    while(result.length != 5 && i <= this.pageCount) {
+      result.push(i);
+      i++;
+    }
+
+    return result;
   }
 
   changePage(page: number) {
