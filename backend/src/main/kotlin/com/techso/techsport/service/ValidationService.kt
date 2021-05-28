@@ -1,20 +1,21 @@
 package com.techso.techsport.service
 
 import com.techso.techsport.model.ActivityToValidate
-import com.techso.techsport.model.DataImport
 import com.techso.techsport.model.Time
 import com.techso.techsport.model.exception.ActivityNotFoundException
 import com.techso.techsport.model.exception.AlreadyApprovedException
 import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.ActivityToValidateRepository
-import com.techso.techsport.repository.DataImportRepository
+import com.techso.techsport.service.activity.ActivityManagerProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.Instant
 
 @Service
@@ -22,7 +23,8 @@ class ValidationService
 @Autowired
 constructor(
     private val activityToValidateRepository: ActivityToValidateRepository,
-    private val teamService: TeamService
+    private val teamService: TeamService,
+    private val activityManagerProvider: ActivityManagerProvider
 ) {
 
     @Transactional
@@ -51,7 +53,10 @@ constructor(
                 activity.approved = approved
 
                 if (approved) {
-                    this.teamService.addPointsToTeam(teamName, activity.activityTime.timeInSeconds.toDouble())
+                    this.teamService.addPointsToTeam(
+                        teamName,
+                        activity.points
+                    )
                     activity.teamName = teamName
                 }
 
@@ -70,7 +75,11 @@ constructor(
                 id = activity.id.toString(),
                 athleteFullName = athlete.firstname + ' ' + athlete.lastname,
                 activityDate = activity.startDate ?: Instant.now(),
-                activityTime = Time(activity.movingTime)
+                activityTime = Time(activity.movingTime),
+                distance = BigDecimal.valueOf(activity.distance).setScale(2, RoundingMode.HALF_UP),
+                type = activity.type,
+                isManual = activity.isManual,
+                points = this.activityManagerProvider.calculatePoints(activity)
             )
 
             this.activityToValidateRepository.save(newActivity)

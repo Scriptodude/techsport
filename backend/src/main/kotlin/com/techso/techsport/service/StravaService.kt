@@ -6,7 +6,7 @@ import com.techso.techsport.model.DataImport
 import com.techso.techsport.model.request.StravaAuthRequest
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
 import com.techso.techsport.repository.DataImportRepository
-import com.techso.techsport.service.activity.ActivityFilteringProvider
+import com.techso.techsport.service.activity.ActivityManagerProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.net.URI
@@ -22,7 +22,7 @@ constructor(
     private val validationService: ValidationService,
     private val dataImportRepository: DataImportRepository,
     private val configurationService: ConfigurationService,
-    private val activityFilteringProvider: ActivityFilteringProvider
+    private val activityManagerProvider: ActivityManagerProvider
 ) {
 
     fun redirect(response: HttpServletResponse) =
@@ -88,7 +88,7 @@ constructor(
                         )
                     )
 
-                    val goodActivities = this.activityFilteringProvider.filterActivities.call(activities)
+                    val goodActivities = this.activityManagerProvider.filterActivities(activities)
                     goodActivities.forEach { this.validationService.addActivity(it, athlete) }
 
                     httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?success=true&count=${goodActivities.size}")

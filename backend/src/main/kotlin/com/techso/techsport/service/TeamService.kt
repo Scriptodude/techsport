@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 
 @Service
 class TeamService
@@ -25,7 +26,7 @@ class TeamService
 
     @Transactional
     fun addPointsToTeam(name: String, timeInSeconds: Double, timeToTeamRequest: AddTimeToTeamRequest) {
-        this.addPointsToTeam(name, timeInSeconds)
+        this.addPointsToTeam(name, BigDecimal.valueOf(timeInSeconds))
         this.timeLogService.log(
             timeToTeamRequest.who,
             timeToTeamRequest.why,
@@ -58,11 +59,11 @@ class TeamService
     }
 
     @Transactional
-    fun addPointsToTeam(teamName: String, points: Double) {
+    fun addPointsToTeam(teamName: String, points: BigDecimal) {
         val team = teamRepository.findByName(teamName)
 
         if (team != null) {
-            team.addTime(points)
+            team.addTime(points.toDouble())
             teamRepository.save(team)
         } else {
             throw TeamNotFoundException()
