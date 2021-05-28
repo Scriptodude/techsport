@@ -2,7 +2,7 @@ techsport:
   front-url: "https://techsport.herokuapp.com"
   end-of-event: "2021-06-30T00:00:00Z"
   database:
-    name: "techsport-dev"
+    name: "techsport-prod-second-edition"
   strava:
     url:
       api: "https://www.strava.com/api/"

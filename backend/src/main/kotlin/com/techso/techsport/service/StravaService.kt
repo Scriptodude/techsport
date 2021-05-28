@@ -6,6 +6,7 @@ import com.techso.techsport.model.DataImport
 import com.techso.techsport.model.request.StravaAuthRequest
 import com.techso.techsport.model.strava.request.TokenExchangeRequest
 import com.techso.techsport.repository.DataImportRepository
+import com.techso.techsport.service.activity.ActivityFilteringProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.net.URI
@@ -20,7 +21,8 @@ constructor(
     private val techsport: TechsportProperties,
     private val validationService: ValidationService,
     private val dataImportRepository: DataImportRepository,
-    private val configurationService: ConfigurationService
+    private val configurationService: ConfigurationService,
+    private val activityFilteringProvider: ActivityFilteringProvider
 ) {
 
     fun redirect(response: HttpServletResponse) =
@@ -66,11 +68,7 @@ constructor(
                         this.dataImportRepository
                             .findById(athlete.id)
                             .map { it.lastImport }
-                            .orElse(
-                                ZonedDateTime
-                                    .of(LocalDate.of(2021, 2, 1), LocalTime.MIN, ZoneId.of("UTC"))
-                                    .toInstant()
-                            )
+                            .orElse(this.configurationService.getConfig().startDate)
 
                     if (Instant.now().minusMillis(lastImport.toEpochMilli())
                             .toEpochMilli() <= 15 * 60 * 1000
@@ -90,11 +88,8 @@ constructor(
                         )
                     )
 
-                    val goodActivities = activities
-                        .filter { it.movingTime >= 15 * 60 }
-
-                    goodActivities
-                        .forEach { this.validationService.addActivity(it, athlete) }
+                    val goodActivities = this.activityFilteringProvider.filterActivities.call(activities)
+                    goodActivities.forEach { this.validationService.addActivity(it, athlete) }
 
                     httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?success=true&count=${goodActivities.size}")
                 }
