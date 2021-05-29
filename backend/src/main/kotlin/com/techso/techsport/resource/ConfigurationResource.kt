@@ -2,6 +2,7 @@ package com.techso.techsport.resource
 
 import com.techso.techsport.model.ApplicationConfiguration
 import com.techso.techsport.model.request.UpdateConfigurationRequest
+import com.techso.techsport.model.response.ConfigurationResponse
 import com.techso.techsport.service.ConfigurationService
 import com.techso.techsport.service.LoginService
 import org.springframework.web.bind.annotation.*
@@ -21,16 +22,16 @@ class ConfigurationResource(
 ) {
 
     @GetMapping
-    fun getConfig(): ApplicationConfiguration {
-        return this.configurationService.getConfig()
+    fun getConfig(): ConfigurationResponse {
+        return ConfigurationResponse(this.configurationService.getConfig())
     }
 
     @PutMapping
     fun updateConfig(
         @RequestBody request: UpdateConfigurationRequest,
         @CookieValue("token") token: String
-    ): ApplicationConfiguration {
+    ): ConfigurationResponse {
         this.loginService.validateToken(token)
-        return this.configurationService.updateConfig(request)
+        return ConfigurationResponse(this.configurationService.updateConfig(request))
     }
 }

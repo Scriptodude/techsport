@@ -15,8 +15,7 @@
             <li [ngbNavItem]="1">
                 <a ngbNavLink>Demandes</a>
                 <ng-template ngbNavContent class="d-flex justify-content-center">
-                    <app-activities [teams]="teams" (message)="handleMessage($event)" *ngIf="isTimeMode()"></app-activities>
-                    <h1 *ngIf="!isTimeMode()">Le mode distance est en construction</h1>
+                    <app-activities [teams]="teams" (message)="handleMessage($event)"></app-activities>
                 </ng-template>
             </li>
             <li [ngbNavItem]="2" *ngIf="isTimeMode()">

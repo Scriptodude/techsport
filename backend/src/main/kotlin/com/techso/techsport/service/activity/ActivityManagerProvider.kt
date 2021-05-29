@@ -14,14 +14,14 @@ class ActivityManagerProvider(
 
     override fun filterActivities(activities: List<Activity>) =
         when (configurationService.getConfig().appMode) {
-            ApplicationMode.time -> distancePerSportActivityManager.filterActivities(activities)
-            ApplicationMode.distancePerSport -> timeActivityManager.filterActivities(activities)
+            ApplicationMode.distancePerSport -> distancePerSportActivityManager.filterActivities(activities)
+            ApplicationMode.time -> timeActivityManager.filterActivities(activities)
         }
 
     override fun calculatePoints(activity: Activity) =
         when (configurationService.getConfig().appMode) {
-            ApplicationMode.time -> distancePerSportActivityManager.calculatePoints(activity)
-            ApplicationMode.distancePerSport -> timeActivityManager.calculatePoints(activity)
+            ApplicationMode.distancePerSport -> distancePerSportActivityManager.calculatePoints(activity)
+            ApplicationMode.time -> timeActivityManager.calculatePoints(activity)
         }
 
 }

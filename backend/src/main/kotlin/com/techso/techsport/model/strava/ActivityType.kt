@@ -2,19 +2,19 @@ package com.techso.techsport.model.strava
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-enum class ActivityType {
+enum class ActivityType(val french: String) {
     @JsonProperty("Walk")
-    walk,
+    walk("Marche à pied"),
     @JsonProperty("Hike")
-    hike,
+    hike("Randonnée pédestre"),
     @JsonProperty("InlineSkate")
-    inlineSkate,
+    inlineSkate("Patins à roues alignées"),
     @JsonProperty("Ride")
-    bike,
+    bike("Vélo"),
     @JsonProperty("VirtualRide")
-    virtualRide,
+    virtualRide("Vélo stationnaire"),
     @JsonProperty("Run")
-    run,
+    run("Course à pied"),
     @JsonProperty("VirtualRun")
-    virtualRun,
+    virtualRun("Course à pied sur tapis roulant");
 }

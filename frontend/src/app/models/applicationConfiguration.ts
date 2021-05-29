@@ -3,6 +3,7 @@ export interface ApplicationConfigurationResponse {
   pointModifiers: Map<string, number>
   startDate: string
   endDate: string
+  supportedActivities: Map<string, string>
 }
 
 export function createDefaultConfigResponse(): ApplicationConfigurationResponse {
@@ -10,7 +11,8 @@ export function createDefaultConfigResponse(): ApplicationConfigurationResponse 
     appMode: "time",
     pointModifiers: new Map<string, number>(),
     startDate: '2021-01-01T00:00:00Z',
-    endDate: '2021-01-01T00:00:00Z'
+    endDate: '2021-01-01T00:00:00Z',
+    supportedActivities: new Map<string, string>()
   }
 }
 

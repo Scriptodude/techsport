@@ -55,7 +55,7 @@ constructor(
                 if (approved) {
                     this.teamService.addPointsToTeam(
                         teamName,
-                        activity.points
+                        activity.points ?: activity.activityTime.timeInSeconds.toBigDecimal()
                     )
                     activity.teamName = teamName
                 }

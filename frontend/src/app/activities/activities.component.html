@@ -1,4 +1,5 @@
 <span>Filtrer par:</span>
+<br>
 <div ngbDropdown class="d-inline-block">
     <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ filter
         }}</button>
@@ -13,16 +14,10 @@
     <ng-container *ngFor="let activity of activities">
         <div class="card text-center">
             <div class="card-body">
-                <a class="" href="https://www.strava.com/activities/{{activity.id}}">Lien vers
+                <a href="https://www.strava.com/activities/{{activity.id}}">Lien vers
                     l'activité (Strava)</a>
-                <div class="row">
-                    <span class="col-sm-6">Athlète: {{ activity.athleteFullName }}</span>
-                    <span class="col-sm-6">Date: {{activity.activityDate}}</span>
-                    <span class="col-sm-6">Temps: {{activity.activityTime.hours}}h
-                        {{activity.activityTime.minutes}}m {{activity.activityTime.seconds}}s</span>
-                    <span class="col-sm-6">{{ getStatus(activity) }}</span>
-                </div>
-                <ng-container *ngIf="activity.approved == false || activity.approved == null">
+                <app-activity-body [activity]="activity"></app-activity-body>
+                <ng-container class="row" *ngIf="activity.approved == false || activity.approved == null">
                     <div ngbDropdown class="d-inline-block">
                         <button class="btn btn-success dropdown-toggle" id="selectTeamApproval"
                             ngbDropdownToggle>Approuver pour l'équipe</button>

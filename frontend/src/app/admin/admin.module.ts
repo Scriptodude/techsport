@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatDateAdapter } from '@angular-material-components/datetime-picker';
+import { ActivityBodyComponent } from '../activity-body/activity-body.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatDateAdapter }
     AddTimeComponent,
     TimeLogComponent,
     PaginationComponent,
-    AdminConfigComponent
+    AdminConfigComponent,
+    ActivityBodyComponent,
   ],
   imports: [
     CommonModule,

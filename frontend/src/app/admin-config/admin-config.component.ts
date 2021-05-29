@@ -27,7 +27,7 @@ export class AdminConfigComponent implements OnInit {
 
   ngOnInit(): void {
     this.configRequest.mode = this.config.appMode;
-    this.configRequest.modifiers = new Map<string, number>(Object.entries(this.config.pointModifiers));
+    this.configRequest.modifiers = this.config.pointModifiers;
     this.configRequest.startDate = this.config.startDate;
     this.configRequest.endDate = this.config.endDate;
     this.start.setValue(moment.utc(this.config.startDate).tz("America/Montreal"));
@@ -76,7 +76,7 @@ export class AdminConfigComponent implements OnInit {
   }
 
   getAvailableSports() {
-    return [["Walk", "Marche à pied"], ["Hike", "Randonnée pédestre"], ["Run", "Course à pied extérieure"], ["VirtualRun", "Course à pied sur tapis roulant"], ["Ride", "Vélo"], ["VirtualRide", "Vélo Stationnaire"], ["InlineSkate", "Patin à roues alignées"]]
+    return Array.from(this.config.supportedActivities.entries());
   }
 
   selectMode(mode: string) {

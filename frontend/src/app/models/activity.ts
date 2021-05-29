@@ -6,6 +6,10 @@ export interface Activity {
     athleteFullName: string;
     activityTime: Time;
     activityDate: string;
+    distance: number | null;
+    type: string | null;
+    isManual: Boolean | null;
+    points: number | null;
     approved: Boolean | null;
     teamName: string | null;
 }
@@ -26,6 +30,10 @@ export function createDefaultActivity() {
             timeInSeconds: 0
         },
         activityDate: '',
+        distance: null,
+        type: null,
+        isManual: null,
+        points: null,
         approved: null,
         teamName: null
     }
