@@ -14,10 +14,12 @@ open class Team(@Id val name: String) {
         private set;
 
     fun addTime(points: BigDecimal) {
-        this.points.add(points)
-        this.points.max(BigDecimal.ZERO);
+        val pointsBefore = this.points.add(BigDecimal.ZERO)
+        this.points = this.points.add(points)
+        this.points = this.points.max(BigDecimal.ZERO);
 
         val oldValue = this.pointsChanges.getOrDefault(LocalDate.now(), BigDecimal.ZERO);
-        this.pointsChanges[LocalDate.now()] = oldValue.add(points)
+        val actualChange = this.points.minus(pointsBefore)
+        this.pointsChanges[LocalDate.now()] = oldValue.plus(actualChange)
     }
 }
