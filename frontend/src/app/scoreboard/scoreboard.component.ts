@@ -109,7 +109,7 @@ export class ScoreboardComponent implements OnInit {
     if (this.isTimeMode()) {
       return `${team.timeTotal.hours}h ${team.timeTotal.minutes}m ${team.timeTotal.seconds}s`;
     } else {
-      return team.pointsTotal;
+      return team.pointsTotal.toFixed(2);
     }
   }
 
@@ -127,7 +127,7 @@ export class ScoreboardComponent implements OnInit {
 
       return hours + "h " + minutes + "m " + seconds + "s ";
     } else {
-      return team.pointsToday;
+      return team.pointsToday.toFixed(2);
     }
   }
 
@@ -147,7 +147,7 @@ export class ScoreboardComponent implements OnInit {
     switch (name) {
       case "max": return this.secondsToHms(maxV)
       case "min": return this.secondsToHms(minV)
-      default: return this.secondsToHms(avgV.toFixed(2))
+      default: return this.secondsToHms(avgV)
     }
   }
 
@@ -163,7 +163,7 @@ export class ScoreboardComponent implements OnInit {
     return this.isTimeMode() ? parseFloat((y / 3600).toFixed(2)) : y;
   }
 
-  private secondsToHms(d) {
+  private secondsToHms(d: number) {
     if (this.isTimeMode()) {
       d = Number(d);
       var h = Math.floor(d / 3600);
@@ -175,7 +175,7 @@ export class ScoreboardComponent implements OnInit {
       var sDisplay = s > 0 ? s + "s" : "";
       return hDisplay + mDisplay + sDisplay;
     } else {
-      return d;
+      return d.toFixed(2);
     }
   }
 

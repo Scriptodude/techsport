@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ActivityService } from '../activity.service';
@@ -22,11 +23,17 @@ export class ActivitiesComponent implements OnInit {
   @Input() teams: Team[] = []
   public page: number = 1;
 
-  constructor(private activityService: ActivityService) { }
+  constructor(private activityService: ActivityService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getActivities();
-    this.teamFilter = this.teams[0]?.name
+    this.route.queryParams.subscribe(params => {
+      this.filter = params["filter"];
+      this.teamFilter = params["team"];
+      this.page = params["page"]
+      this.getActivities(this.filter, this.teamFilter);
+    });
   }
 
   pages() {
@@ -49,19 +56,31 @@ export class ActivitiesComponent implements OnInit {
     this.filter = filter;
     this.teamFilter = team;
 
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: {
+          filter,
+          team,
+          page: this.page
+        },
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+
     switch (this.filter) {
       case "Toutes":
-        this.activityService.getAllActivities(this.page, null, true, team).subscribe(a => {this.activities = a. activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, null, true, team).subscribe(a => { this.activities = a.activities; this.pageCount = a.pages });
         break;
       case 'Refusées':
-        this.activityService.getAllActivities(this.page, false, false, team).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, false, false, team).subscribe(a => { this.activities = a.activities; this.pageCount = a.pages });
         break;
       case 'Approuvées':
-        this.activityService.getAllActivities(this.page, true, false, team).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, true, false, team).subscribe(a => { this.activities = a.activities; this.pageCount = a.pages });
         break;
       default:
       case 'À Valider':
-        this.activityService.getAllActivities(this.page, null, false, team).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, null, false, team).subscribe(a => { this.activities = a.activities; this.pageCount = a.pages });
         break;
     }
   }
@@ -83,7 +102,7 @@ export class ActivitiesComponent implements OnInit {
         if (r == false) return;
 
         this.message.emit(new ComponentMessage(true, 'La demande fut ' + (approved == true ? 'approuvée' : 'refusée') + ' avec succès!'));
-        this.getActivities()
+        this.ngOnInit();
       })
   }
 
@@ -99,7 +118,7 @@ export class ActivitiesComponent implements OnInit {
     switch (error.status) {
       case 409:
         this.message.emit(new ComponentMessage(false, 'Cette demande est déjà approuvée.'));
-        this.getActivities();
+        this.ngOnInit();
         break;
       case 404:
         this.message.emit(new ComponentMessage(false, 'Cette demande n\'existe plus.'));

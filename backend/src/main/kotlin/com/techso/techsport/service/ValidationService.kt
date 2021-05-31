@@ -82,9 +82,10 @@ constructor(
                     }
                 } else {
 
-                    // We want to remove the points of the team
+                    // We want to remove the points of the team and bring it back to approved
                     this.teamService.rollbackPoints(teamName, activity)
-                    activity.approved = false;
+                    activity.approved = null;
+                    activity.teamName = null;
                 }
             }
             else -> {

@@ -11,13 +11,19 @@
             <button ngbDropdownItem (click)="page = 1; getActivities('Approuvées')">Approuvées</button>
         </div>
     </div>
-    <div ngbDropdown class="d-inline-block" *ngIf="filter === 'Toutes' || filter === 'Approuvées'">
-        <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ teamFilter || 'Équipe...' }}</button>
-        <div ngbDropdownMenu aria-labelledby="selectTeamFilter" class="mb-4">
-            <button ngbDropdownItem *ngFor="let team of teams"
-                (click)="page=1; getActivities(filter, team.name)">{{team.name}}</button>
+    <ng-container *ngIf="filter === 'Approuvées'">
+        <span>pour</span>
+        <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ teamFilter ||
+                'Toutes les équipes' }}</button>
+            <div ngbDropdownMenu aria-labelledby="selectTeamFilter" class="mb-4">
+                <button ngbDropdownItem *ngFor="let team of teams"
+                    (click)="page=1; getActivities(filter, team.name)">{{team.name}}</button>
+                <button ngbDropdownItem (click)="page=1; getActivities(filter, null)">Toutes
+                    les équipes</button>
+            </div>
         </div>
-    </div>
+    </ng-container>
 </div>
 <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
     <ng-container *ngFor="let activity of activities">
@@ -28,15 +34,16 @@
                 <app-activity-body [activity]="activity"></app-activity-body>
                 <ng-container class="row">
                     <div ngbDropdown class="d-inline-block">
-                        <button class="btn btn-success dropdown-toggle" id="selectTeamApproval"
-                            ngbDropdownToggle>{{ getApprovalName(activity) }}</button>
+                        <button class="btn btn-success dropdown-toggle" id="selectTeamApproval" ngbDropdownToggle>{{
+                            getApprovalName(activity) }}</button>
                         <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
                             <button ngbDropdownItem *ngFor="let team of teams"
                                 (click)="changeApproval(activity, team.name, true)">{{team.name}}</button>
                         </div>
                     </div>
                     <button mdbBtn class="btn btn-danger"
-                        (click)="changeApproval(activity, activity.teamName || '', false)" *ngIf="activity.approved !== false">{{ getRefusalName(activity) }}</button>
+                        (click)="changeApproval(activity, activity.teamName || '', false)"
+                        *ngIf="activity.approved !== false">{{ getRefusalName(activity) }}</button>
                 </ng-container>
             </div>
         </div>
