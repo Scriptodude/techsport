@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ActivityToValidateRepository : PagingAndSortingRepository<ActivityToValidate, String> {
     fun findAllByApproved(approved: Boolean?, pageable: Pageable): Page<ActivityToValidate>
+
+    fun findAllByTeamNameAndApproved(teamName: String?, approved: Boolean?, pageable: Pageable): Page<ActivityToValidate>
+    fun findAllByTeamName(teamName: String?, pageable: Pageable): Page<ActivityToValidate>
 }

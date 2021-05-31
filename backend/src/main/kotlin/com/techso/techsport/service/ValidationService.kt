@@ -28,41 +28,78 @@ constructor(
 ) {
 
     @Transactional
-    fun getAllActivities(page: Int, approved: Boolean?): Page<ActivityToValidate> =
-        this.activityToValidateRepository
-            .findAllByApproved(approved, PageRequest.of(page, 10, Sort.by("id").descending()))
+    fun getAllActivities(
+        page: Int,
+        approved: Boolean?,
+        teamName: String?
+    ): Page<ActivityToValidate> =
+        if (teamName == null) {
+            this.activityToValidateRepository
+                .findAllByApproved(approved, PageRequest.of(page, 10, Sort.by("id").descending()))
+        } else {
+            this.activityToValidateRepository.findAllByTeamNameAndApproved(
+                teamName,
+                approved,
+                PageRequest.of(page, 10, Sort.by("id").descending())
+            )
+        }
 
     @Transactional
-    fun getAllActivities(page: Int): Page<ActivityToValidate> =
-        this.activityToValidateRepository
-            .findAll(PageRequest.of(page, 10, Sort.by("id").descending()))
+    fun getAllActivities(page: Int, teamName: String?): Page<ActivityToValidate> =
+        if (teamName == null) {
+            this.activityToValidateRepository
+                .findAll(PageRequest.of(page, 10, Sort.by("id").descending()))
+        } else {
+            this.activityToValidateRepository.findAllByTeamName(
+                teamName,
+                PageRequest.of(page, 10, Sort.by("id").descending())
+            )
+        }
 
     @Transactional
     fun changeActivityApprobation(teamName: String, activityId: String, approved: Boolean) {
-        val activityOpt = this.activityToValidateRepository.findById(activityId);
+        val activity = this.activityToValidateRepository.findById(activityId)
+            .orElseThrow { ActivityNotFoundException() }
 
         when {
-            activityOpt.isEmpty -> {
-                throw ActivityNotFoundException()
-            }
-            activityOpt.get().approved == true -> {
-                throw AlreadyApprovedException()
+
+            // The activity was already approved for a team
+            activity.approved == true -> {
+
+                // And we want to re-approve it
+                if (approved) {
+
+                    // If the team did not change, then we do nothing
+                    if (teamName == activity.teamName) {
+                        throw AlreadyApprovedException()
+                    } else {
+
+                        // Otherwise, the team changed, we roll back the points to the previous team
+                        // And add them to the new team
+                        this.teamService.rollbackPoints(activity.teamName ?: "", activity)
+                        this.teamService.addPointsToTeam(teamName, activity)
+                        activity.teamName = teamName
+                    }
+                } else {
+
+                    // We want to remove the points of the team
+                    this.teamService.rollbackPoints(teamName, activity)
+                    activity.approved = false;
+                }
             }
             else -> {
-                val activity = activityOpt.get()
+
+                // The activity was previously unapproved, simply change the approbation
                 activity.approved = approved
 
                 if (approved) {
-                    this.teamService.addPointsToTeam(
-                        teamName,
-                        activity.points ?: activity.activityTime.timeInSeconds.toBigDecimal()
-                    )
+                    this.teamService.addPointsToTeam(teamName, activity)
                     activity.teamName = teamName
                 }
-
-                this.activityToValidateRepository.save(activity)
             }
         }
+
+        this.activityToValidateRepository.save(activity)
     }
 
     @Transactional

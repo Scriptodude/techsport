@@ -52,7 +52,7 @@ class TeamResource
     @GetMapping("/{name}")
     fun getTeamByName(@PathVariable name: String): TimeBasedTeamResponse {
         val team = this.teamService.getTeam(name)
-        return TimeBasedTeamResponse(team?.name!!, team?.points.toLong(), team?.members, team?.pointsChanges)
+        return TimeBasedTeamResponse(team.name, team.points.toLong(), team.members, team.pointsChanges)
     }
 
     @PostMapping("/{name}")

@@ -1,5 +1,6 @@
 package com.techso.techsport.service
 
+import com.techso.techsport.model.ActivityToValidate
 import com.techso.techsport.model.Team
 import com.techso.techsport.model.exception.AlreadyExistsException
 import com.techso.techsport.model.exception.TeamNotFoundException
@@ -22,10 +23,15 @@ class TeamService
         teamRepository.findAll(Sort.by(Sort.Direction.DESC, "timeInSeconds"));
 
     @Transactional
-    fun getTeam(name: String) = teamRepository.findByName(name)
+    fun getTeam(name: String) =
+        teamRepository.findByName(name).orElseThrow { TeamNotFoundException() }
 
     @Transactional
-    fun addPointsToTeam(name: String, timeInSeconds: Double, timeToTeamRequest: AddTimeToTeamRequest) {
+    fun addPointsToTeam(
+        name: String,
+        timeInSeconds: Double,
+        timeToTeamRequest: AddTimeToTeamRequest
+    ) {
         this.addPointsToTeam(name, BigDecimal.valueOf(timeInSeconds))
         this.timeLogService.log(
             timeToTeamRequest.who,
@@ -38,7 +44,7 @@ class TeamService
 
     @Transactional
     fun createNewTeam(name: String, members: List<String>): Team {
-        if (teamRepository.findByName(name) != null) {
+        if (teamRepository.findByName(name).isPresent) {
             throw AlreadyExistsException()
         }
 
@@ -50,7 +56,7 @@ class TeamService
 
     @Transactional
     fun updateTeam(name: String, members: List<String>): Team {
-        val team = teamRepository.findByName(name) ?: throw TeamNotFoundException()
+        val team = this.getTeam(name)
 
         team.members.clear()
         team.members.addAll(members)
@@ -60,13 +66,24 @@ class TeamService
 
     @Transactional
     fun addPointsToTeam(teamName: String, points: BigDecimal) {
-        val team = teamRepository.findByName(teamName)
+        val team = this.getTeam(teamName)
+        team.addTime(points.toDouble())
+        teamRepository.save(team)
+    }
 
-        if (team != null) {
-            team.addTime(points.toDouble())
-            teamRepository.save(team)
-        } else {
-            throw TeamNotFoundException()
-        }
+    @Transactional
+    fun addPointsToTeam(teamName: String, activity: ActivityToValidate) {
+        return this.addPointsToTeam(
+            teamName,
+            activity.points ?: activity.activityTime.timeInSeconds.toBigDecimal()
+        )
+    }
+
+    @Transactional
+    fun rollbackPoints(teamName: String, activity: ActivityToValidate) {
+        this.addPointsToTeam(
+            teamName,
+            (activity.points ?: activity.activityTime.timeInSeconds.toBigDecimal()).negate()
+        )
     }
 }

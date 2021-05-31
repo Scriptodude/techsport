@@ -16,6 +16,7 @@ export class ActivitiesComponent implements OnInit {
 
   public activities: Activity[] = [];
   public filter: string = 'À Valider';
+  public teamFilter: string | null = null;
   public pageCount: number = 1;
   @Output() message = new EventEmitter<ComponentMessage>()
   @Input() teams: Team[] = []
@@ -25,6 +26,7 @@ export class ActivitiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getActivities();
+    this.teamFilter = this.teams[0]?.name
   }
 
   pages() {
@@ -43,22 +45,23 @@ export class ActivitiesComponent implements OnInit {
     return 'Status: À Valider'
   }
 
-  getActivities(filter: string = 'À Valider') {
+  getActivities(filter: string = 'À Valider', team: string | null = null) {
     this.filter = filter;
+    this.teamFilter = team;
 
     switch (this.filter) {
       case "Toutes":
-        this.activityService.getAllActivities(this.page, null, true).subscribe(a => {this.activities = a. activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, null, true, team).subscribe(a => {this.activities = a. activities; this.pageCount = a.pages});
         break;
       case 'Refusées':
-        this.activityService.getAllActivities(this.page, false).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, false, false, team).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
         break;
       case 'Approuvées':
-        this.activityService.getAllActivities(this.page, true).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, true, false, team).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
         break;
       default:
       case 'À Valider':
-        this.activityService.getAllActivities(this.page, null).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
+        this.activityService.getAllActivities(this.page, null, false, team).subscribe(a => {this.activities = a.activities; this.pageCount = a.pages});
         break;
     }
   }
@@ -82,6 +85,14 @@ export class ActivitiesComponent implements OnInit {
         this.message.emit(new ComponentMessage(true, 'La demande fut ' + (approved == true ? 'approuvée' : 'refusée') + ' avec succès!'));
         this.getActivities()
       })
+  }
+
+  getRefusalName(activity: Activity) {
+    return activity.approved === true ? 'Enlever les points' : 'Refuser';
+  }
+
+  getApprovalName(activity: Activity) {
+    return activity.approved === false || activity.approved === null ? 'Approuver pour l\'équipe' : 'Transférer vers l\'équipe'
   }
 
   private handleAppovalError(error: HttpErrorResponse) {

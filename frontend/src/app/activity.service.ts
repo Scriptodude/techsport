@@ -13,9 +13,10 @@ export class ActivityService {
 
   constructor(private client: HttpClient) { }
 
-  getAllActivities(page: number, approved: boolean | null = null, all = false) {
+  getAllActivities(page: number, approved: boolean | null = null, all = false, team: string | null = null) {
     let queryParam = "?page=" + (page - 1);
     queryParam += approved == null ? '' : '&approved=' + approved;
+    queryParam += team == null ? '' : '&team=' + team;
     queryParam += '&all=' + all;
 
     return this.client.get<ActivityResponse>(environment.apiUrl + "/activities" + queryParam, { withCredentials: true })

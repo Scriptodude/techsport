@@ -27,13 +27,14 @@ constructor(
         @CookieValue("token") token: String,
         @RequestParam("page") page: Int,
         @RequestParam("approved", required = false) approved: Boolean?,
+        @RequestParam("team", required = false) teamName: String?,
         @RequestParam("all", required = false) all: Boolean?
     ): AllActivitiesResponse {
         this.loginService.validateToken(token)
 
         val activities = when (all) {
-            true -> this.validationService.getAllActivities(page)
-            else -> this.validationService.getAllActivities(page, approved)
+            true -> this.validationService.getAllActivities(page, teamName)
+            else -> this.validationService.getAllActivities(page, approved, teamName)
         }
         val pages = activities.totalPages
 

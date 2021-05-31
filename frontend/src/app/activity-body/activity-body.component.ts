@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConfigurationService } from '../configuration.service';
 import { Activity, createDefaultActivity } from '../models/activity';
 import { ApplicationConfigurationResponse, createDefaultConfigResponse } from '../models/applicationConfiguration';
@@ -11,6 +11,7 @@ import { ApplicationConfigurationResponse, createDefaultConfigResponse } from '.
 export class ActivityBodyComponent implements OnInit {
 
   @Input() activity: Activity = createDefaultActivity()
+  @Output() changeApprovalEmiter = new EventEmitter<any[]>()
   private config: ApplicationConfigurationResponse = createDefaultConfigResponse()
 
   constructor(private configService: ConfigurationService) { }

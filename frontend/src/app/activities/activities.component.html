@@ -1,13 +1,22 @@
 <span>Filtrer par:</span>
 <br>
-<div ngbDropdown class="d-inline-block">
-    <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ filter
-        }}</button>
-    <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
-        <button ngbDropdownItem (click)="page = 1; getActivities('Toutes')">Toutes</button>
-        <button ngbDropdownItem (click)="page = 1; getActivities('À Valider')">À Valider</button>
-        <button ngbDropdownItem (click)="page = 1; getActivities('Refusées')">Refusées</button>
-        <button ngbDropdownItem (click)="page = 1; getActivities('Approuvées')">Approuvées</button>
+<div>
+    <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ filter
+            }}</button>
+        <div ngbDropdownMenu aria-labelledby="filterActivities" class="mb-4">
+            <button ngbDropdownItem (click)="page = 1; getActivities('Toutes')">Toutes</button>
+            <button ngbDropdownItem (click)="page = 1; getActivities('À Valider')">À Valider</button>
+            <button ngbDropdownItem (click)="page = 1; getActivities('Refusées')">Refusées</button>
+            <button ngbDropdownItem (click)="page = 1; getActivities('Approuvées')">Approuvées</button>
+        </div>
+    </div>
+    <div ngbDropdown class="d-inline-block" *ngIf="filter === 'Toutes' || filter === 'Approuvées'">
+        <button class="btn btn-primary dropdown-toggle" id="selectFilter" ngbDropdownToggle>{{ teamFilter || 'Équipe...' }}</button>
+        <div ngbDropdownMenu aria-labelledby="selectTeamFilter" class="mb-4">
+            <button ngbDropdownItem *ngFor="let team of teams"
+                (click)="page=1; getActivities(filter, team.name)">{{team.name}}</button>
+        </div>
     </div>
 </div>
 <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
@@ -17,17 +26,17 @@
                 <a href="https://www.strava.com/activities/{{activity.id}}">Lien vers
                     l'activité (Strava)</a>
                 <app-activity-body [activity]="activity"></app-activity-body>
-                <ng-container class="row" *ngIf="activity.approved == false || activity.approved == null">
+                <ng-container class="row">
                     <div ngbDropdown class="d-inline-block">
                         <button class="btn btn-success dropdown-toggle" id="selectTeamApproval"
-                            ngbDropdownToggle>Approuver pour l'équipe</button>
+                            ngbDropdownToggle>{{ getApprovalName(activity) }}</button>
                         <div ngbDropdownMenu aria-labelledby="selectTeamApproval" class="mb-4">
                             <button ngbDropdownItem *ngFor="let team of teams"
                                 (click)="changeApproval(activity, team.name, true)">{{team.name}}</button>
                         </div>
                     </div>
                     <button mdbBtn class="btn btn-danger"
-                        (click)="changeApproval(activity, 'test-2', false)">Refuser</button>
+                        (click)="changeApproval(activity, activity.teamName || '', false)" *ngIf="activity.approved !== false">{{ getRefusalName(activity) }}</button>
                 </ng-container>
             </div>
         </div>
