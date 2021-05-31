@@ -10,6 +10,7 @@ export interface Activity {
     type: string | null;
     isManual: Boolean | null;
     points: number | null;
+    appliedRate: number | null;
     approved: Boolean | null;
     teamName: string | null;
 }
@@ -34,6 +35,7 @@ export function createDefaultActivity() {
         type: null,
         isManual: null,
         points: null,
+        appliedRate: null,
         approved: null,
         teamName: null
     }

@@ -16,6 +16,7 @@ data class ActivityToValidate(
     var type: ActivityType?,
     var isManual: Boolean?,
     var points: BigDecimal?,
+    var appliedRate: BigDecimal?,
     var approved: Boolean? = null,
     var teamName: String? = null,
 )

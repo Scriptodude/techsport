@@ -27,7 +27,9 @@
             <div class="form-check" *ngIf="configRequest.mode === 'distancePerSport'">
                 <p>Le mode de pointage par distance par activité permet d'assigner un certain nombre de points par
                     kilomètres pour certains types d'activités. <br>Le pointage est automatiquement calculé lors de
-                    l'approbation d'une activité.<br>Il est impossible d'ajouter des points manuellement dans ce mode,
+                    l'import d'une activité.<br>Lors du changement d'un pointage, ce dernier sera mis en application
+                    lors de l'import des nouvelles activités, le pointage précédent sera appliqué aux activités
+                    précédemment importées.<br>Il est impossible d'ajouter des points manuellement dans ce mode,
                     seul l'import via strava est disponible.</p>
                 <br>
                 <table class="table">
@@ -41,9 +43,8 @@
                             <td><input type="number" name="{{ sport[0] }}" class="form-control"
                                     formControlName="{{ sport[0] }}"
                                     value="{{ configRequest.modifiers.get(sport[0]) || 1.0 }}"
-                                    placeholder="{{ configRequest.modifiers.get(sport[0]) || 1.0 }}" 
-                                    min="0.5"
-                                    step="0.5" required/></td>
+                                    placeholder="{{ configRequest.modifiers.get(sport[0]) || 1.0 }}" min="0.5"
+                                    step="0.5" required /></td>
                         </tr>
                     </tbody>
                 </table>

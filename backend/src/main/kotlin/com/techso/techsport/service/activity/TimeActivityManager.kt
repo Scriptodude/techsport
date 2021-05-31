@@ -7,9 +7,13 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service("time")
-class TimeActivityManager : ActivityFiltering, PointsCalculator {
+class TimeActivityManager : ActivityManager {
     override fun filterActivities(activities: List<Activity>) =
         activities.filter { it.movingTime >= 15 * 60 }
 
     override fun calculatePoints(activity: Activity) = BigDecimal.valueOf(Time(activity.movingTime).timeInSeconds).setScale(2, RoundingMode.HALF_UP)
+
+    override fun getAppliedRate(activity: Activity): BigDecimal {
+        return BigDecimal.ONE
+    }
 }

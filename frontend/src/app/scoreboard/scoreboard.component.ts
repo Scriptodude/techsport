@@ -28,7 +28,7 @@ export class ScoreboardComponent implements OnInit {
       let startDate = moment.tz(moment(this.config.startDate), 'Etc/UTC')
       let now = moment.tz(moment(), 'Etc/UTC')
       let endDate = moment.tz(moment(this.config.endDate), 'Etc/UTC')
-      let maxDate = now; 
+      let maxDate = now;
       let maxValue = 0;
       let dataCount = 0;
 
@@ -107,7 +107,7 @@ export class ScoreboardComponent implements OnInit {
 
   teamTotalFormatted(team: Team) {
     if (this.isTimeMode()) {
-      return `${team.timeTotal.hours}h ${team.timeTotal.minutes}m ${team.timeTotal.seconds}s`; 
+      return `${team.timeTotal.hours}h ${team.timeTotal.minutes}m ${team.timeTotal.seconds}s`;
     } else {
       return team.pointsTotal;
     }
@@ -120,15 +120,15 @@ export class ScoreboardComponent implements OnInit {
 
     if (Object.entries(team.pointChanges).length == 0) return "Aucun";
 
-    if (!this.isTimeMode()) {
+    if (this.isTimeMode()) {
+      const hours = team.timeToday.hours
+      const minutes = team.timeToday.minutes
+      const seconds = team.timeToday.seconds
+
+      return hours + "h " + minutes + "m " + seconds + "s ";
+    } else {
       return team.pointsToday;
     }
-
-    const hours = team.timeToday.hours
-    const minutes = team.timeToday.minutes
-    const seconds = team.timeToday.seconds
-
-    return hours + "h " + minutes + "m " + seconds + "s ";
   }
 
   getTeamStats(idx: number, name: string) {
@@ -164,16 +164,19 @@ export class ScoreboardComponent implements OnInit {
   }
 
   private secondsToHms(d) {
-    if (!this.isTimeMode()) return d;
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor(d % 3600 / 60);
-    var s = Math.floor(d % 3600 % 60);
+    if (this.isTimeMode()) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
 
-    var hDisplay = h > 0 ? h + "h " : "";
-    var mDisplay = m > 0 ? m + "m " : "";
-    var sDisplay = s > 0 ? s + "s" : "";
-    return hDisplay + mDisplay + sDisplay;
+      var hDisplay = h > 0 ? h + "h " : "";
+      var mDisplay = m > 0 ? m + "m " : "";
+      var sDisplay = s > 0 ? s + "s" : "";
+      return hDisplay + mDisplay + sDisplay;
+    } else {
+      return d;
+    }
   }
 
   private isTimeMode() {

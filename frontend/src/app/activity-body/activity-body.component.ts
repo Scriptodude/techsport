@@ -24,7 +24,7 @@ export class ActivityBodyComponent implements OnInit {
   }
 
   showMaths() {
-    return `${this.activity.distance} x ${this.getModifierForType(this.activity.type)}`
+    return `${this.activity.distance} x ${this.activity.appliedRate || 1.0}`
   }
 
   getNamedType() {
@@ -40,17 +40,5 @@ export class ActivityBodyComponent implements OnInit {
     if (this.activity.approved === true) return 'Status: Approuvée pour l\'équipe ' + this.activity.teamName || 'Inconnue';
     else if (this.activity.approved === false) return 'Status: Refusée'
     return 'Status: À Valider'
-  }
-
-  private getModifierForType(type: string | null) {
-    if (type == null) {
-      return 1.0;
-    }
-
-    if (this.config.pointModifiers.has(type)) {
-      return this.config.pointModifiers.get(type)
-    }
-
-    return 1.0;
   }
 }

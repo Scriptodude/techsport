@@ -79,7 +79,8 @@ constructor(
                 distance = BigDecimal.valueOf(activity.distance).setScale(2, RoundingMode.HALF_UP),
                 type = activity.type,
                 isManual = activity.isManual,
-                points = this.activityManagerProvider.calculatePoints(activity)
+                points = this.activityManagerProvider.calculatePoints(activity),
+                appliedRate = this.activityManagerProvider.getAppliedRate(activity)
             )
 
             this.activityToValidateRepository.save(newActivity)
