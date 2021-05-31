@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ActivityService } from '../activity.service';
+import { ConfigurationService } from '../configuration.service';
 import { Activity } from '../models/activity';
+import { createDefaultConfigResponse } from '../models/applicationConfiguration';
 import ComponentMessage from '../models/componentMessage';
 import Team from '../models/team';
 
@@ -22,12 +24,16 @@ export class ActivitiesComponent implements OnInit {
   @Output() message = new EventEmitter<ComponentMessage>()
   @Input() teams: Team[] = []
   public page: number = 1;
+  public config = createDefaultConfigResponse()
 
   constructor(private activityService: ActivityService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private configService: ConfigurationService
+    ) { }
 
   ngOnInit(): void {
+    this.configService.getConfiguration().subscribe(c => this.config = c);
     this.route.queryParams.subscribe(params => {
       this.filter = params["filter"] || 'À Valider';
       this.teamFilter = params["team"] || null;

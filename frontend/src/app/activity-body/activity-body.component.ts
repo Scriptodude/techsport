@@ -12,28 +12,23 @@ export class ActivityBodyComponent implements OnInit {
 
   @Input() activity: Activity = createDefaultActivity()
   @Output() changeApprovalEmiter = new EventEmitter<any[]>()
-  private config: ApplicationConfigurationResponse = createDefaultConfigResponse()
+  @Input() isTimeMode = true
+  @Input() supportedActivities = new Map<String, String>()
 
-  constructor(private configService: ConfigurationService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.configService.getConfiguration().subscribe(c => this.config = c);
   }
-
-  isTimeMode() {
-    return this.config.appMode === 'time';
-  }
-
   showMaths() {
     return `${this.activity.distance} x ${this.activity.appliedRate || 1.0}`
   }
 
   getNamedType() {
-    if (this.activity.type == null || !this.config.supportedActivities.has(this.activity.type)) {
+    if (this.activity.type == null || !this.supportedActivities.has(this.activity.type)) {
       return 'Type non supporté';
     }
 
-    return this.config.supportedActivities.get(this.activity.type);
+    return this.supportedActivities.get(this.activity.type);
   }
 
   getStatus() {

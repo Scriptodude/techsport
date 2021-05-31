@@ -5,14 +5,14 @@
             <td><span>Date: {{ activity.activityDate }}</span></td>
         </tr>
         <tr>
-            <td><span *ngIf="isTimeMode()">Temps: {{activity.activityTime.hours}}h
+            <td><span *ngIf="isTimeMode">Temps: {{activity.activityTime.hours}}h
                     {{activity.activityTime.minutes}}m {{activity.activityTime.seconds}}s</span>
-                <span *ngIf="!isTimeMode()">Points: {{ activity.points }} ({{ showMaths() }})</span>
+                <span *ngIf="!isTimeMode">Points: {{ activity.points }} ({{ showMaths() }})</span>
             </td>
             <td><span>{{ getStatus() }}</span></td>
         </tr>
         <tr>
-            <td rowspan="2"><span *ngIf="!isTimeMode()">Type: {{ getNamedType() }}</span></td>
+            <td rowspan="2"><span *ngIf="!isTimeMode">Type: {{ getNamedType() }}</span></td>
         </tr>
     </tbody>
 </table>
