@@ -13,7 +13,7 @@ open class Team(@Id val name: String) {
     var pointsChanges: MutableMap<LocalDate, BigDecimal> = mutableMapOf()
         private set;
 
-    fun addTime(points: BigDecimal) {
+    fun addPoints(points: BigDecimal) {
         val pointsBefore = this.points.add(BigDecimal.ZERO)
         this.points = this.points.add(points)
         this.points = this.points.max(BigDecimal.ZERO);

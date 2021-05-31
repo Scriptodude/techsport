@@ -50,7 +50,7 @@ class TeamService
 
         val team = Team(name)
         team.members.addAll(members)
-        team.addTime(BigDecimal.ZERO)
+        team.addPoints(BigDecimal.ZERO)
 
         return teamRepository.save(team)
     }
@@ -68,7 +68,7 @@ class TeamService
     @Transactional
     fun addPointsToTeam(teamName: String, points: BigDecimal) {
         val team = this.getTeam(teamName)
-        team.addTime(points)
+        team.addPoints(points)
         teamRepository.save(team)
     }
 
