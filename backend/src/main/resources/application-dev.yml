@@ -1,7 +1,7 @@
 techsport:
   front-url: "http://localhost:4200"
   database:
-    name: "techsport-prod-second-edition"
+    name: "techsport-dev"
   strava:
     url:
       api: "https://www.strava.com/api/"

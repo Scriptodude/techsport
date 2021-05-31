@@ -31,6 +31,7 @@ export class PaginationComponent implements OnInit {
 
   changePage(page: number) {
     this.page = page
+    window.scroll(0,0);
     this.pageChanged.emit(this.page);
   }
 

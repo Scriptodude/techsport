@@ -1,22 +1,23 @@
 package com.techso.techsport.model
 
 import org.springframework.data.annotation.Id
+import java.math.BigDecimal
 import java.time.LocalDate
 import kotlin.math.max
 
 open class Team(@Id val name: String) {
     var members: MutableList<String> = mutableListOf()
         private set;
-    var points: Double = 0.0
+    var points: BigDecimal = BigDecimal.ZERO
         private set;
-    var pointsChanges: MutableMap<LocalDate, Double> = mutableMapOf()
+    var pointsChanges: MutableMap<LocalDate, BigDecimal> = mutableMapOf()
         private set;
 
-    fun addTime(points: Double) {
-        this.points += points
-        this.points = max(this.points, 0.0);
+    fun addTime(points: BigDecimal) {
+        this.points.add(points)
+        this.points.max(BigDecimal.ZERO);
 
-        val oldValue = this.pointsChanges.getOrDefault(LocalDate.now(), 0.0);
-        this.pointsChanges[LocalDate.now()] = oldValue + points
+        val oldValue = this.pointsChanges.getOrDefault(LocalDate.now(), BigDecimal.ZERO);
+        this.pointsChanges[LocalDate.now()] = oldValue.add(points)
     }
 }

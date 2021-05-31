@@ -29,9 +29,9 @@ export class ActivitiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.filter = params["filter"];
-      this.teamFilter = params["team"];
-      this.page = params["page"]
+      this.filter = params["filter"] || 'À Valider';
+      this.teamFilter = params["team"] || null;
+      this.page = params["page"] || 1;
       this.getActivities(this.filter, this.teamFilter);
     });
   }
