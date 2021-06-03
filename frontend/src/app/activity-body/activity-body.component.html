@@ -12,7 +12,8 @@
             <td><span>{{ getStatus() }}</span></td>
         </tr>
         <tr>
-            <td rowspan="2"><span *ngIf="!isTimeMode">Type: {{ getNamedType() }}</span></td>
+            <td><span *ngIf="!isTimeMode">Type: {{ getNamedType() }}</span></td>
+            <td><span *ngIf="activity.manual"><u><b class="h6">Activité manuelle !</b></u></span></td>
         </tr>
     </tbody>
 </table>

@@ -8,7 +8,7 @@ export interface Activity {
     activityDate: string;
     distance: number | null;
     type: string | null;
-    isManual: Boolean | null;
+    manual: Boolean | null;
     points: number | null;
     appliedRate: number | null;
     approved: Boolean | null;
@@ -33,7 +33,7 @@ export function createDefaultActivity() {
         activityDate: '',
         distance: null,
         type: null,
-        isManual: null,
+        manual: null,
         points: null,
         appliedRate: null,
         approved: null,

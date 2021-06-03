@@ -10,5 +10,6 @@ data class Activity(
     @JsonProperty("start_date_local") val startDate: Instant?,
     @JsonProperty("distance") var distance: Double,
     @JsonProperty("type") val type: ActivityType,
-    @JsonProperty("manual") val isManual: Boolean
+    @JsonProperty("manual") val isManual: Boolean,
+    @JsonProperty("total_elevation_gain") val elevationGain: Double
 )
