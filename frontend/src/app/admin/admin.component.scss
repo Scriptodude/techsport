@@ -29,3 +29,11 @@ textarea {
  ::ng-deep:-ms-input-placeholder {  
     text-align: center; 
  }
+
+ .nav-link.active {
+    font-weight: bold;
+}
+
+a {
+    color: inherit;
+}

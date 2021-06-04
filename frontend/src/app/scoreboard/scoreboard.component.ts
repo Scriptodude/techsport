@@ -42,7 +42,9 @@ export class ScoreboardComponent implements OnInit {
 
         for (var m = startDate.clone(); m.isBefore(maxDate); m.add(1, 'days')) {
           y += this.incrementPoints(m, team);
-          dataPoints.push({ x: m.toDate(), y });
+          const date = m.toDate()
+          date.setHours(0,0,0,0);
+          dataPoints.push({ x: date, y });
           maxValue = Math.max(maxValue, y);
           dataCount++;
         }
@@ -52,7 +54,7 @@ export class ScoreboardComponent implements OnInit {
           name: team.name,
           showInLegend: true,
           markerType: "circle",
-          markerSize: 5,
+          markerSize: 10,
           lineThickness: 3,
           dataPoints
         })
@@ -74,7 +76,27 @@ export class ScoreboardComponent implements OnInit {
           includeZero: false,
           minimum: 0,
           maximum: maxValue * 1.25,
-          interval: Math.ceil(maxValue * 1.25 / dataCount)
+          stripLines: [{
+            value: 0,
+            thickness: 1,
+            color: 'red'
+          },
+          {
+            value: Math.round((maxValue * 1.25) / 3),
+            thickness: 1,
+            color: 'yellowgreen'
+          },
+          {
+            value: 2 * Math.round((maxValue * 1.25) / 3),
+            thickness: 1,
+            color: 'green'
+          },
+          {
+            value: (maxValue * 1.25),
+            thickness: 1,
+            color: 'black'
+          }
+          ]
         },
         legend: {
           cursor: "pointer",
