@@ -19,13 +19,19 @@ export class StravaComponent implements OnInit {
   count = 0;
   startDate = '2021-01-01 à 00:00:00'
   endDate = '2021-01-01 à 00:00:00'
+  isStarted = false;
 
   constructor(private route: ActivatedRoute, private configService: ConfigurationService) { }
 
   ngOnInit(): void {
     this.configService.getConfiguration().subscribe(r => {
-      this.startDate = moment.utc(r.startDate).tz("America/Montreal").locale("fr").format("LLL")
-      this.endDate = moment.utc(r.endDate).tz("America/Montreal").locale("fr").format("LLL")
+      const startDate = moment.utc(r.startDate).tz("America/Montreal");
+      const endDate = moment.utc(r.endDate).tz("America/Montreal");
+      const now = moment.tz(moment(), 'Etc/UTC')
+      this.startDate = startDate.locale("fr").format("LL à HH:mm")
+      this.endDate = endDate.locale("fr").format("LL à HH:mm")
+
+      this.isStarted = (now >= startDate && now <= endDate);
     })
 
     this.route.queryParams.subscribe(params => {

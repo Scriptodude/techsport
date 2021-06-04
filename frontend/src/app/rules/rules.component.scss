@@ -2,25 +2,38 @@ ul {
     list-style-type: square;
 }
 
-.h1 {
+.h1,.h3 {
     text-align: center;
 }
 
 .container {
-    padding-top: 11%;
-    padding-bottom: 0;
+    padding-top: 2rem;
+    padding-bottom: 5rem;
 }
 
-.justify-content-center {
-    margin: auto;
-    width: 75%;
-    height: 60%;
-    background-color: rgba(255, 255, 255, 0.75);
-}
+// .justify-content-center {
+//     // margin: auto;
+//     // width: 75%;
+//     // height: 60%;
+//     background-color: rgba(255, 255, 255, 0.75);
+// }
 
 .image {
-    height: 94vh;
+    width: 35vw;
+    height: 50vh;
     background-image: url('../../assets/images/vs.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    margin: auto;
+}
+
+@media only screen and (max-width: 600px) {
+    .image {
+        width: 95vw;
+        height: 50vh;
+        background-image: url('../../assets/images/vs.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        margin: auto;
+    }
 }

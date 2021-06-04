@@ -15,99 +15,109 @@ export class ScoreboardComponent implements OnInit {
 
   teams: Team[] = [];
   config: ApplicationConfigurationResponse = createDefaultConfigResponse();
+  showBoard = true;
+  startDateFormatted = '1er janvier 2021 à 00:00'
 
   constructor(private teamService: TeamsService, private configService: ConfigurationService) { }
 
   ngOnInit(): void {
-    this.configService.getConfiguration().subscribe(c => this.config = c);
+    this.configService.getConfiguration().subscribe(c => {
+      this.config = c
 
-    this.teamService.getAllTeams().subscribe(teams => {
-      this.teams = teams
-
-      let data: any = [];
       let startDate = moment.tz(moment(this.config.startDate), 'Etc/UTC')
       let now = moment.tz(moment(), 'Etc/UTC')
       let endDate = moment.tz(moment(this.config.endDate), 'Etc/UTC')
-      let maxDate = now;
-      let maxValue = 0;
-      let dataCount = 0;
+      this.startDateFormatted = startDate.tz("America/Montreal").locale("fr").format("LL à HH:mm");
 
-      if (now > endDate) {
-        maxDate = endDate;
-      }
+      if (now < startDate) {
+        this.showBoard = false;
+      } else {
+        this.teamService.getAllTeams().subscribe(teams => {
+          this.teams = teams
 
-      for (let team of this.teams) {
-        let y = 0;
-        let dataPoints: any = [];
+          let data: any = [];
+          let maxDate = now;
+          let maxValue = 0;
+          let dataCount = 0;
 
-        for (var m = startDate.clone(); m.isBefore(maxDate); m.add(1, 'days')) {
-          y += this.incrementPoints(m, team);
-          const date = m.toDate()
-          date.setHours(0,0,0,0);
-          dataPoints.push({ x: date, y });
-          maxValue = Math.max(maxValue, y);
-          dataCount++;
-        }
-
-        data.push({
-          type: 'line',
-          name: team.name,
-          showInLegend: true,
-          markerType: "circle",
-          markerSize: 10,
-          lineThickness: 3,
-          dataPoints
-        })
-      }
-
-      let chart = new CanvasJS.Chart("chartContainer", {
-        zoomEnabled: true,
-        animationEnabled: true,
-        exportEnabled: false,
-        title: {
-          text: this.isTimeMode() ? "Total du temps cumulé" : "Pointage Actuel"
-        },
-        axisX: {
-          valueFormatString: "DD/MM",
-          interval: 1,
-          intervalType: "day"
-        },
-        axisY: {
-          includeZero: false,
-          minimum: 0,
-          maximum: maxValue * 1.25,
-          stripLines: [{
-            value: 0,
-            thickness: 1,
-            color: 'red'
-          },
-          {
-            value: Math.round((maxValue * 1.25) / 3),
-            thickness: 1,
-            color: 'yellowgreen'
-          },
-          {
-            value: 2 * Math.round((maxValue * 1.25) / 3),
-            thickness: 1,
-            color: 'green'
-          },
-          {
-            value: (maxValue * 1.25),
-            thickness: 1,
-            color: 'black'
+          if (now > endDate) {
+            maxDate = endDate;
           }
-          ]
-        },
-        legend: {
-          cursor: "pointer",
-          verticalAlign: "top",
-          horizontalAlign: "center",
-          dockInsidePlotArea: false,
-        },
-        data
-      });
 
-      chart.render();
+          for (let team of this.teams) {
+            let y = 0;
+            let dataPoints: any = [];
+
+            for (var m = startDate.clone(); m.isBefore(maxDate); m.add(1, 'days')) {
+              y += this.incrementPoints(m, team);
+              const date = m.toDate()
+              date.setHours(0, 0, 0, 0);
+              dataPoints.push({ x: date, y });
+              maxValue = Math.max(maxValue, y);
+              dataCount++;
+            }
+
+            data.push({
+              type: 'line',
+              name: team.name,
+              showInLegend: true,
+              markerType: "circle",
+              markerSize: 10,
+              lineThickness: 3,
+              dataPoints
+            })
+          }
+
+          let chart = new CanvasJS.Chart("chartContainer", {
+            zoomEnabled: true,
+            animationEnabled: true,
+            exportEnabled: false,
+            title: {
+              text: this.isTimeMode() ? "Total du temps cumulé" : (now <= endDate ? "Pointage Actuel" : "Pointage Final")
+            },
+            axisX: {
+              valueFormatString: "DD/MM",
+              interval: 1,
+              intervalType: "day"
+            },
+            axisY: {
+              includeZero: false,
+              minimum: 0,
+              maximum: maxValue * 1.25,
+              stripLines: [{
+                value: 0,
+                thickness: 1,
+                color: 'red'
+              },
+              {
+                value: Math.round((maxValue * 1.25) / 3),
+                thickness: 1,
+                color: 'yellowgreen'
+              },
+              {
+                value: 2 * Math.round((maxValue * 1.25) / 3),
+                thickness: 1,
+                color: 'green'
+              },
+              {
+                value: (maxValue * 1.25),
+                thickness: 1,
+                color: 'black'
+              }
+              ]
+            },
+            legend: {
+              cursor: "pointer",
+              verticalAlign: "top",
+              horizontalAlign: "center",
+              dockInsidePlotArea: false,
+            },
+            data
+          });
+
+          chart.render();
+        });
+      }
     });
   }
 

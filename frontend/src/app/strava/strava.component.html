@@ -1,17 +1,24 @@
 <div class="container">
     <div class="d-flex justify-content-center">
         <h2 *ngIf="failure" class="border border-danger bg-danger text-light">{{ reason }}</h2>
-        <h2 *ngIf="success" class="border border-success bg-success">{{ count }} activité(s) importée(s) avec succès</h2>
+        <h2 *ngIf="success" class="border border-success bg-success">{{ count }} activité(s) importée(s) avec succès
+        </h2>
     </div>
     <h2>Demande d'approbation via strava</h2>
     <h3>Ouvert du {{ startDate }} au {{ endDate }}, heures de Montréal</h3>
-    <p>En cliquant sur le bouton ci-dessous,
-        vous allez pouvoir importer toutes vos activités publiques depuis votre dernier import<br />
-        (Date localisé, donc une activitée le 26 Janvier à 3:00 pour la France - qui est le 25 Janvier à 21:00 pour Montréal - compte comme le 26).</p>
-    <p>Ceci ajoutera alors des demandes à être approuvés par les admins.</p>
-    <p>Il n'y a aucun système de feedback pour savoir si votre activité est acceptée ou refusée pour l'instant. </p>
+    <h3 class="text-warning">Assurez-vous que votre position est à jour <a
+        href="https://www.strava.com/settings/profile">sur votre profile strava</a></h3>
+    <span *ngIf="isStarted else closed">
+        <p>En cliquant sur le bouton ci-dessous,
+            vous allez pouvoir importer toutes vos activités publiques depuis votre dernier import<br />
+            (Date localisé, donc une activitée le 26 Janvier à 3:00 pour la France - qui est le 25 Janvier à 21:00 pour
+            Montréal - compte comme le 26).</p>
+        <p>Ceci ajoutera alors des demandes à être approuvés par les admins.</p>
+        <p>Il n'y a aucun système de feedback pour savoir si votre activité est acceptée ou refusée pour l'instant. </p>
 
-    <h3 class="text-warning">Assurez-vous que votre position est à jour <a href="https://www.strava.com/settings/profile">sur votre profile strava</a></h3>
-
-    <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava">Importer de strava</a>
+        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava">Importer de strava</a>
+    </span>
+    <ng-template #closed>
+        <p class="h3">L'import est présentement fermé !</p>
+    </ng-template>
 </div>
