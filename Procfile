@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -Dhttps.protocols=TLSv1.2 -Dspring.profiles.active=prod -jar backend/build/libs/techsport-1.0.jar
+web: java -Dserver.port=$PORT -Dhttps.protocols=TLSv1.2 -Dspring.profiles.active=prod -Duser.timezone=UTC -jar backend/build/libs/techsport-1.0.jar
