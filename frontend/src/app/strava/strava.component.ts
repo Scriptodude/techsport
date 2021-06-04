@@ -25,8 +25,8 @@ export class StravaComponent implements OnInit {
 
   ngOnInit(): void {
     this.configService.getConfiguration().subscribe(r => {
-      const startDate = moment.utc(r.startDate).tz("America/Montreal");
-      const endDate = moment.utc(r.endDate).tz("America/Montreal");
+      const startDate = r.startDateMtl;
+      const endDate = r.endDateMtl;
       const now = moment.tz(moment(), 'Etc/UTC')
       this.startDate = startDate.locale("fr").format("LL à HH:mm")
       this.endDate = endDate.locale("fr").format("LL à HH:mm")

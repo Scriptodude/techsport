@@ -27,7 +27,7 @@ export class ScoreboardComponent implements OnInit {
       let startDate = moment.tz(moment(this.config.startDate), 'Etc/UTC')
       let now = moment.tz(moment(), 'Etc/UTC')
       let endDate = moment.tz(moment(this.config.endDate), 'Etc/UTC')
-      this.startDateFormatted = startDate.tz("America/Montreal").locale("fr").format("LL à HH:mm");
+      this.startDateFormatted = this.config.startDateMtl.locale("fr").format("LL à HH:mm");
 
       if (now < startDate) {
         this.showBoard = false;

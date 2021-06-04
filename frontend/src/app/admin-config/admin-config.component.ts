@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import moment from 'moment-timezone';
-import { of, throwError } from 'rxjs';
+import { config, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ConfigurationService } from '../configuration.service';
 import { ApplicationConfigurationRequest, ApplicationConfigurationResponse, createDefaultConfigRequest, createDefaultConfigResponse } from '../models/applicationConfiguration';
@@ -30,8 +30,8 @@ export class AdminConfigComponent implements OnInit {
     this.configRequest.modifiers = this.config.pointModifiers;
     this.configRequest.startDate = this.config.startDate;
     this.configRequest.endDate = this.config.endDate;
-    this.start.setValue(moment.utc(this.config.startDate).tz("America/Montreal"));
-    this.end.setValue(moment.utc(this.config.endDate).tz("America/Montreal"));
+    this.start.setValue(this.config.startDateMtl);
+    this.end.setValue(this.config.endDateMtl);
     this.getAvailableSports().map(a => a[0]).forEach(v => this.modifiers.addControl(v, new FormControl(this.configRequest.modifiers.get(v) || 1.0)));
   }
 
@@ -46,14 +46,14 @@ export class AdminConfigComponent implements OnInit {
       return;
     }
 
-    this.configRequest.startDate = moment.utc(this.start.value).tz("America/Montreal", true).utc(true).format()
+    this.configRequest.startDate = moment.utc(this.start.value).tz("America/Montreal").utc().format()
     this.configRequest.endDate = moment.utc(this.end.value).tz("America/Montreal").utc().format()
+    
 
     if (this.configRequest.mode === 'distancePerSport') {
       this.getAvailableSports().map(a => a[0]).forEach(v => this.configRequest.modifiers.set(v, this.modifiers.get(v)?.value));
     }
 
-    console.log(this.configRequest);
     this.configService.updateConfiguration(this.configRequest)
     .pipe(catchError(this.handleError.bind(this)))
     .subscribe(r => {

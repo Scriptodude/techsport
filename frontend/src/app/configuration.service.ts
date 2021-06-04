@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import moment from 'moment';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ApplicationConfigurationRequest, ApplicationConfigurationResponse } from './models/applicationConfiguration';
@@ -28,6 +29,8 @@ export class ConfigurationService {
   private fixResponse(config: ApplicationConfigurationResponse) {
     config.pointModifiers = new Map<string, number>(Object.entries(config.pointModifiers));
     config.supportedActivities = new Map<string, string>(Object.entries(config.supportedActivities));
+    config.startDateMtl = moment.utc(config.startDate).tz("America/Montreal")
+    config.endDateMtl = moment.utc(config.endDate).tz("America/Montreal")
     return config;
   }
 }
