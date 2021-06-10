@@ -95,6 +95,7 @@ constructor(
                 }
             }
         } catch (e: Exception) {
+            System.err.println(e)
             httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=3")
             return
         }

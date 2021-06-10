@@ -4,6 +4,7 @@ import com.techso.techsport.model.ActivityToValidate
 import com.techso.techsport.model.Time
 import com.techso.techsport.model.exception.ActivityNotFoundException
 import com.techso.techsport.model.exception.AlreadyApprovedException
+import com.techso.techsport.model.strava.ActivityType
 import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.ActivityToValidateRepository
