@@ -20,7 +20,7 @@ class TeamService
 ) {
     @Transactional
     fun getAllTeams(): List<Team> =
-        teamRepository.findAll(Sort.by(Sort.Direction.DESC, "timeInSeconds"));
+        teamRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
 
     @Transactional
     fun getTeam(name: String) =
@@ -50,7 +50,6 @@ class TeamService
 
         val team = Team(name)
         team.members.addAll(members)
-        team.addPoints(BigDecimal.ZERO)
 
         return teamRepository.save(team)
     }
