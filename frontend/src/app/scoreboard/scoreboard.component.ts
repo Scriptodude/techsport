@@ -18,6 +18,8 @@ export class ScoreboardComponent implements OnInit {
   showBoard = true;
   startDateFormatted = '1er janvier 2021 à 00:00'
 
+  private teamColor = new Map<string, string>();
+
   constructor(private teamService: TeamsService, private configService: ConfigurationService) { }
 
   ngOnInit(): void {
@@ -59,6 +61,7 @@ export class ScoreboardComponent implements OnInit {
 
             data.push({
               type: 'line',
+              color: this.getTeamColor(team.name),
               name: team.name,
               showInLegend: true,
               markerType: "circle",
@@ -83,28 +86,7 @@ export class ScoreboardComponent implements OnInit {
             axisY: {
               includeZero: false,
               minimum: 0,
-              maximum: maxValue * 1.25,
-              stripLines: [{
-                value: 0,
-                thickness: 1,
-                color: 'red'
-              },
-              {
-                value: Math.round((maxValue * 1.25) / 3),
-                thickness: 1,
-                color: 'yellowgreen'
-              },
-              {
-                value: 2 * Math.round((maxValue * 1.25) / 3),
-                thickness: 1,
-                color: 'green'
-              },
-              {
-                value: (maxValue * 1.25),
-                thickness: 1,
-                color: 'black'
-              }
-              ]
+              maximum: maxValue * 1.25
             },
             legend: {
               cursor: "pointer",
@@ -180,6 +162,22 @@ export class ScoreboardComponent implements OnInit {
       case "max": return this.secondsToHms(maxV)
       case "min": return this.secondsToHms(minV)
       default: return this.secondsToHms(avgV)
+    }
+  }
+
+  getTeamColor(name: string) {
+    if (name.toLowerCase().includes('techso')) {
+      return 'red';
+    } else if (name.toLowerCase().includes('flinks')) {
+      return 'blue';
+    } else {
+      if (this.teamColor.has(name)) {
+        return this.teamColor.get(name)
+      }
+
+      const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+      this.teamColor.set(name, color);
+      return color;
     }
   }
 
