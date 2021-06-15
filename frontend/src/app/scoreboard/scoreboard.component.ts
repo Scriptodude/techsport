@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import moment, { Moment } from 'moment-timezone';
+import { ActivityService } from '../activity.service';
 import { ConfigurationService } from '../configuration.service';
 import { ApplicationConfigurationResponse, createDefaultConfigResponse } from '../models/applicationConfiguration';
 import Team from '../models/team';
@@ -19,8 +20,9 @@ export class ScoreboardComponent implements OnInit {
   startDateFormatted = '1er janvier 2021 à 00:00'
 
   private teamColor = new Map<string, string>();
+  pointPerSport = new Map<string, Map<string, number>>();
 
-  constructor(private teamService: TeamsService, private configService: ConfigurationService) { }
+  constructor(private teamService: TeamsService, private configService: ConfigurationService, private activityService: ActivityService) { }
 
   ngOnInit(): void {
     this.configService.getConfiguration().subscribe(c => {
@@ -47,6 +49,13 @@ export class ScoreboardComponent implements OnInit {
           }
 
           for (let team of this.teams) {
+
+            if (this.config.appMode == 'distancePerSport') {
+              this.activityService.getPointsPerActivityType(team.name).subscribe(pts => {
+                this.pointPerSport.set(team.name, new Map<string, number>(Object.entries(pts)));
+              })
+            }
+
             let y = 0;
             let dataPoints: any = [];
 
@@ -178,6 +187,28 @@ export class ScoreboardComponent implements OnInit {
       const color = '#' + Math.floor(Math.random()*16777215).toString(16);
       this.teamColor.set(name, color);
       return color;
+    }
+  }
+
+  getPoints(name: string, type: string) {
+    if (!this.pointPerSport.has(name)) return 0;
+
+    const ptsTeam = this.pointPerSport.get(name)
+    switch(type) {
+      case 'walk': 
+        const walk = ptsTeam?.get('walk') || 0
+        const hike = ptsTeam?.get('hike') || 0
+        return walk + hike;
+      case 'run':
+        const run = ptsTeam?.get('run') || 0
+        const virtual = ptsTeam?.get('virtualRun') || 0
+        return run + virtual;
+      case 'ride':
+        const ride = ptsTeam?.get('ride') || 0
+        const virtualRide = ptsTeam?.get('virtualRide') || 0
+        return ride + virtualRide;
+      default:
+        return ptsTeam?.get('inlineSkate') || 0
     }
   }
 

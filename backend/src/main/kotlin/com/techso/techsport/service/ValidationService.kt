@@ -58,6 +58,21 @@ constructor(
         }
 
     @Transactional
+    fun getPointsPerActivityType(teamName: String): Map<ActivityType?, BigDecimal?> {
+        val activities = this.activityToValidateRepository.findAllByTeamName(teamName)
+
+        return activities
+            .filter { it.type != null }
+            .groupBy { it.type }
+            .map {
+                Pair(it.key, it.value
+                    .filter { it.points != null }
+                    .map { act -> act.points }
+                    .reduceRight { a, b -> a?.add(b) ?: b })
+            }.associate { it }
+    }
+
+    @Transactional
     fun changeActivityApprobation(teamName: String, activityId: String, approved: Boolean) {
         val activity = this.activityToValidateRepository.findById(activityId)
             .orElseThrow { ActivityNotFoundException() }

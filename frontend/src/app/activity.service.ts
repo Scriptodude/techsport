@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import ActivityResponse from './models/activity';
 import Activity from './models/activity';
@@ -24,5 +25,9 @@ export class ActivityService {
 
   changeActivityApproval(changeActivityApproval: ChangeActivityApproval) {
     return this.client.post(environment.apiUrl + "/activities", changeActivityApproval, { withCredentials: true, observe: 'response' })
+  }
+
+  getPointsPerActivityType(team: string): Observable<any> {
+    return this.client.get<any>(environment.apiUrl + "/activities/points?team=" + team);
   }
 }

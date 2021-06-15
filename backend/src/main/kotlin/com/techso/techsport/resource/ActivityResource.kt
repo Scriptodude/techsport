@@ -41,6 +41,9 @@ constructor(
         return AllActivitiesResponse(activities.toList(), pages)
     }
 
+    @GetMapping("/points")
+    fun getPointsPerActivityType(@RequestParam("team") teamName: String) = this.validationService.getPointsPerActivityType(teamName)
+
     @PostMapping
     fun changeActivityApprobation(
         @CookieValue("token") token: String,

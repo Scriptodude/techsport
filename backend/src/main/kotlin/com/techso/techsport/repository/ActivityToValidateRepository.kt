@@ -12,4 +12,5 @@ interface ActivityToValidateRepository : PagingAndSortingRepository<ActivityToVa
 
     fun findAllByTeamNameAndApproved(teamName: String?, approved: Boolean?, pageable: Pageable): Page<ActivityToValidate>
     fun findAllByTeamName(teamName: String?, pageable: Pageable): Page<ActivityToValidate>
+    fun findAllByTeamName(teamName: String?): List<ActivityToValidate>
 }
