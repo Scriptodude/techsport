@@ -4,6 +4,7 @@ import { ActivityService } from '../activity.service';
 import { ConfigurationService } from '../configuration.service';
 import { ApplicationConfigurationResponse, createDefaultConfigResponse } from '../models/applicationConfiguration';
 import Team from '../models/team';
+import TranslatedComponent from '../models/translation/translatedComponent';
 import { TeamsService } from '../teams.service';
 import * as CanvasJS from './canvasjs.min';
 
@@ -12,7 +13,7 @@ import * as CanvasJS from './canvasjs.min';
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.scss']
 })
-export class ScoreboardComponent implements OnInit {
+export class ScoreboardComponent extends TranslatedComponent implements OnInit {
 
   teams: Team[] = [];
   config: ApplicationConfigurationResponse = createDefaultConfigResponse();
@@ -22,9 +23,10 @@ export class ScoreboardComponent implements OnInit {
   private teamColor = new Map<string, string>();
   pointPerSport = new Map<string, Map<string, number>>();
 
-  constructor(private teamService: TeamsService, private configService: ConfigurationService, private activityService: ActivityService) { }
+  constructor(private teamService: TeamsService, private configService: ConfigurationService, private activityService: ActivityService) { super() }
 
   ngOnInit(): void {
+    super.init();
     this.configService.getConfiguration().subscribe(c => {
       this.config = c
 
@@ -85,7 +87,7 @@ export class ScoreboardComponent implements OnInit {
             animationEnabled: true,
             exportEnabled: false,
             title: {
-              text: this.isTimeMode() ? "Total du temps cumulé" : (now <= endDate ? "Pointage Actuel" : "Pointage Final")
+              text: this.isTimeMode() ? "Total du temps cumulé" : (now <= endDate ? this.translation.scoreboard.titleNow : this.translation.scoreboard.titleDone)
             },
             axisX: {
               valueFormatString: "DD/MM",
@@ -124,7 +126,7 @@ export class ScoreboardComponent implements OnInit {
     if (this.isTimeMode()) {
       return "Temps aujourd'hui"
     } else {
-      return "Points aujourd'hui"
+      return this.translation.scoreboard.pointsToday;
     }
   }
 
@@ -184,7 +186,7 @@ export class ScoreboardComponent implements OnInit {
         return this.teamColor.get(name)
       }
 
-      const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+      const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
       this.teamColor.set(name, color);
       return color;
     }
@@ -194,8 +196,8 @@ export class ScoreboardComponent implements OnInit {
     if (!this.pointPerSport.has(name)) return 0;
 
     const ptsTeam = this.pointPerSport.get(name)
-    switch(type) {
-      case 'walk': 
+    switch (type) {
+      case 'walk':
         const walk = ptsTeam?.get('walk') || 0
         const hike = ptsTeam?.get('hike') || 0
         return walk + hike;

@@ -5,8 +5,8 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">Position</th>
-                    <th scope="col">Nom de l'équipe</th>
+                    <th scope="col">{{ translation.scoreboard.position }}</th>
+                    <th scope="col">{{ translation.scoreboard.teamName }}</th>
                     <th scope="col">{{ totalName() }}</th>
                     <th scope="col">{{ todayName() }}</th>
                     <ng-template *ngIf="config.appMode == 'time' else distanceTitle">
@@ -19,11 +19,11 @@
                         </th>
                     </ng-template>
                     <ng-template #distanceTitle>
-                        <th scope="col" class="text-center">Points par sport
+                        <th scope="col" class="text-center">{{ translation.scoreboard.pointsBySport }}
                             <tr class="d-flex justify-content-center text-center">
-                                <th scope="col" class="stat">Marche / Randonnée</th>
-                                <th scope="col" class="stat">Vélo</th>
-                                <th scope="col" class="stat">Course</th>
+                                <th scope="col" class="stat">{{ translation.scoreboard.walkHike }}</th>
+                                <th scope="col" class="stat">{{ translation.scoreboard.bike }}</th>
+                                <th scope="col" class="stat">{{ translation.scoreboard.run }}</th>
                                 <th scope="col" class="stat">Roller</th>
                             </tr>
                         </th>

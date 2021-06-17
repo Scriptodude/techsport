@@ -1,7 +1,8 @@
+<a href="https://www.strava.com/activities/{{activity.id}}">{{ translation.strava.linkToStravaActivity }}</a>
 <table class="table table-borderless">
     <tbody>
         <tr>
-            <td><span>Athlète: {{ activity.athleteFullName }}</span></td>
+            <td><span>{{ translation.activityCard.athlete }}: {{ activity.athleteFullName }}</span></td>
             <td><span>Date: {{ activity.activityDate }}</span></td>
         </tr>
         <tr>
@@ -13,7 +14,7 @@
         </tr>
         <tr>
             <td><span *ngIf="!isTimeMode">Type: {{ getNamedType() }}</span></td>
-            <td><span *ngIf="activity.manual"><u><b class="h6">Activité manuelle !</b></u></span></td>
+            <td><span *ngIf="activity.manual"><u><b class="h6">{{ translation.activityCard.manual }}</b></u></span></td>
         </tr>
     </tbody>
 </table>

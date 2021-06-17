@@ -6,13 +6,14 @@ import { ActivityService } from '../activity.service';
 import { ConfigurationService } from '../configuration.service';
 import { Activity } from '../models/activity';
 import { ApplicationConfigurationResponse, createDefaultConfigResponse } from '../models/applicationConfiguration';
+import TranslatedComponent from '../models/translation/translatedComponent';
 
 @Component({
   selector: 'app-strava',
   templateUrl: './strava.component.html',
   styleUrls: ['./strava.component.scss']
 })
-export class StravaComponent implements OnInit {
+export class StravaComponent extends TranslatedComponent implements OnInit {
 
   apiUrl = environment.apiUrl;
 
@@ -29,9 +30,10 @@ export class StravaComponent implements OnInit {
   pageCount = 1
   activities: Activity[] = [];
 
-  constructor(private route: ActivatedRoute, private configService: ConfigurationService, private activityService: ActivityService) { }
+  constructor(private route: ActivatedRoute, private configService: ConfigurationService, private activityService: ActivityService) { super() }
 
   ngOnInit(): void {
+    super.init();
     this.activityService.isStravaAvailable().subscribe(r => {
       this.hasSession = r.isAvailable
 
@@ -45,8 +47,8 @@ export class StravaComponent implements OnInit {
       const startDate = r.startDateMtl;
       const endDate = r.endDateMtl;
       const now = moment.tz(moment(), 'Etc/UTC')
-      this.startDate = startDate.locale("fr").format("LL à HH:mm")
-      this.endDate = endDate.locale("fr").format("LL à HH:mm")
+      this.startDate = startDate.locale(sessionStorage.getItem('locale') || 'fr').format(`LL ${this.translation.timeSeparator} HH:mm`)
+      this.endDate = endDate.locale(sessionStorage.getItem('locale') || 'fr').format(`LL ${this.translation.timeSeparator} HH:mm`)
 
       this.isStarted = (now >= startDate && now <= endDate);
     })
@@ -78,6 +80,10 @@ export class StravaComponent implements OnInit {
   changePage(page: number) {
     this.page = page
     this.getActivities()
+  }
+
+  printOpening() {
+    return this.translation.strava.openingFormat
   }
 
   private getActivities() {

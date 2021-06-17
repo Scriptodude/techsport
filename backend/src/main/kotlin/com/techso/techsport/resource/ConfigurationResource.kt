@@ -22,16 +22,17 @@ class ConfigurationResource(
 ) {
 
     @GetMapping
-    fun getConfig(): ConfigurationResponse {
-        return ConfigurationResponse(this.configurationService.getConfig())
+    fun getConfig(@RequestParam("lang", defaultValue = "fr") language: String): ConfigurationResponse {
+        return ConfigurationResponse(this.configurationService.getConfig(), language)
     }
 
     @PutMapping
     fun updateConfig(
         @RequestBody request: UpdateConfigurationRequest,
+        @RequestParam("lang", defaultValue = "fr") language: String,
         @CookieValue("token") token: String
     ): ConfigurationResponse {
         this.loginService.validateToken(token)
-        return ConfigurationResponse(this.configurationService.updateConfig(request))
+        return ConfigurationResponse(this.configurationService.updateConfig(request), language)
     }
 }

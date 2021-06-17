@@ -29,8 +29,6 @@
     <ng-container *ngFor="let activity of activities">
         <div class="card text-center">
             <div class="card-body">
-                <a href="https://www.strava.com/activities/{{activity.id}}">Lien vers
-                    l'activité (Strava)</a>
                 <app-activity-body [activity]="activity" [isTimeMode]="config.appMode === 'time'" [supportedActivities]="config.supportedActivities"></app-activity-body>
                 <ng-container class="row">
                     <div ngbDropdown class="d-inline-block">

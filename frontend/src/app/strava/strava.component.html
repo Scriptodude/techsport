@@ -4,29 +4,23 @@
         <h2 *ngIf="success" class="border border-success bg-success">{{ count }} activité(s) importée(s) avec succès
         </h2>
     </div>
-    <h2>Demande d'approbation via strava</h2>
-    <h3>Ouvert du {{ startDate }} au {{ endDate }}, heures de Montréal</h3>
-    <h3 class="text-warning">Assurez-vous que votre position est à jour <a
-        href="https://www.strava.com/settings/profile">sur votre profile strava</a></h3>
+    <h2>{{ translation.strava.title }}</h2>
+    <h3>{{ translation.strava.openingFormat(startDate, endDate) }}</h3>
+    <h3 class="text-warning"> {{ translation.strava.upToDatePosition }} <a
+        href="https://www.strava.com/settings/profile">{{ translation.strava.onYourProfile }}</a></h3>
     <span *ngIf="isStarted else closed">
-        <p>En cliquant sur le bouton ci-dessous,
-            vous allez pouvoir importer toutes vos activités publiques depuis votre dernier import<br />
-            (Date localisé, donc une activitée le 26 Janvier à 3:00 pour la France - qui est le 25 Janvier à 21:00 pour
-            Montréal - compte comme le 26).</p>
-        <p>Ceci ajoutera alors des demandes à être approuvés par les admins.</p>
-        <p>Il n'y a aucun système de feedback pour savoir si votre activité est acceptée ou refusée pour l'instant. </p>
+        <p>{{ translation.strava.clickOnTheButtonBelow }}</p>
+        <p>{{ translation.strava.explanation }}</p>
 
-        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava/import" *ngIf="hasSession">Importer mes activitées</a>
-        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava" *ngIf="!hasSession">Me connecter avec Strava</a>
+        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava/import" *ngIf="hasSession">{{ translation.strava.import }}</a>
+        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava" *ngIf="!hasSession">{{ translation.strava.connect }}</a>
 
         <hr>
         <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
-            <p class="h3">Mes activitées</p>
+            <p class="h3">{{ translation.strava.myActivities }}</p>
             <ng-container *ngFor="let activity of activities">
                 <div class="card text-center">
                     <div class="card-body">
-                        <a href="https://www.strava.com/activities/{{activity.id}}">Lien vers
-                            l'activité (Strava)</a>
                         <app-activity-body [activity]="activity" [isTimeMode]="config.appMode === 'time'" [supportedActivities]="config.supportedActivities"></app-activity-body>
                     </div>
                 </div>
@@ -34,10 +28,10 @@
             <app-pagination [pageCount]="pageCount" [page]="page" (pageChanged)="changePage($event)"></app-pagination>
         </div>
         <ng-template #noActivities>
-            <h1 class="text-center border border-light p-5">Vous n'avez aucune activitée</h1>
+            <h1 class="text-center border border-light p-5">{{ translation.strava.noActivityTitle }}</h1>
         </ng-template>
     </span>
     <ng-template #closed>
-        <p class="h3">L'import est présentement fermé !</p>
+        <p class="h3">{{ translation.strava.importClosed }}</p>
     </ng-template>
 </div>

@@ -1,19 +1,23 @@
 <div class="container">
+    <div style="float: right">
+        <span class="btn btn-light" (click)="changeLang('fr')" *ngIf="isEnglish">FR</span>
+        <span class="btn btn-small btn-light" (click)="changeLang('en')" *ngIf="!isEnglish">EN</span>
+    </div>
     <ul ngbNav [activeId]="route.fragment | async" [ngClass]="'nav-tabs d-flex mb-4 justify-content-between'">
         <li [ngbNavItem]="1">
-            <a ngbNavLink routerLink="/accueil" routerLinkActive="active">Accueil</a>
+            <a ngbNavLink routerLink="/accueil" routerLinkActive="active">{{ translation.navigation.welcome }}</a>
         </li>
         <li [ngbNavItem]="2">
-            <a ngbNavLink routerLink="/pointage" routerLinkActive="active">Pointage</a>
+            <a ngbNavLink routerLink="/pointage" routerLinkActive="active">{{ translation.navigation.points }}</a>
         </li>
         <li [ngbNavItem]="3">
-            <a ngbNavLink routerLink="/equipes" routerLinkActive="active">Équipes</a>
+            <a ngbNavLink routerLink="/equipes" routerLinkActive="active">{{ translation.navigation.teams }}</a>
         </li>
         <li [ngbNavItem]="4">
             <a ngbNavLink routerLink="/strava" routerLinkActive="active">Strava</a>
         </li>
         <li [ngbNavItem]="5" [ngClass]="'ml-auto'" routerLinkActive="active">
-            <a ngbNavLink routerLink="/admin">Administrer</a>
+            <a ngbNavLink routerLink="/admin">{{ translation.navigation.admin }}</a>
         </li>
     </ul>
 </div>

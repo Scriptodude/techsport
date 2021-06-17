@@ -13,7 +13,7 @@ export class ConfigurationService {
   constructor(private client: HttpClient) { }
 
   getConfiguration() {
-    return this.client.get<ApplicationConfigurationResponse>(environment.apiUrl + "/config").pipe(map(this.fixResponse));
+    return this.client.get<ApplicationConfigurationResponse>(environment.apiUrl + "/config?lang=" + (sessionStorage.getItem('locale') || 'fr')).pipe(map(this.fixResponse));
   }
 
   updateConfiguration(request: ApplicationConfigurationRequest) {
@@ -23,7 +23,7 @@ export class ConfigurationService {
       modifiers: [...request.modifiers.entries()].reduce((obj, [key, value]) => (obj[key] = value, obj), {}),
       mode: request.mode
     }
-    return this.client.put<ApplicationConfigurationResponse>(environment.apiUrl + "/config", actualRequest, { withCredentials: true }).pipe(map(this.fixResponse));
+    return this.client.put<ApplicationConfigurationResponse>(environment.apiUrl + "/config?lang=" + (sessionStorage.getItem('locale') || 'fr') , actualRequest, { withCredentials: true }).pipe(map(this.fixResponse));
   }
 
   private fixResponse(config: ApplicationConfigurationResponse) {
