@@ -18,7 +18,8 @@ interface Strava {
     myActivities: string,
     linkToStravaActivity: string,
     noActivityTitle: string,
-    importClosed: string
+    importClosed: string,
+    notLoggedIn: string
 }
 
 interface ActivityCard {

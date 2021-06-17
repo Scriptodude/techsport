@@ -7,28 +7,37 @@
     <h2>{{ translation.strava.title }}</h2>
     <h3>{{ translation.strava.openingFormat(startDate, endDate) }}</h3>
     <h3 class="text-warning"> {{ translation.strava.upToDatePosition }} <a
-        href="https://www.strava.com/settings/profile">{{ translation.strava.onYourProfile }}</a></h3>
+            href="https://www.strava.com/settings/profile">{{ translation.strava.onYourProfile }}</a></h3>
     <span *ngIf="isStarted else closed">
         <p>{{ translation.strava.clickOnTheButtonBelow }}</p>
         <p>{{ translation.strava.explanation }}</p>
 
-        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava/import" *ngIf="hasSession">{{ translation.strava.import }}</a>
-        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava" *ngIf="!hasSession">{{ translation.strava.connect }}</a>
+        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava/import" *ngIf="hasSession">{{
+            translation.strava.import }}</a>
+        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava" *ngIf="!hasSession">{{ translation.strava.connect
+            }}</a>
 
-        <hr>
-        <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
-            <p class="h3">{{ translation.strava.myActivities }}</p>
-            <ng-container *ngFor="let activity of activities">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <app-activity-body [activity]="activity" [isTimeMode]="config.appMode === 'time'" [supportedActivities]="config.supportedActivities"></app-activity-body>
+        <div *ngIf="hasSession; else noSession">
+            <hr>
+            <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
+                <p class="h3">{{ translation.strava.myActivities }}</p>
+                <ng-container *ngFor="let activity of activities">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <app-activity-body [activity]="activity" [isTimeMode]="config.appMode === 'time'"
+                                [supportedActivities]="config.supportedActivities"></app-activity-body>
+                        </div>
                     </div>
-                </div>
-            </ng-container>
-            <app-pagination [pageCount]="pageCount" [page]="page" (pageChanged)="changePage($event)"></app-pagination>
+                </ng-container>
+                <app-pagination [pageCount]="pageCount" [page]="page" (pageChanged)="changePage($event)">
+                </app-pagination>
+            </div>
+            <ng-template #noActivities>
+                <h1 class="text-center border border-light p-5">{{ translation.strava.noActivityTitle }}</h1>
+            </ng-template>
         </div>
-        <ng-template #noActivities>
-            <h1 class="text-center border border-light p-5">{{ translation.strava.noActivityTitle }}</h1>
+        <ng-template #noSession>
+            <h1 class="text-center border border-light p-5">{{ translation.strava.notLoggedIn }}</h1>
         </ng-template>
     </span>
     <ng-template #closed>

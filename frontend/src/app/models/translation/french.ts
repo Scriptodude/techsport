@@ -13,7 +13,8 @@ export default class French implements Translation {
         myActivities: "Mes activitées",
         linkToStravaActivity: "Lien vers l'activité (Strava)",
         noActivityTitle: "Vous n'avez aucune activitée",
-        importClosed: "L'import est présentement fermé !"
+        importClosed: "L'import est présentement fermé !",
+        notLoggedIn: "Vous n'êtes pas connectés à Strava"
     };
     activityCard = {
         athlete: "Athlète",
