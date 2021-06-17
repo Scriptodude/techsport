@@ -20,7 +20,7 @@ class TeamService
 ) {
     @Transactional
     fun getAllTeams(): List<Team> =
-        teamRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
+        teamRepository.findAll().sortedByDescending { it.points };
 
     @Transactional
     fun getTeam(name: String) =

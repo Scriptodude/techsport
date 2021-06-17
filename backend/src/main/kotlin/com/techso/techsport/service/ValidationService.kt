@@ -80,11 +80,12 @@ constructor(
         if (session.getAttribute("athlete") == null) {
             Page.empty()
         } else {
-            this.activityToValidateRepository.findAllByAthleteId(
-                this.objectMapper.readValue(
-                    session.getAttribute("athlete") as String,
-                    Athlete::class.java
-                ).id,
+            val athlete = this.objectMapper.readValue(
+                session.getAttribute("athlete") as String,
+                Athlete::class.java
+            )
+            this.activityToValidateRepository.findAllByAthleteFullName(
+                athlete.firstname + ' ' + athlete.lastname,
                 PageRequest.of(page, 10, Sort.by("id").descending())
             )
         }
