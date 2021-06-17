@@ -77,7 +77,7 @@ constructor(
                 val athlete = this.stravaClient.getCurrentAthlete(response.accessToken);
 
                 val techso = athlete.clubs?.firstOrNull { it.id == 944140L };
-                if (techso != null) {
+                if (techso == null) {
                     httpResponse.sendRedirect("${this.techsport.frontUrl}/strava?failure=true&reason=1")
                     return
                 }
