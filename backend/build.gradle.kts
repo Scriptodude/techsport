@@ -25,6 +25,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.session:spring-session-data-mongodb")
 	implementation("io.github.openfeign:feign-core:11.0")
 	implementation("io.github.openfeign:feign-jackson:11.0")
 	implementation("io.github.openfeign:feign-okhttp:11.0")

@@ -9,5 +9,5 @@ constructor(
     @RequestParam("error")
     val error: String?,
     @RequestParam("code")
-    val code: String?,
+    val code: String?
 )

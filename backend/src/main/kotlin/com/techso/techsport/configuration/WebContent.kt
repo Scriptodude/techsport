@@ -13,12 +13,6 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 
-
-
-
-
-
-
 @Configuration
 class WebContent : WebMvcConfigurer {
 

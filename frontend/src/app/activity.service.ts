@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import ActivityResponse from './models/activity';
 import Activity from './models/activity';
 import ChangeActivityApproval from './models/changeActivityApproval';
+import isStravaAvailable from './models/isStravaAvailableResponse';
 import PageCountResponse from './models/pageCountResponse';
 
 @Injectable({
@@ -29,5 +30,13 @@ export class ActivityService {
 
   getPointsPerActivityType(team: string): Observable<any> {
     return this.client.get<any>(environment.apiUrl + "/activities/points?team=" + team);
+  }
+
+  getActivitiesForUser(page: number = 0) {
+    return this.client.get<ActivityResponse>(environment.apiUrl + "/activities/user?page=" + (page - 1), { withCredentials: true })
+  }
+
+  isStravaAvailable() {
+    return this.client.get<isStravaAvailable>(environment.apiUrl + "/strava/available", { withCredentials: true })
   }
 }

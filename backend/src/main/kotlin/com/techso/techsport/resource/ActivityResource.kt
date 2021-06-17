@@ -6,6 +6,7 @@ import com.techso.techsport.service.LoginService
 import com.techso.techsport.service.ValidationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/activities")
@@ -42,7 +43,17 @@ constructor(
     }
 
     @GetMapping("/points")
-    fun getPointsPerActivityType(@RequestParam("team") teamName: String) = this.validationService.getPointsPerActivityType(teamName)
+    fun getPointsPerActivityType(@RequestParam("team") teamName: String) =
+        this.validationService.getPointsPerActivityType(teamName)
+
+    @GetMapping("/user")
+    fun getActivitiesOfUser(
+        session: HttpSession,
+        @RequestParam("page", defaultValue = "0") page: Int
+    ): AllActivitiesResponse {
+        val activities = this.validationService.getActivitiesOfUser(session, page)
+        return AllActivitiesResponse(activities.content, activities.totalPages)
+    }
 
     @PostMapping
     fun changeActivityApprobation(
@@ -50,6 +61,10 @@ constructor(
         @RequestBody req: ChangeActivityApprobation
     ) {
         this.loginService.validateToken(token)
-        this.validationService.changeActivityApprobation(req.teamName ?: "", req.activityId, req.approved)
+        this.validationService.changeActivityApprobation(
+            req.teamName ?: "",
+            req.activityId,
+            req.approved
+        )
     }
 }

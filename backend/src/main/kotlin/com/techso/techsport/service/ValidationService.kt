@@ -1,5 +1,6 @@
 package com.techso.techsport.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.techso.techsport.model.ActivityToValidate
 import com.techso.techsport.model.Time
 import com.techso.techsport.model.exception.ActivityNotFoundException
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.Instant
+import javax.servlet.http.HttpSession
 
 @Service
 class ValidationService
@@ -25,7 +27,8 @@ class ValidationService
 constructor(
     private val activityToValidateRepository: ActivityToValidateRepository,
     private val teamService: TeamService,
-    private val activityManagerProvider: ActivityManagerProvider
+    private val activityManagerProvider: ActivityManagerProvider,
+    private val objectMapper: ObjectMapper
 ) {
 
     @Transactional
@@ -71,6 +74,20 @@ constructor(
                     .reduceRight { a, b -> a?.add(b) ?: b })
             }.associate { it }
     }
+
+    @Transactional
+    fun getActivitiesOfUser(session: HttpSession, page: Int): Page<ActivityToValidate> =
+        if (session.getAttribute("athlete") == null) {
+            Page.empty()
+        } else {
+            this.activityToValidateRepository.findAllByAthleteId(
+                this.objectMapper.readValue(
+                    session.getAttribute("athlete") as String,
+                    Athlete::class.java
+                ).id,
+                PageRequest.of(page, 10, Sort.by("id").descending())
+            )
+        }
 
     @Transactional
     fun changeActivityApprobation(teamName: String, activityId: String, approved: Boolean) {
@@ -127,6 +144,7 @@ constructor(
         else {
             val newActivity = ActivityToValidate(
                 id = activity.id.toString(),
+                athleteId = athlete.id,
                 athleteFullName = athlete.firstname + ' ' + athlete.lastname,
                 activityDate = activity.startDate ?: Instant.now(),
                 activityTime = Time(activity.movingTime),

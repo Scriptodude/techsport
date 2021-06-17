@@ -8,6 +8,7 @@ import java.time.Instant
 
 data class ActivityToValidate(
     @Id val id: String,
+    var athleteId: Long? = null,
     var athleteFullName: String,
     var activityTime: Time,
     @get:JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")

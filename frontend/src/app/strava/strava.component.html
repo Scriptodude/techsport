@@ -16,7 +16,26 @@
         <p>Ceci ajoutera alors des demandes à être approuvés par les admins.</p>
         <p>Il n'y a aucun système de feedback pour savoir si votre activité est acceptée ou refusée pour l'instant. </p>
 
-        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava">Importer de strava</a>
+        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava/import" *ngIf="hasSession">Importer mes activitées</a>
+        <a class="btn btn-lg btn-primary" href="{{apiUrl}}/strava" *ngIf="!hasSession">Me connecter avec Strava</a>
+
+        <hr>
+        <div class="text-center border border-light p-5" *ngIf="activities.length > 0; else noActivities">
+            <p class="h3">Mes activitées</p>
+            <ng-container *ngFor="let activity of activities">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <a href="https://www.strava.com/activities/{{activity.id}}">Lien vers
+                            l'activité (Strava)</a>
+                        <app-activity-body [activity]="activity" [isTimeMode]="config.appMode === 'time'" [supportedActivities]="config.supportedActivities"></app-activity-body>
+                    </div>
+                </div>
+            </ng-container>
+            <app-pagination [pageCount]="pageCount" [page]="page" (pageChanged)="changePage($event)"></app-pagination>
+        </div>
+        <ng-template #noActivities>
+            <h1 class="text-center border border-light p-5">Vous n'avez aucune activitée</h1>
+        </ng-template>
     </span>
     <ng-template #closed>
         <p class="h3">L'import est présentement fermé !</p>

@@ -55,6 +55,10 @@ import { ActivityBodyComponent } from '../activity-body/activity-body.component'
     MatButtonModule,
     NgxMatMomentModule
   ],
+  exports: [
+    PaginationComponent,
+    ActivityBodyComponent
+  ],
   providers: [
     { provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true, strict: true } },
     { provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter }]
