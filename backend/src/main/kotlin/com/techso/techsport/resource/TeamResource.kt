@@ -82,6 +82,11 @@ class TeamResource
         return this.selectResponseAccordingToConfig(team);
     }
 
+    @GetMapping("/stats")
+    fun getTeamStats() =
+        this.teamService
+            .getAllTeamStats()
+
     private fun selectResponseAccordingToConfig(it: Team) = when (configurationService.getConfig().appMode) {
         ApplicationMode.time -> TimeBasedTeamResponse(
             it.name,

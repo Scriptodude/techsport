@@ -5,10 +5,12 @@ import com.techso.techsport.model.ActivityToValidate
 import com.techso.techsport.model.Time
 import com.techso.techsport.model.exception.ActivityNotFoundException
 import com.techso.techsport.model.exception.AlreadyApprovedException
+import com.techso.techsport.model.exception.TeamNotFoundException
 import com.techso.techsport.model.strava.ActivityType
 import com.techso.techsport.model.strava.response.Activity
 import com.techso.techsport.model.strava.response.Athlete
 import com.techso.techsport.repository.ActivityToValidateRepository
+import com.techso.techsport.repository.TeamStatisticsRepository
 import com.techso.techsport.service.activity.ActivityManagerProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -26,6 +28,7 @@ class ValidationService
 @Autowired
 constructor(
     private val activityToValidateRepository: ActivityToValidateRepository,
+    private val teamStatisticsRepository: TeamStatisticsRepository,
     private val teamService: TeamService,
     private val activityManagerProvider: ActivityManagerProvider,
     private val objectMapper: ObjectMapper
@@ -62,17 +65,13 @@ constructor(
 
     @Transactional
     fun getPointsPerActivityType(teamName: String): Map<ActivityType?, BigDecimal?> {
-        val activities = this.activityToValidateRepository.findAllByTeamName(teamName)
+        val activities =
+            this.teamStatisticsRepository.findById(teamName).orElseThrow { TeamNotFoundException() }
 
         return activities
-            .filter { it.type != null }
-            .groupBy { it.type }
-            .map {
-                Pair(it.key, it.value
-                    .filter { it.points != null }
-                    .map { act -> act.points }
-                    .reduceRight { a, b -> a?.add(b) ?: b })
-            }.associate { it }
+            .statsPerType
+            .map { Pair(it.key, it.value.points.total) }
+            .associate { it }
     }
 
     @Transactional

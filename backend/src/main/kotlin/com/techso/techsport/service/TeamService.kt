@@ -6,6 +6,7 @@ import com.techso.techsport.model.exception.AlreadyExistsException
 import com.techso.techsport.model.exception.TeamNotFoundException
 import com.techso.techsport.model.request.AddTimeToTeamRequest
 import com.techso.techsport.repository.TeamRepository
+import com.techso.techsport.repository.TeamStatisticsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -16,11 +17,14 @@ import java.math.BigDecimal
 class TeamService
 @Autowired constructor(
     private val teamRepository: TeamRepository,
+    private val teamStatisticsService: TeamStatisticsService,
     private val timeLogService: PointsLogService
 ) {
     @Transactional
     fun getAllTeams(): List<Team> =
         teamRepository.findAll().sortedByDescending { it.points };
+
+    fun getAllTeamStats() = teamStatisticsService.teamStatisticsRepository.findAll()
 
     @Transactional
     fun getTeam(name: String) =
@@ -69,6 +73,8 @@ class TeamService
         val team = this.getTeam(teamName)
         team.addPoints(points)
         teamRepository.save(team)
+
+        this.teamStatisticsService.updateTeamStat(teamName)
     }
 
     @Transactional
