@@ -11,10 +11,10 @@ import java.math.BigDecimal
 @Service
 class TeamStatisticsService(
     private val activityToValidateRepository: ActivityToValidateRepository,
-    public val teamStatisticsRepository: TeamStatisticsRepository
+    val teamStatisticsRepository: TeamStatisticsRepository
 ) {
 
-    fun updateTeamStat(name: String) {
+    fun updateTeamStatFromScratch(name: String) {
         try {
             val activities = this.activityToValidateRepository.findAllByTeamName(name)
 
@@ -27,11 +27,13 @@ class TeamStatisticsService(
                 .map { entry ->
                     val typeStatistics = ActivityTypeStatistics(
                         count = entry.value.size,
-                        distance = CommonStatistics(entry.value.map {
+                        distance = CommonStatistics.build(entry.value.map {
                             it.distance ?: BigDecimal.ZERO
                         }),
-                        points = CommonStatistics(entry.value.map { it.points ?: BigDecimal.ZERO }),
-                        time = CommonStatistics(entry.value.map { it.activityTime.timeInSeconds.toBigDecimal() }),
+                        points = CommonStatistics.build(entry.value.map {
+                            it.points ?: BigDecimal.ZERO
+                        }),
+                        time = CommonStatistics.build(entry.value.map { it.activityTime.timeInSeconds.toBigDecimal() }),
                         uniqueAthleteCount = entry.value.distinctBy { it.athleteFullName }.size
                     )
 

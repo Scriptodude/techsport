@@ -6,7 +6,6 @@ import com.techso.techsport.model.exception.AlreadyExistsException
 import com.techso.techsport.model.exception.TeamNotFoundException
 import com.techso.techsport.model.request.AddTimeToTeamRequest
 import com.techso.techsport.repository.TeamRepository
-import com.techso.techsport.repository.TeamStatisticsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -74,12 +73,12 @@ class TeamService
         team.addPoints(points)
         teamRepository.save(team)
 
-        this.teamStatisticsService.updateTeamStat(teamName)
+        this.teamStatisticsService.updateTeamStatFromScratch(teamName)
     }
 
     @Transactional
     fun addPointsToTeam(teamName: String, activity: ActivityToValidate) {
-        return this.addPointsToTeam(
+        this.addPointsToTeam(
             teamName,
             activity.points ?: activity.activityTime.timeInSeconds.toBigDecimal()
         )

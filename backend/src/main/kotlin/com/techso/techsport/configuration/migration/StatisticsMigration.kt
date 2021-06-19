@@ -17,7 +17,7 @@ class StatisticsMigration(
     override fun apply(): Boolean {
         return try {
             val teams = this.teamRepository.findAll();
-            teams.map { it.name }.forEach(this.teamStatisticsService::updateTeamStat)
+            teams.map { it.name }.forEach(this.teamStatisticsService::updateTeamStatFromScratch)
 
             true
         } catch (e: Exception) {
