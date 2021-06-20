@@ -61,17 +61,17 @@ export class StravaComponent extends TranslatedComponent implements OnInit {
 
       switch (reason) {
         case "1":
-          this.reason = 'Vous ne faites pas parti du club techso.'
+          this.reason = this.translation.strava.notInTeam
           break;
         case "2":
-          this.reason = 'Vous pouvez importer vos données qu\'aux 15 minutes.'
+          this.reason = this.translation.strava.throttle
           break;
         case "4":
-          this.reason = 'L\'import est fermé, l\'événement terminait le ' + this.endDate + ", heures de montréal"
+          this.reason = this.translation.strava.importClosed
           break;
         case "3":
         default:
-          this.reason = 'Erreur lors de l\'import des données.'
+          this.reason = this.translation.strava.genericError
           break;
       }
   });

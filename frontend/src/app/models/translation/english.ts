@@ -14,7 +14,11 @@ export default class English implements Translation {
         linkToStravaActivity: "Link to the activity (Strava)",
         noActivityTitle: "You have no activity",
         importClosed: "The import is currently closed",
-        notLoggedIn: "You are not logged in with Strava"
+        notLoggedIn: "You are not logged in with Strava",
+        notInTeam: "You aren't part of the techso vs flinks club.",
+        throttle: "You can only import your data once every 15 minutes.",
+        genericError: "Unknown error while importing your activities.",
+        importSuccess: (value) => `${value} activities imported successfully.`
     };
     activityCard = {
         athlete: "Athlete",
@@ -44,7 +48,7 @@ export default class English implements Translation {
         run: "Running",
     };
     statistics = {
-        title: "Statistics of the team",
+        title: "Statistics of the teams",
         totalActivitiesTitle: "Approved activity count",
         totalAthleteTitle: "Total unique athlete count",
         activityTypeTitle: "Activity type",

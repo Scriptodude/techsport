@@ -1,6 +1,7 @@
 package com.techso.techsport.model.statistics
 
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 data class CommonStatistics(
     var min: BigDecimal,
@@ -10,12 +11,15 @@ data class CommonStatistics(
 ) {
     companion object {
         fun build(values: List<BigDecimal>): CommonStatistics {
-            val total = values.reduce(BigDecimal::add)
+            val total = values.reduce(BigDecimal::add).setScale(2)
             return CommonStatistics(
                 min = (values.minOrNull() ?: BigDecimal.ZERO).setScale(2),
                 max = (values.maxOrNull() ?: BigDecimal.ZERO).setScale(2),
                 total = total,
-                average = (total.divide(values.size.toBigDecimal())),
+                average = (if (values.isNotEmpty()) (total.toDouble() / values.size).toBigDecimal() else BigDecimal.ZERO).setScale(
+                    2,
+                    RoundingMode.HALF_UP
+                )
             )
         }
     }

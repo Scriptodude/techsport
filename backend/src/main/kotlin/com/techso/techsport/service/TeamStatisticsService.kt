@@ -15,41 +15,37 @@ class TeamStatisticsService(
 ) {
 
     fun updateTeamStatFromScratch(name: String) {
-        try {
-            val activities = this.activityToValidateRepository.findAllByTeamName(name)
+        val activities = this.activityToValidateRepository.findAllByTeamName(name)
 
-            val groupedActivities =
-                activities
-                    .filter { it.type != null }
-                    .groupBy { it.type!! }
+        val groupedActivities =
+            activities
+                .filter { it.type != null }
+                .groupBy { it.type!! }
 
-            val statisticsPerType = groupedActivities
-                .map { entry ->
-                    val typeStatistics = ActivityTypeStatistics(
-                        count = entry.value.size,
-                        distance = CommonStatistics.build(entry.value.map {
-                            it.distance ?: BigDecimal.ZERO
-                        }),
-                        points = CommonStatistics.build(entry.value.map {
-                            it.points ?: BigDecimal.ZERO
-                        }),
-                        time = CommonStatistics.build(entry.value.map { it.activityTime.timeInSeconds.toBigDecimal() }),
-                        uniqueAthleteCount = entry.value.distinctBy { it.athleteFullName }.size
-                    )
+        val statisticsPerType = groupedActivities
+            .map { entry ->
+                val typeStatistics = ActivityTypeStatistics(
+                    count = entry.value.size,
+                    distance = CommonStatistics.build(entry.value.map {
+                        it.distance ?: BigDecimal.ZERO
+                    }),
+                    points = CommonStatistics.build(entry.value.map {
+                        it.points ?: BigDecimal.ZERO
+                    }),
+                    time = CommonStatistics.build(entry.value.map { it.activityTime.timeInSeconds.toBigDecimal() }),
+                    uniqueAthleteCount = entry.value.distinctBy { it.athleteFullName }.size
+                )
 
-                    Pair(entry.key, typeStatistics)
-                }.associate { it }
+                Pair(entry.key, typeStatistics)
+            }.associate { it }
 
-            val stats = TeamStatistics(
-                teamName = name,
-                totalActivities = activities.size,
-                statsPerType = statisticsPerType,
-                totalAthletes = activities.distinctBy { it.athleteFullName }.size
-            )
+        val stats = TeamStatistics(
+            teamName = name,
+            totalActivities = activities.size,
+            statsPerType = statisticsPerType,
+            totalAthletes = activities.distinctBy { it.athleteFullName }.size
+        )
 
-            this.teamStatisticsRepository.save(stats)
-        } catch (e: Exception) {
-            System.err.println(e)
-        }
+        this.teamStatisticsRepository.save(stats)
     }
 }

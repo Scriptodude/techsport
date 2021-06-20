@@ -22,6 +22,7 @@ class AutomaticMigration(
             } catch (e: Exception) {
                 System.err.println("Failed to migrate")
                 System.err.println(e)
+                e.printStackTrace()
             }
         }
     }

@@ -72,8 +72,6 @@ class TeamService
         val team = this.getTeam(teamName)
         team.addPoints(points)
         teamRepository.save(team)
-
-        this.teamStatisticsService.updateTeamStatFromScratch(teamName)
     }
 
     @Transactional

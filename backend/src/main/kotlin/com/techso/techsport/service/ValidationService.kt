@@ -30,6 +30,7 @@ constructor(
     private val activityToValidateRepository: ActivityToValidateRepository,
     private val teamStatisticsRepository: TeamStatisticsRepository,
     private val teamService: TeamService,
+    private val teamStatisticsService: TeamStatisticsService,
     private val activityManagerProvider: ActivityManagerProvider,
     private val objectMapper: ObjectMapper
 ) {
@@ -133,6 +134,7 @@ constructor(
             }
         }
 
+        this.teamStatisticsService.updateTeamStatFromScratch(teamName)
         this.activityToValidateRepository.save(activity)
     }
 

@@ -200,17 +200,17 @@ export class ScoreboardComponent extends TranslatedComponent implements OnInit {
       case 'walk':
         const walk = ptsTeam?.get('walk') || 0
         const hike = ptsTeam?.get('hike') || 0
-        return walk + hike;
+        return (walk + hike).toFixed(2);
       case 'run':
         const run = ptsTeam?.get('run') || 0
         const virtual = ptsTeam?.get('virtualRun') || 0
-        return run + virtual;
+        return (run + virtual).toFixed(2);
       case 'ride':
         const ride = ptsTeam?.get('ride') || 0
         const virtualRide = ptsTeam?.get('virtualRide') || 0
         return ride + virtualRide;
       default:
-        return ptsTeam?.get('inlineSkate') || 0
+        return (ptsTeam?.get('inlineSkate') || 0).toFixed(2)
     }
   }
 

@@ -14,7 +14,11 @@ export default class French implements Translation {
         linkToStravaActivity: "Lien vers l'activité (Strava)",
         noActivityTitle: "Vous n'avez aucune activitée",
         importClosed: "L'import est présentement fermé !",
-        notLoggedIn: "Vous n'êtes pas connectés à Strava"
+        notLoggedIn: "Vous n'êtes pas connectés à Strava",
+        notInTeam: "Vous ne faites pas parti du club techso vs flinks.",
+        throttle: 'Vous pouvez importer vos données qu\'aux 15 minutes.',
+        genericError: "Erreur lors de l\'import des données.",
+        importSuccess: (value) => `${value} activité(s) importée(s) avec succès.`
     };
     activityCard = {
         athlete: "Athlète",

@@ -20,7 +20,11 @@ interface Strava {
     linkToStravaActivity: string,
     noActivityTitle: string,
     importClosed: string,
-    notLoggedIn: string
+    notLoggedIn: string,
+    notInTeam: string,
+    throttle: string,
+    genericError: string,
+    importSuccess: (value) => string
 }
 
 interface ActivityCard {
