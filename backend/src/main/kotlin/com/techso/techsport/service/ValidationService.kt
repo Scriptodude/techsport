@@ -134,8 +134,8 @@ constructor(
             }
         }
 
-        this.teamStatisticsService.updateTeamStatFromScratch(teamName)
         this.activityToValidateRepository.save(activity)
+        this.teamStatisticsService.updateTeamStatFromScratch(teamName)
     }
 
     @Transactional
