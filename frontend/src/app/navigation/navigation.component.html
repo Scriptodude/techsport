@@ -11,12 +11,15 @@
             <a ngbNavLink routerLink="/pointage" routerLinkActive="active">{{ translation.navigation.points }}</a>
         </li>
         <li [ngbNavItem]="3">
-            <a ngbNavLink routerLink="/equipes" routerLinkActive="active">{{ translation.navigation.teams }}</a>
+            <a ngbNavLink routerLink="/stats" routerLinkActive="active">{{ translation.navigation.stats }}</a>
         </li>
         <li [ngbNavItem]="4">
+            <a ngbNavLink routerLink="/equipes" routerLinkActive="active">{{ translation.navigation.teams }}</a>
+        </li>
+        <li [ngbNavItem]="5">
             <a ngbNavLink routerLink="/strava" routerLinkActive="active">Strava</a>
         </li>
-        <li [ngbNavItem]="5" [ngClass]="'ml-auto'" routerLinkActive="active">
+        <li [ngbNavItem]="6" [ngClass]="'ml-auto'" routerLinkActive="active">
             <a ngbNavLink routerLink="/admin">{{ translation.navigation.admin }}</a>
         </li>
     </ul>

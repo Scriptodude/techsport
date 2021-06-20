@@ -13,6 +13,7 @@ import { StravaComponent } from './strava/strava.component';
 import { RulesComponent } from './rules/rules.component';
 import { AngularEmojisModule } from 'angular-emojis';
 import { AdminModule } from './admin/admin.module';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AdminModule } from './admin/admin.module';
     TeamsComponent,
     ScoreboardComponent,
     StravaComponent,
-    RulesComponent
+    RulesComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,

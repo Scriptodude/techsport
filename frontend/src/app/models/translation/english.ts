@@ -28,7 +28,8 @@ export default class English implements Translation {
         welcome: "Home",
         points: "Scoreboard",
         teams: "Teams",
-        admin: "Admin"
+        admin: "Admin",
+        stats: "Statistics"
     };
     timeSeparator = '\\a\\t';
     scoreboard = {
@@ -41,5 +42,13 @@ export default class English implements Translation {
         walkHike: "Walk / Hike",
         bike: "Bike",
         run: "Running",
+    };
+    statistics = {
+        title: "Statistics of the team",
+        totalActivitiesTitle: "Approved activity count",
+        totalAthleteTitle: "Total unique athlete count",
+        activityTypeTitle: "Activity type",
+        averageTitle: "avg",
+        timeTitle: "Time of the activities"
     };
 }

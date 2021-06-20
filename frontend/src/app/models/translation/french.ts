@@ -28,7 +28,8 @@ export default class French implements Translation {
         welcome: "Accueil",
         points: "Pointage",
         teams: "Équipes",
-        admin: "Administrer"
+        admin: "Administrer",
+        stats: "Statistiques"
     };
     timeSeparator = 'à'
     scoreboard = {
@@ -41,5 +42,13 @@ export default class French implements Translation {
         walkHike: "Marche / Randonnée",
         bike: "Vélo",
         run: "Course",
-    }
+    };
+    statistics = {
+        title: "Statistiques des équipes",
+        totalActivitiesTitle: "Nombre d'activités approuvées",
+        totalAthleteTitle: "Nombre d'athlètes participants",
+        activityTypeTitle: "Type d'activité",
+        averageTitle: "moy",
+        timeTitle: "Temps des activités",
+    };
 }

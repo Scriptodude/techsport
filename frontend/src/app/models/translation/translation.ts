@@ -4,6 +4,7 @@ export default interface Translation {
     timeSeparator: string
     navigation: Navigation
     scoreboard: Scoreboard
+    statistics: Statistics
 }
 
 interface Strava {
@@ -35,7 +36,8 @@ interface Navigation {
     welcome: string,
     points: string,
     teams: string,
-    admin: string
+    admin: string,
+    stats: string
 }
 
 interface Scoreboard {
@@ -48,4 +50,13 @@ interface Scoreboard {
     walkHike: string,
     bike: string,
     run: string,
+}
+
+interface Statistics {
+    title: string,
+    totalActivitiesTitle: string,
+    totalAthleteTitle: string,
+    activityTypeTitle: string,
+    averageTitle: string,
+    timeTitle: string
 }

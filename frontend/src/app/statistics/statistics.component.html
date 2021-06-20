@@ -1,0 +1,91 @@
+<div class="container">
+    <p class="h2" style="text-align: center;">{{ translation.statistics.title }}</p>
+
+
+    <div *ngFor="let stat of teamStats">
+        <hr>
+        <p class="h3" style="text-align: center;">{{ stat.teamName }}</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">{{ translation.statistics.totalActivitiesTitle }}</th>
+                    <th scope="col">{{ translation.statistics.totalAthleteTitle }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ stat.totalActivities }}</td>
+                    <td>{{ stat.totalAthletes }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{{ translation.statistics.activityTypeTitle }}</th>
+                    <th scope="col" class="global">{{ translation.statistics.totalActivitiesTitle }}</th>
+                    <th scope="col" class="global">{{ translation.statistics.totalAthleteTitle }}</th>
+
+                    <th scope="col" class="text-center">Distance
+                        <tr class="d-flex justify-content-center text-center">
+                            <th scope="col" class="stat">max</th>
+                            <th scope="col" class="stat">min</th>
+                            <th scope="col" class="stat">{{ translation.statistics.averageTitle }}</th>
+                            <th scope="col" class="stat">total</th>
+                        </tr>
+                    </th>
+                    <th scope="col" class="text-center">{{ translation.statistics.timeTitle }}
+                        <tr class="d-flex justify-content-center text-center">
+                            <th scope="col" class="stat">max</th>
+                            <th scope="col" class="stat">min</th>
+                            <th scope="col" class="stat">{{ translation.statistics.averageTitle }}</th>
+                            <th scope="col" class="stat">total</th>
+                        </tr>
+                    </th>
+                    <th scope="col" class="text-center">Points
+                        <tr class="d-flex justify-content-center text-center">
+                            <th scope="col" class="stat">max</th>
+                            <th scope="col" class="stat">min</th>
+                            <th scope="col" class="stat">{{ translation.statistics.averageTitle }}</th>
+                            <th scope="col" class="stat">total</th>
+                        </tr>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let sport of getAvailableSports()">{{ sport[1] }}
+                    <td>{{ getGlobalStatOfSport(stat, sport[0], 'count') }}</td>
+                    <td>{{ getGlobalStatOfSport(stat, sport[0], 'uniqueAthleteCount') }}</td>
+
+                    <td>
+                        <div class="d-flex justify-content-center text-center">
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'distance', 'max') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'distance', 'min') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'distance', 'average') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'distance', 'total') }}</td>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center text-center">
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'time', 'max') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'time', 'min') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'time', 'average') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'time', 'total') }}</td>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center text-center">
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'points', 'max') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'points', 'min') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'points', 'average') }}</td>
+                            <td class="stat">{{ getStatOfSport(stat, sport[0], 'points', 'total') }}</td>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <br>
+    <br>
+</div>
