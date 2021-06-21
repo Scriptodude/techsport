@@ -51,13 +51,13 @@ export class AdminComponent implements OnInit {
     this.error = '';
     if (message.message.trim() == '') return;
 
-    window.scroll(0,0);
     switch(message.isSuccess) {
       case true:
         this.success = message.message;
         break;
       case false:
         this.error = message.message;
+        window.scroll(0,0);
         break;
     }
 
