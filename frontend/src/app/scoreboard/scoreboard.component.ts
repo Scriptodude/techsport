@@ -208,7 +208,7 @@ export class ScoreboardComponent extends TranslatedComponent implements OnInit {
       case 'ride':
         const ride = ptsTeam?.get('ride') || 0
         const virtualRide = ptsTeam?.get('virtualRide') || 0
-        return ride + virtualRide;
+        return (ride + virtualRide).toFixed(2);
       default:
         return (ptsTeam?.get('inlineSkate') || 0).toFixed(2)
     }
